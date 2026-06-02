@@ -1,0 +1,1610 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MS Tech - Sistema de Gestão</title>
+  <style>
+    :root {
+      --bg: #f6f7f4;
+      --panel: #ffffff;
+      --ink: #1f2a2e;
+      --muted: #647174;
+      --line: #dce2dc;
+      --brand: #176b5b;
+      --brand-2: #b2552d;
+      --ok: #237a46;
+      --warn: #b26a00;
+      --danger: #b93b3b;
+      --soft: #edf4ef;
+      --shadow: 0 16px 40px rgba(31, 42, 46, .08);
+      font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, rgba(246, 247, 244, .9), rgba(246, 247, 244, .97)), var(--bg);
+      color: var(--ink);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(246, 247, 244, .72), rgba(246, 247, 244, .92)),
+        url("LOGOTIPO MS.png") center 42% / min(760px, 86vw) auto no-repeat;
+      opacity: .5;
+      pointer-events: none;
+    }
+
+    header {
+      background:
+        linear-gradient(90deg, rgba(9, 31, 45, .96), rgba(10, 82, 119, .9)),
+        url("LOGOTIPO MS.png") right center / 360px auto no-repeat;
+      color: white;
+      padding: 22px clamp(16px, 4vw, 48px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.4vw, 2.15rem);
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      color: #cfe3dc;
+      max-width: 760px;
+      line-height: 1.45;
+      font-size: .96rem;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    main {
+      width: min(1440px, 100%);
+      margin: 0 auto;
+      padding: 22px clamp(14px, 3vw, 34px) 42px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .metric, .panel, dialog {
+      background: rgba(255, 255, 255, .94);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric {
+      padding: 16px;
+      min-height: 108px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-size: .88rem;
+    }
+
+    .metric strong {
+      font-size: clamp(1.35rem, 2vw, 1.9rem);
+      line-height: 1.1;
+    }
+
+    .goals {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .goal-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(145px, 1fr));
+      gap: 10px;
+    }
+
+    .goal-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfa;
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .goal-card span {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 700;
+    }
+
+    .goal-card strong {
+      font-size: 1.25rem;
+      line-height: 1.15;
+    }
+
+    .progress {
+      height: 12px;
+      background: #e4ebe5;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--brand);
+      border-radius: inherit;
+      transition: width .2s ease;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: 370px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .panel {
+      overflow: hidden;
+    }
+
+    .panel h2 {
+      margin: 0;
+      padding: 16px 18px;
+      font-size: 1rem;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfa;
+    }
+
+    form, .panel-body {
+      padding: 16px 18px 18px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      color: var(--muted);
+      font-size: .84rem;
+      font-weight: 650;
+      margin-bottom: 12px;
+    }
+
+    input, select {
+      width: 100%;
+      border: 1px solid #ccd5cf;
+      border-radius: 6px;
+      padding: 10px 11px;
+      color: var(--ink);
+      background: white;
+      font: inherit;
+      min-height: 42px;
+    }
+
+    input:focus, select:focus {
+      outline: 3px solid rgba(23, 107, 91, .18);
+      border-color: var(--brand);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .hint {
+      background: var(--soft);
+      border: 1px solid #d7e8dc;
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0 14px;
+      color: #295448;
+      font-size: .9rem;
+      line-height: 1.4;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    button {
+      border: 0;
+      border-radius: 6px;
+      min-height: 40px;
+      padding: 10px 13px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      background: var(--brand);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button.secondary {
+      background: #eef3ef;
+      color: #24443d;
+      border: 1px solid #d6ded8;
+    }
+
+    button.warning { background: var(--brand-2); }
+    button.danger { background: var(--danger); }
+    button.icon {
+      width: 38px;
+      padding: 0;
+      flex: 0 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 4px;
+      padding: 8px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfcfa;
+      overflow-x: auto;
+    }
+
+    .tab {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .tab.active {
+      background: #e7f1eb;
+      color: #173e36;
+      border-color: #cdded2;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 10px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: white;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 860px;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: middle;
+      font-size: .92rem;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: .78rem;
+      text-transform: uppercase;
+      background: #fbfcfa;
+      letter-spacing: 0;
+    }
+
+    tr.low-stock td { background: #fff7e8; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: .78rem;
+      font-weight: 750;
+      background: #eef3ef;
+      color: #2f4a43;
+      white-space: nowrap;
+    }
+
+    .pill.ok { background: #e6f4ec; color: var(--ok); }
+    .pill.warn { background: #fff1d4; color: var(--warn); }
+    .pill.danger { background: #fde9e9; color: var(--danger); }
+
+    .money { font-weight: 750; white-space: nowrap; }
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+
+    .empty {
+      padding: 30px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .customer-tools {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) 220px auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .customer-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .customer-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfa;
+      min-height: 86px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .customer-card span {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 750;
+    }
+
+    .customer-card strong {
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .customer-name-button {
+      background: transparent;
+      color: var(--brand);
+      border: 0;
+      padding: 0;
+      min-height: auto;
+      font-weight: 800;
+      text-align: left;
+      justify-content: flex-start;
+    }
+
+    .customer-name-button:hover { text-decoration: underline; }
+
+    .customer-detail {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      overflow: hidden;
+    }
+
+    .customer-detail-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .customer-detail-head h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+
+    .customer-detail-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    .sale-row {
+      display: grid;
+      grid-template-columns: 1fr 110px 120px 38px;
+      gap: 8px;
+      align-items: end;
+      margin-bottom: 10px;
+    }
+
+    .sale-total {
+      border-top: 1px solid var(--line);
+      margin-top: 12px;
+      padding-top: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .notice {
+      margin-top: 10px;
+      color: var(--danger);
+      font-weight: 700;
+      min-height: 20px;
+      font-size: .9rem;
+    }
+
+    dialog {
+      width: min(720px, calc(100vw - 24px));
+      border: 1px solid var(--line);
+      padding: 0;
+    }
+
+    dialog::backdrop { background: rgba(16, 28, 26, .45); }
+
+    .dialog-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dialog-head h3 { margin: 0; font-size: 1rem; }
+
+    @media (max-width: 1050px) {
+      .workspace { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
+      .goals { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary { grid-template-columns: 1fr; }
+      .sale-row { grid-template-columns: 1fr 1fr; }
+      .sale-row button { width: 100%; }
+      header { align-items: flex-start; }
+      .header-actions { width: 100%; }
+      .header-actions button { flex: 1; }
+    }
+  </style>
+
+<script src="https://unpkg.com/html5-qrcode">
+document.addEventListener("DOMContentLoaded",()=>{
+ const btn=document.getElementById("scanBarcode");
+ if(btn && window.Html5Qrcode){
+   btn.addEventListener("click",()=>{
+      const qr=new Html5Qrcode("reader");
+      qr.start(
+        {facingMode:"environment"},
+        {fps:10, qrbox:250},
+        (decodedText)=>{
+          const campo=document.getElementById("saleBarcode");
+          campo.value=decodedText;
+          campo.dispatchEvent(new Event("change"));
+          qr.stop();
+        }
+      );
+   });
+ }
+});
+
+
+function updateHistoryLists(){
+ const products=[...new Set(state.products.map(p=>p.name).filter(Boolean))];
+ const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))];
+ const sups=[...new Set(state.products.map(p=>p.supplier).filter(Boolean))];
+
+ let p='<datalist id="productHistory">'+products.map(v=>`<option value="${v}">`).join('')+'</datalist>';
+ let c='<datalist id="categoryHistory">'+cats.map(v=>`<option value="${v}">`).join('')+'</datalist>';
+ let s='<datalist id="supplierHistory">'+sups.map(v=>`<option value="${v}">`).join('')+'</datalist>';
+
+ ['productHistory','categoryHistory','supplierHistory'].forEach(id=>document.getElementById(id)?.remove());
+ document.body.insertAdjacentHTML('beforeend',p+c+s);
+}
+
+
+function renderCustomerHistory(){
+  const div=document.getElementById('customerHistoryResults');
+  if(!div) return;
+
+  const nomeFiltro=(document.getElementById('searchCustomerName')?.value||'').toLowerCase();
+  const foneFiltro=(document.getElementById('searchCustomerPhone')?.value||'').toLowerCase();
+
+  const clientes={};
+
+  (state.sales||[]).forEach(venda=>{
+      const nome=venda.customerName || "Não informado";
+      const fone=venda.customerPhone || "";
+      const chave=nome+"|"+fone;
+
+      if(!clientes[chave]){
+          clientes[chave]={
+              nome:nome,
+              fone:fone,
+              compras:0,
+              total:0
+          };
+      }
+
+      clientes[chave].compras += 1;
+      clientes[chave].total += Number(venda.total || 0);
+  });
+
+  const lista=Object.values(clientes).filter(c=>
+      (!nomeFiltro || c.nome.toLowerCase().includes(nomeFiltro)) &&
+      (!foneFiltro || c.fone.toLowerCase().includes(foneFiltro))
+  );
+
+  div.innerHTML=`
+    <table style="width:100%;border-collapse:collapse">
+      <thead>
+        <tr>
+          <th>Cliente</th>
+          <th>Celular</th>
+          <th>Qtd. Compras</th>
+          <th>Total Comprado</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${lista.map(c=>`
+          <tr>
+            <td>${c.nome}</td>
+            <td>${c.fone}</td>
+            <td>${c.compras}</td>
+            <td>${money.format(c.total)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>`;
+}
+
+
+</script>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>MS Tech</h1>
+      <p class="subtitle">Sistema de gestão MS Tech.</p>
+    </div>
+    <div class="header-actions">
+      <button class="secondary" id="exportBtn" type="button">Exportar dados</button>
+      <button class="warning" id="resetBtn" type="button">Limpar base</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="metrics" aria-label="Resumo da empresa">
+      <article class="metric"><span>Saldo em vendas</span><strong id="metricRevenue">R$ 0,00</strong></article>
+      <article class="metric"><span>Lucro estimado</span><strong id="metricProfit">R$ 0,00</strong></article>
+      <article class="metric"><span>Valor em estoque</span><strong id="metricStockValue">R$ 0,00</strong></article>
+      <article class="metric"><span>Itens em estoque</span><strong id="metricUnits">0</strong></article>
+    </section>
+
+    <section class="goals" aria-label="Metas de vendas">
+      <div class="panel">
+        <h2>Metas de vendas</h2>
+        <form id="goalForm">
+          <div class="grid-2">
+            <label>Meta de vendas
+              <input id="salesGoal" type="number" min="0" step="0.01" placeholder="Ex.: 25000">
+            </label>
+            <label>Pessoas na venda
+              <input id="salesPeople" type="number" min="1" step="1" value="1">
+            </label>
+          </div>
+          <div class="actions">
+            <button type="submit">Atualizar meta</button>
+          </div>
+        </form>
+      </div>
+      <div class="panel">
+        <h2>Acompanhamento</h2>
+        <div class="panel-body">
+          <div class="goal-summary">
+            <article class="goal-card"><span>Realizado da meta</span><strong id="goalPercent">0%</strong></article>
+            <article class="goal-card"><span>Falta vender</span><strong id="goalRemaining">R$ 0,00</strong></article>
+            <article class="goal-card"><span>Ticket médio por pessoa</span><strong id="currentTicket">R$ 0,00</strong></article>
+            <article class="goal-card"><span>Vendas necessárias</span><strong id="salesNeeded">0</strong></article>
+          </div>
+          <div class="progress" aria-label="Progresso da meta"><div class="progress-bar" id="goalProgress"></div></div>
+          <p class="hint" id="goalHint">Defina uma meta para acompanhar quantas vendas faltam.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="workspace">
+      <div class="panel">
+        <h2>Entrada de produto</h2>
+        <form id="productForm">
+          <input type="hidden" id="productId">
+
+          <label>Código de Barras
+            <input id="barcode" placeholder="Leia ou digite o código de barras">
+          </label>
+
+          <label>SKU<input id="sku" placeholder="Código interno"></label><label>Marca<input id="brand" placeholder="Marca"></label><label>Localização<input id="location" placeholder="Prateleira"></label><label>Produto
+            <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
+          </label>
+          <div class="grid-2">
+            <label>Categoria
+              <input id="category" list="categoryHistory" placeholder="Ex.: Vestuário">
+            </label>
+            <label>Fornecedor
+              <input id="supplier" list="supplierHistory" placeholder="Ex.: Atacado ABC">
+            </label>
+          </div>
+          <div class="grid-2">
+            <label>Custo unitário
+              <input id="cost" type="number" min="0" step="0.01" required>
+            </label>
+            <label>Quantidade de entrada
+              <input id="quantity" type="number" min="0" step="1" required>
+            </label>
+          </div>
+          <div class="grid-2">
+            <label>Margem desejada (%)
+              <input id="margin" type="number" min="0" step="1" value="200">
+            </label>
+            <label>Estoque mínimo
+              <input id="minStock" type="number" min="0" step="1" value="5">
+            </label>
+          </div>
+          <div class="hint" id="priceHint">Informe o custo para ver a sugestão de preço.</div>
+          <div class="actions">
+            <button type="submit" id="saveProductBtn">Salvar produto</button>
+            <button type="button" class="secondary" id="clearProductBtn">Novo</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-view="sales" type="button">Vendas</button>
+          <button class="tab" data-view="inventory" type="button">Estoque</button>
+          <button class="tab" data-view="history" type="button">Histórico</button><button class="tab" data-view="customerHistory" type="button">Clientes</button>
+          <button class="tab" data-view="expenses" type="button">Despesas</button>
+          <button class="tab" data-view="financial" type="button">Dashboard Financeiro</button>
+        </div>
+
+        <section id="inventoryView">
+          <div class="toolbar">
+            <input id="search" placeholder="Buscar produto, categoria ou fornecedor">
+            <select id="stockFilter">
+              <option value="all">Todos</option>
+              <option value="low">Estoque baixo</option>
+              <option value="available">Disponíveis</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Categoria</th>
+                  <th>Estoque</th>
+                  <th>Custo</th>
+                  <th>Preço sugerido</th>
+                  <th>Saldo em estoque</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="inventoryBody"></tbody>
+            </table>
+          </div>
+          <div class="empty hidden" id="inventoryEmpty">Nenhum produto encontrado.</div>
+        </section>
+
+        <section id="salesView" class="hidden">
+          <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Registrar venda</h2>
+
+            <label>Leitor de Código de Barras
+              <input id="saleBarcode" placeholder="Passe o leitor aqui">
+<button type="button" id="scanBarcode">📷 Ler pela Câmera</button>
+<div id="reader" style="width:300px;max-width:100%;"></div>
+            </label>
+
+            
+<div class="grid-2" style="margin-bottom:12px;">
+<label>Nome do Cliente
+<input id="customerName" placeholder="Nome do cliente">
+</label>
+<label>Celular
+<input id="customerPhone" placeholder="(11) 99999-9999">
+</label>
+</div>
+<div id="saleItems"></div>
+
+            <button type="button" class="secondary" id="addSaleItemBtn">Adicionar item</button>
+            <div class="grid-2" style="margin-top:14px;">
+              <label>Desconto total
+                <input id="discount" type="number" min="0" step="0.01" value="0">
+              </label>
+              <label>Forma de pagamento
+                <select id="paymentMethod">
+                  <option>Dinheiro</option>
+                  <option>Pix</option>
+                  <option>Cartão de crédito</option>
+                  <option>Cartão de débito</option>
+                  <option>Boleto</option>
+                </select>
+              </label>
+            </div>
+            <div class="sale-total"><span>Total</span><span id="saleTotal">R$ 0,00</span></div>
+            <div class="notice" id="saleNotice"></div>
+            <div class="actions" style="margin-top:12px;">
+              <button type="button" id="finishSaleBtn">Finalizar venda</button>
+              <button type="button" class="secondary" id="clearSaleBtn">Cancelar</button>
+            </div>
+          </div>
+        </section>
+
+        
+<section id="customerHistoryView" class="hidden">
+<div class="panel-body">
+<h2 style="padding:0 0 12px;border:0;background:transparent;">Consulta de Clientes</h2>
+<div class="customer-tools">
+<label>Filtrar por nome
+<input id="searchCustomerName" placeholder="Nome do cliente">
+</label>
+<label>Filtrar por telefone
+<input id="searchCustomerPhone" placeholder="Celular">
+</label>
+<label>Ordenar lista
+<select id="customerSort">
+<option value="total-desc">Maior valor comprado</option>
+<option value="total-asc">Menor valor comprado</option>
+<option value="name-asc">Nome A-Z</option>
+<option value="last-desc">Compra mais recente</option>
+<option value="purchases-desc">Mais compras</option>
+</select>
+</label>
+<button type="button" class="secondary" id="exportCustomersBtn">Exportar Excel</button>
+</div>
+<div id="customerSummary" class="customer-summary"></div>
+<div id="customerHistoryResults"></div>
+<div id="customerPurchaseDetails"></div>
+</div>
+</section>
+<section id="historyView" class="hidden">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Itens</th>
+                  <th>Pagamento</th>
+                  <th>Total</th>
+                  <th>Lucro estimado</th>
+                </tr>
+              </thead>
+              <tbody id="historyBody"></tbody>
+            </table>
+          </div>
+          <div class="empty hidden" id="historyEmpty">Nenhuma venda registrada.</div>
+        </section>
+
+        <section id="expensesView" class="hidden">
+          <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Controle de Despesas</h2>
+            <div class="grid-2">
+              <label>Tipo
+                <select id="expenseType">
+                  <option value="Fixa">Fixa</option>
+                  <option value="Variável">Variável</option>
+                </select>
+              </label>
+              <label>Valor
+                <input id="expenseValue" type="number" min="0" step="0.01">
+              </label>
+            </div>
+            <label>Descrição
+              <input id="expenseDescription" placeholder="Ex.: Aluguel, Energia, Internet">
+            </label>
+            <button type="button" id="addExpenseBtn">Adicionar Despesa</button>
+            <table>
+              <thead><tr><th>Tipo</th><th>Descrição</th><th>Valor</th></tr></thead>
+              <tbody id="expenseBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="financialView" class="hidden">
+          <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Dashboard Financeiro</h2>
+            <div class="goal-summary">
+              <article class="goal-card"><span>Receitas</span><strong id="finRevenue">R$ 0,00</strong></article>
+              <article class="goal-card"><span>Despesas</span><strong id="finExpenses">R$ 0,00</strong></article>
+              <article class="goal-card"><span>Lucro Líquido</span><strong id="finNet">R$ 0,00</strong></article>
+              <article class="goal-card"><span>Margem</span><strong id="finMargin">0%</strong></article>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <dialog id="movementDialog">
+    <div class="dialog-head">
+      <h3 id="movementTitle">Ajustar estoque</h3>
+      <button class="secondary icon" id="closeMovementBtn" type="button" aria-label="Fechar">×</button>
+    </div>
+    <form id="movementForm">
+      <input type="hidden" id="movementProductId">
+      <div class="grid-2">
+        <label>Tipo
+          <select id="movementType">
+            <option value="in">Entrada</option>
+            <option value="out">Saída</option>
+          </select>
+        </label>
+        <label>Quantidade
+          <input id="movementQuantity" type="number" min="1" step="1" required>
+        </label>
+      </div>
+      <label>Observação
+        <input id="movementNote" placeholder="Ex.: compra, avaria, ajuste de contagem">
+      </label>
+      <div class="actions">
+        <button type="submit">Aplicar ajuste</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const STORAGE_KEY = "gestao-empresa-v1";
+    const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+    const dateFmt = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
+    const makeId = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+
+    const seed = {
+      products: [
+        { id: makeId(), name: "Camiseta básica", category: "Vestuário", supplier: "Atacado Sul", cost: 28, quantity: 34, margin: 55, minStock: 8 },
+        { id: makeId(), name: "Caneca personalizada", category: "Presentes", supplier: "Print Mais", cost: 14.5, quantity: 18, margin: 70, minStock: 6 },
+        { id: makeId(), name: "Caderno executivo", category: "Papelaria", supplier: "Office Rio", cost: 21.9, quantity: 5, margin: 45, minStock: 7 }
+      ],
+      sales: [],
+      expenses: [],
+      goals: { salesGoal: 25000, salesPeople: 3 }
+    };
+
+    let state = loadState();
+    let selectedCustomerKey = "";
+    const el = id => document.getElementById(id);
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const loaded = raw ? JSON.parse(raw) : seed;
+      loaded.products ||= [];
+      loaded.sales ||= [];
+      loaded.expenses ||= [];
+      loaded.goals ||= { salesGoal: 0, salesPeople: 1 };
+      return loaded;
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function updateHistoryLists() {
+      const products = [...new Set(state.products.map(p => p.name).filter(Boolean))];
+      const cats = [...new Set(state.products.map(p => p.category).filter(Boolean))];
+      const sups = [...new Set(state.products.map(p => p.supplier).filter(Boolean))];
+      const productOptions = `<datalist id="productHistory">${products.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const categoryOptions = `<datalist id="categoryHistory">${cats.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const supplierOptions = `<datalist id="supplierHistory">${sups.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      ["productHistory", "categoryHistory", "supplierHistory"].forEach(id => document.getElementById(id)?.remove());
+      document.body.insertAdjacentHTML("beforeend", productOptions + categoryOptions + supplierOptions);
+    }
+
+    function suggestedPrice(product) {
+      return Number(product.cost || 0) * (1 + Number(product.margin || 0) / 100);
+    }
+
+    function stockStatus(product) {
+      if (product.quantity <= 0) return ["Sem estoque", "danger"];
+      if (product.quantity <= product.minStock) return ["Estoque baixo", "warn"];
+      return ["Disponível", "ok"];
+    }
+
+    function renderMetrics() {
+      const revenue = state.sales.reduce((sum, sale) => sum + sale.total, 0);
+      const profit = state.sales.reduce((sum, sale) => sum + sale.profit, 0);
+      const stockValue = state.products.reduce((sum, p) => sum + p.quantity * p.cost, 0);
+      const units = state.products.reduce((sum, p) => sum + Number(p.quantity || 0), 0);
+      el("metricRevenue").textContent = money.format(revenue);
+      el("metricProfit").textContent = money.format(profit);
+      el("metricStockValue").textContent = money.format(stockValue);
+      el("metricUnits").textContent = units;
+    }
+
+    function renderGoals() {
+      const revenue = state.sales.reduce((sum, sale) => sum + sale.total, 0);
+      const totalSales = state.sales.length;
+      const goal = Number(state.goals.salesGoal || 0);
+      const people = Math.max(1, Number(state.goals.salesPeople || 1));
+      const averageSaleTicket = totalSales ? revenue / totalSales : 0;
+      const averageProductTicket = state.products.length
+        ? state.products.reduce((sum, product) => sum + suggestedPrice(product), 0) / state.products.length
+        : 0;
+      const ticketBase = averageSaleTicket || averageProductTicket;
+      const remaining = Math.max(0, goal - revenue);
+      const salesNeeded = remaining > 0 && ticketBase > 0 ? Math.ceil(remaining / ticketBase) : 0;
+      const salesPerPerson = Math.ceil(salesNeeded / people);
+      const ticketPerPerson = remaining > 0 ? remaining / people : 0;
+      const percent = goal > 0 ? Math.min(100, (revenue / goal) * 100) : 0;
+
+      el("salesGoal").value = goal || "";
+      el("salesPeople").value = people;
+      el("goalPercent").textContent = `${Math.round(percent)}%`;
+      el("goalRemaining").textContent = money.format(remaining);
+      el("currentTicket").textContent = money.format(ticketPerPerson);
+      el("salesNeeded").textContent = salesNeeded;
+      el("goalProgress").style.width = `${percent}%`;
+
+      if (!goal) {
+        el("goalHint").textContent = "Defina uma meta para acompanhar quantas vendas faltam.";
+      } else if (!ticketBase) {
+        el("goalHint").textContent = "Cadastre produtos ou registre vendas para o sistema estimar quantas vendas faltam.";
+      } else if (remaining <= 0) {
+        el("goalHint").textContent = "Meta batida. Continue acompanhando as próximas vendas.";
+      } else {
+        const ticketSource = averageSaleTicket ? "ticket médio real das vendas" : "preço médio sugerido dos produtos";
+        el("goalHint").textContent = `Faltam ${salesNeeded} venda(s), cerca de ${salesPerPerson} por pessoa. Cada pessoa precisa vender em média ${money.format(ticketPerPerson)} para bater a meta. Cálculo baseado no ${ticketSource}: ${money.format(ticketBase)}.`;
+      }
+    }
+
+    function renderInventory() {
+      const term = el("search").value.trim().toLowerCase();
+      const filter = el("stockFilter").value;
+      const rows = state.products
+        .filter(p => [p.name, p.category, p.supplier].join(" ").toLowerCase().includes(term))
+        .filter(p => filter === "all" || (filter === "low" && p.quantity <= p.minStock) || (filter === "available" && p.quantity > 0));
+
+      el("inventoryBody").innerHTML = rows.map(p => {
+        const [label, cls] = stockStatus(p);
+        return `
+          <tr class="${p.quantity <= p.minStock ? "low-stock" : ""}">
+            <td><strong>${escapeHtml(p.name)}</strong><br><span class="muted">${escapeHtml(p.supplier || "Sem fornecedor")}</span></td>
+            <td>${escapeHtml(p.category || "-")}</td>
+            <td>${p.quantity}</td>
+            <td class="money">${money.format(p.cost)}</td>
+            <td class="money">${money.format(suggestedPrice(p))}</td>
+            <td class="money">${money.format(p.quantity * p.cost)}</td>
+            <td><span class="pill ${cls}">${label}</span></td>
+            <td>
+              <div class="actions">
+                <button class="secondary icon" title="Editar" onclick="editProduct('${p.id}')">✎</button>
+                <button class="secondary icon" title="Ajustar estoque" onclick="openMovement('${p.id}')">↕</button>
+                <button class="danger icon" title="Excluir" onclick="deleteProduct('${p.id}')">×</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join("");
+      el("inventoryEmpty").classList.toggle("hidden", rows.length > 0);
+    }
+
+    function renderSaleItems() {
+      if (!el("saleItems").children.length) addSaleItem();
+      [...document.querySelectorAll(".sale-product")].forEach(select => {
+        const current = select.value;
+        select.innerHTML = `<option value="">Selecione</option>` + state.products
+          .filter(p => p.quantity > 0)
+          .map(p => `<option value="${p.id}">${escapeHtml(p.name)} (${p.quantity} un.)</option>`)
+          .join("");
+        select.value = current;
+      });
+      calculateSaleTotal();
+    }
+
+    function renderHistory() {
+      el("historyBody").innerHTML = state.sales.slice().reverse().map(sale => `
+        <tr>
+          <td>${dateFmt.format(new Date(sale.date))}</td>
+          <td>${sale.items.map(item => `${escapeHtml(item.name)} x${item.quantity}`).join("<br>")}</td>
+          <td>${escapeHtml(sale.paymentMethod)}</td>
+          <td class="money">${money.format(sale.total)}</td>
+          <td class="money">${money.format(sale.profit)}</td>
+        </tr>
+      `).join("");
+      el("historyEmpty").classList.toggle("hidden", state.sales.length > 0);
+    }
+
+    function normalizePhone(phone) {
+      return String(phone || "").replace(/\D/g, "");
+    }
+
+    function customerKeyFromSale(sale) {
+      const name = String(sale.customerName || "Nao informado").trim() || "Nao informado";
+      const phone = normalizePhone(sale.customerPhone);
+      return `${name.toLowerCase()}|${phone}`;
+    }
+
+    function buildCustomerList() {
+      const customers = {};
+      (state.sales || []).forEach(sale => {
+        const name = String(sale.customerName || "Nao informado").trim() || "Nao informado";
+        const phone = String(sale.customerPhone || "").trim();
+        const key = customerKeyFromSale(sale);
+        if (!customers[key]) {
+          customers[key] = {
+            key,
+            name,
+            phone,
+            purchases: 0,
+            total: 0,
+            lastPurchase: "",
+            sales: []
+          };
+        }
+        customers[key].purchases += 1;
+        customers[key].total += Number(sale.total || 0);
+        customers[key].sales.push(sale);
+        if (!customers[key].lastPurchase || new Date(sale.date) > new Date(customers[key].lastPurchase)) {
+          customers[key].lastPurchase = sale.date;
+        }
+      });
+
+      return Object.values(customers).map(customer => ({
+        ...customer,
+        averageTicket: customer.purchases ? customer.total / customer.purchases : 0,
+        sales: customer.sales.slice().sort((a, b) => new Date(b.date) - new Date(a.date))
+      }));
+    }
+
+    function sortCustomers(customers) {
+      const sort = el("customerSort")?.value || "total-desc";
+      return customers.slice().sort((a, b) => {
+        if (sort === "total-asc") return a.total - b.total;
+        if (sort === "name-asc") return a.name.localeCompare(b.name, "pt-BR");
+        if (sort === "last-desc") return new Date(b.lastPurchase || 0) - new Date(a.lastPurchase || 0);
+        if (sort === "purchases-desc") return b.purchases - a.purchases;
+        return b.total - a.total;
+      });
+    }
+
+    function getFilteredCustomers() {
+      const nameFilter = (el("searchCustomerName")?.value || "").trim().toLowerCase();
+      const phoneFilter = normalizePhone(el("searchCustomerPhone")?.value || "");
+      return sortCustomers(buildCustomerList().filter(customer => {
+        const matchesName = !nameFilter || customer.name.toLowerCase().includes(nameFilter);
+        const matchesPhone = !phoneFilter || normalizePhone(customer.phone).includes(phoneFilter);
+        return matchesName && matchesPhone;
+      }));
+    }
+
+    function whatsappUrl(phone) {
+      const digits = normalizePhone(phone);
+      if (!digits) return "";
+      const fullNumber = digits.startsWith("55") ? digits : `55${digits}`;
+      return `https://wa.me/${fullNumber}`;
+    }
+
+    function renderCustomerSummary(customers) {
+      const summary = el("customerSummary");
+      if (!summary) return;
+      const totalCustomers = customers.length;
+      const best = customers.slice().sort((a, b) => b.total - a.total)[0];
+      const totalBought = customers.reduce((sum, customer) => sum + customer.total, 0);
+      const totalPurchases = customers.reduce((sum, customer) => sum + customer.purchases, 0);
+      const averageTicket = totalPurchases ? totalBought / totalPurchases : 0;
+      summary.innerHTML = `
+        <article class="customer-card"><span>Clientes encontrados</span><strong>${totalCustomers}</strong></article>
+        <article class="customer-card"><span>Ranking - melhor cliente</span><strong>${best ? escapeHtml(best.name) : "Sem vendas"}</strong></article>
+        <article class="customer-card"><span>Total comprado</span><strong>${money.format(totalBought)}</strong></article>
+        <article class="customer-card"><span>Ticket medio por cliente</span><strong>${money.format(averageTicket)}</strong></article>
+      `;
+    }
+
+    function renderCustomerDetails(customerKey) {
+      const detail = el("customerPurchaseDetails");
+      if (!detail) return;
+      const customer = buildCustomerList().find(item => item.key === customerKey);
+      if (!customer) {
+        detail.innerHTML = "";
+        return;
+      }
+      const whats = whatsappUrl(customer.phone);
+      detail.innerHTML = `
+        <section class="customer-detail">
+          <div class="customer-detail-head">
+            <div>
+              <h3>${escapeHtml(customer.name)}</h3>
+              <p>${escapeHtml(customer.phone || "Celular nao informado")} | ${customer.purchases} compra(s) | ${money.format(customer.total)}</p>
+            </div>
+            ${whats ? `<a href="${whats}" target="_blank" rel="noopener"><button type="button">WhatsApp</button></a>` : ""}
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Produtos</th>
+                  <th>Pagamento</th>
+                  <th>Valor</th>
+                  <th>Ticket</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${customer.sales.map(sale => `
+                  <tr>
+                    <td>${dateFmt.format(new Date(sale.date))}</td>
+                    <td>${sale.items.map(item => `${escapeHtml(item.name)} x${item.quantity}`).join("<br>")}</td>
+                    <td>${escapeHtml(sale.paymentMethod || "")}</td>
+                    <td class="money">${money.format(Number(sale.total || 0))}</td>
+                    <td class="money">${money.format(Number(sale.total || 0))}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderCustomerHistory() {
+      const container = el("customerHistoryResults");
+      if (!container) return;
+      const customers = getFilteredCustomers();
+      renderCustomerSummary(customers);
+
+      if (!customers.length) {
+        container.innerHTML = `<div class="empty">Nenhum cliente encontrado.</div>`;
+        renderCustomerDetails("");
+        return;
+      }
+
+      if (selectedCustomerKey && !customers.some(customer => customer.key === selectedCustomerKey)) {
+        selectedCustomerKey = "";
+      }
+
+      const ranking = new Map(buildCustomerList().sort((a, b) => b.total - a.total).map((customer, index) => [customer.key, index + 1]));
+      container.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ranking</th>
+                <th>Cliente</th>
+                <th>Celular</th>
+                <th>Qtd. compras</th>
+                <th>Total comprado</th>
+                <th>Ticket medio</th>
+                <th>Ultima compra</th>
+                <th>WhatsApp</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${customers.map((customer, index) => {
+                const whats = whatsappUrl(customer.phone);
+                return `
+                  <tr>
+                    <td>${ranking.get(customer.key) || index + 1}o</td>
+                    <td><button class="customer-name-button" type="button" data-customer-key="${escapeHtml(customer.key)}">${escapeHtml(customer.name)}</button></td>
+                    <td>${escapeHtml(customer.phone || "Nao informado")}</td>
+                    <td>${customer.purchases}</td>
+                    <td class="money">${money.format(customer.total)}</td>
+                    <td class="money">${money.format(customer.averageTicket)}</td>
+                    <td>${customer.lastPurchase ? dateFmt.format(new Date(customer.lastPurchase)) : "-"}</td>
+                    <td>${whats ? `<a href="${whats}" target="_blank" rel="noopener">Abrir</a>` : "-"}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      container.querySelectorAll("[data-customer-key]").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedCustomerKey = button.dataset.customerKey;
+          renderCustomerDetails(selectedCustomerKey);
+        });
+      });
+
+      renderCustomerDetails(selectedCustomerKey || customers[0].key);
+    }
+
+    function exportCustomersToExcel() {
+      const customers = getFilteredCustomers();
+      const rows = [
+        ["Ranking", "Cliente", "Celular", "Quantidade de compras", "Valor total comprado", "Ticket medio", "Data da ultima compra"]
+      ];
+      customers.forEach((customer, index) => {
+        rows.push([
+          index + 1,
+          customer.name,
+          customer.phone || "",
+          customer.purchases,
+          customer.total.toFixed(2).replace(".", ","),
+          customer.averageTicket.toFixed(2).replace(".", ","),
+          customer.lastPurchase ? dateFmt.format(new Date(customer.lastPurchase)) : ""
+        ]);
+      });
+      const html = `<table>${rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</table>`;
+      const blob = new Blob(["\ufeff" + html], { type: "application/vnd.ms-excel;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `clientes-ms-tech-${new Date().toISOString().slice(0, 10)}.xls`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    
+    function renderExpenses(){
+      const body=el("expenseBody");
+      if(!body) return;
+      body.innerHTML=(state.expenses||[]).map(e=>`<tr><td>${e.type}</td><td>${e.description}</td><td>${money.format(e.value)}</td></tr>`).join("");
+    }
+
+    function renderFinancial(){
+      const revenue=state.sales.reduce((s,v)=>s+v.total,0);
+      const expenses=(state.expenses||[]).reduce((s,e)=>s+e.value,0);
+      const net=revenue-expenses;
+      if(el("finRevenue")){
+        el("finRevenue").textContent=money.format(revenue);
+        el("finExpenses").textContent=money.format(expenses);
+        el("finNet").textContent=money.format(net);
+        el("finMargin").textContent=revenue?((net/revenue)*100).toFixed(1)+"%":"0%";
+      }
+    }
+
+function renderAll() {
+      renderMetrics();
+      renderGoals();
+      renderInventory();
+      renderSaleItems();
+      renderHistory();
+      renderExpenses();
+      renderFinancial(); updateHistoryLists(); renderCustomerHistory();
+    }
+
+    function updatePriceHint() {
+      const cost = Number(el("cost").value || 0);
+      const margin = Number(el("margin").value || 0);
+      if (!cost) {
+        el("priceHint").textContent = "Informe o custo para ver a sugestão de preço.";
+        return;
+      }
+      const price = cost * (1 + margin / 100);
+      const profit = price - cost;
+      el("priceHint").textContent = `Preço sugerido: ${money.format(price)}. Lucro estimado por unidade: ${money.format(profit)}.`;
+    }
+
+    function clearProductForm() {
+      el("productForm").reset();
+      el("productId").value = "";
+      if(el("barcode")) el("barcode").value = "";
+      el("margin").value = 45;
+      el("minStock").value = 5;
+      el("saveProductBtn").textContent = "Salvar produto";
+      updatePriceHint();
+    }
+
+    function editProduct(id) {
+      const p = state.products.find(item => item.id === id);
+      if (!p) return;
+      el("productId").value = p.id;
+      el("barcode").value = p.barcode || "";
+      el("name").value = p.name;
+      el("category").value = p.category || "";
+      el("supplier").value = p.supplier || "";
+      el("cost").value = p.cost;
+      el("quantity").value = p.quantity;
+      el("margin").value = p.margin;
+      el("minStock").value = p.minStock;
+      el("saveProductBtn").textContent = "Atualizar produto";
+      updatePriceHint();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function deleteProduct(id) {
+      const p = state.products.find(item => item.id === id);
+      if (!p || !confirm(`Excluir "${p.name}"?`)) return;
+      state.products = state.products.filter(item => item.id !== id);
+      saveState();
+      
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+
+    }
+
+    function openMovement(id) {
+      const p = state.products.find(item => item.id === id);
+      if (!p) return;
+      el("movementProductId").value = id;
+      el("movementTitle").textContent = `Ajustar estoque: ${p.name}`;
+      el("movementQuantity").value = "";
+      el("movementNote").value = "";
+      el("movementDialog").showModal();
+    }
+
+    function addSaleItem() {
+      const row = document.createElement("div");
+      row.className = "sale-row";
+      row.innerHTML = `
+        <label>Produto
+          <select class="sale-product"></select>
+        </label>
+        <label>Qtd.
+          <input class="sale-quantity" type="number" min="1" step="1" value="1">
+        </label>
+        <label>Preço
+          <input class="sale-price" type="number" min="0" step="0.01">
+        </label>
+        <button type="button" class="secondary icon" title="Remover item">×</button>
+      `;
+      row.querySelector("button").addEventListener("click", () => {
+        row.remove();
+        calculateSaleTotal();
+      });
+      row.querySelector(".sale-product").addEventListener("change", event => {
+        const p = state.products.find(item => item.id === event.target.value);
+        row.querySelector(".sale-price").value = p ? suggestedPrice(p).toFixed(2) : "";
+        calculateSaleTotal();
+      });
+      row.querySelectorAll("input, select").forEach(input => input.addEventListener("input", calculateSaleTotal));
+      el("saleItems").appendChild(row);
+      renderSaleItems();
+    }
+
+    function getSaleDraft() {
+      const items = [...document.querySelectorAll(".sale-row")].map(row => {
+        const product = state.products.find(p => p.id === row.querySelector(".sale-product").value);
+        const quantity = Number(row.querySelector(".sale-quantity").value || 0);
+        const price = Number(row.querySelector(".sale-price").value || 0);
+        return product ? { product, quantity, price } : null;
+      }).filter(Boolean);
+      const subtotal = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
+      const discount = Number(el("discount").value || 0);
+      return { items, subtotal, discount, total: Math.max(0, subtotal - discount) };
+    }
+
+    function calculateSaleTotal() {
+      const draft = getSaleDraft();
+      el("saleTotal").textContent = money.format(draft.total);
+      const invalid = draft.items.find(item => item.quantity > item.product.quantity);
+      el("saleNotice").textContent = invalid ? `Estoque insuficiente para ${invalid.product.name}. Disponível: ${invalid.product.quantity}.` : "";
+    }
+
+    function clearSale() {
+      el("saleItems").innerHTML = "";
+      el("discount").value = 0;
+      if (el("customerName")) el("customerName").value = "";
+      if (el("customerPhone")) el("customerPhone").value = "";
+      addSaleItem();
+      el("saleNotice").textContent = "";
+    }
+
+    function finishSale() {
+      const draft = getSaleDraft();
+      if (!draft.items.length) {
+        el("saleNotice").textContent = "Adicione ao menos um produto.";
+        return;
+      }
+      const invalid = draft.items.find(item => item.quantity <= 0 || item.price <= 0 || item.quantity > item.product.quantity);
+      if (invalid) {
+        el("saleNotice").textContent = `Revise quantidade e preço de ${invalid.product.name}.`;
+        return;
+      }
+
+      const costTotal = draft.items.reduce((sum, item) => sum + item.quantity * item.product.cost, 0);
+      draft.items.forEach(item => item.product.quantity -= item.quantity);
+      state.sales.push({
+        id: makeId(),
+        date: new Date().toISOString(),
+        paymentMethod: el("paymentMethod").value,
+        customerName: document.getElementById("customerName")?.value || "",
+        customerPhone: document.getElementById("customerPhone")?.value || "",
+        discount: draft.discount,
+        total: draft.total,
+        profit: draft.total - costTotal,
+        items: draft.items.map(item => ({
+          productId: item.product.id,
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.price,
+          cost: item.product.cost
+        }))
+      });
+      saveState();
+      clearSale();
+      
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+
+      switchView("history");
+    }
+
+    function switchView(view) {
+      ["sales","inventory","history","customerHistory","expenses","financial"].forEach(name => {
+        el(`${name}View`).classList.toggle("hidden", name !== view);
+        document.querySelector(`[data-view="${name}"]`).classList.toggle("active", name === view);
+      });
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
+    }
+
+    el("productForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const product = {
+        id: el("productId").value || makeId(),
+        barcode: el("barcode").value.trim(),
+        name: el("name").value.trim(),
+        category: el("category").value.trim(),
+        supplier: el("supplier").value.trim(),
+        cost: Number(el("cost").value || 0),
+        quantity: Number(el("quantity").value || 0),
+        margin: Number(el("margin").value || 0),
+        minStock: Number(el("minStock").value || 0)
+      };
+      const index = state.products.findIndex(p => p.id === product.id);
+      if (index >= 0) state.products[index] = product;
+      else state.products.push(product);
+      saveState();
+      clearProductForm();
+      
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+
+    });
+
+    el("goalForm").addEventListener("submit", event => {
+      event.preventDefault();
+      state.goals = {
+        salesGoal: Number(el("salesGoal").value || 0),
+        salesPeople: Math.max(1, Number(el("salesPeople").value || 1))
+      };
+      saveState();
+      renderGoals();
+    });
+
+    ["cost", "margin"].forEach(id => el(id).addEventListener("input", updatePriceHint));
+    el("clearProductBtn").addEventListener("click", clearProductForm);
+    el("search").addEventListener("input", renderInventory);
+    el("stockFilter").addEventListener("change", renderInventory);
+    el("addSaleItemBtn").addEventListener("click", addSaleItem);
+    el("finishSaleBtn").addEventListener("click", finishSale);
+    el("clearSaleBtn").addEventListener("click", clearSale);
+    el("discount").addEventListener("input", calculateSaleTotal);
+    el("closeMovementBtn").addEventListener("click", () => el("movementDialog").close());
+
+    el("movementForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const product = state.products.find(p => p.id === el("movementProductId").value);
+      const quantity = Number(el("movementQuantity").value || 0);
+      if (!product || quantity <= 0) return;
+      product.quantity += el("movementType").value === "in" ? quantity : -Math.min(quantity, product.quantity);
+      saveState();
+      el("movementDialog").close();
+      
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+
+    });
+
+    
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => switchView(tab.dataset.view)));
+
+    const saleBarcodeInput = document.getElementById("saleBarcode");
+    if (saleBarcodeInput) {
+      saleBarcodeInput.addEventListener("change", () => {
+        const code = saleBarcodeInput.value.trim();
+
+        const product = state.products.find(
+          p => (p.barcode || "") === code
+        );
+
+        if (!product) {
+          alert("Produto não encontrado.");
+          saleBarcodeInput.value = "";
+          return;
+        }
+
+        addSaleItem();
+
+        const rows = document.querySelectorAll(".sale-row");
+        const row = rows[rows.length - 1];
+
+        row.querySelector(".sale-product").value = product.id;
+        row.querySelector(".sale-price").value = suggestedPrice(product).toFixed(2);
+
+        calculateSaleTotal();
+
+        saleBarcodeInput.value = "";
+      });
+    }
+
+
+    el("exportBtn").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `gestao-empresa-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    });
+
+    el("resetBtn").addEventListener("click", () => {
+      if (!confirm("Limpar todos os produtos e vendas cadastrados?")) return;
+      state = { products: [], sales: [], goals: { salesGoal: 0, salesPeople: 1 } };
+      saveState();
+      clearProductForm();
+      clearSale();
+      
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+
+    });
+
+    const addExpenseBtn=document.getElementById("addExpenseBtn");
+    if(addExpenseBtn){
+      addExpenseBtn.addEventListener("click",()=>{
+        const desc=el("expenseDescription").value.trim();
+        const val=Number(el("expenseValue").value||0);
+        if(!desc||val<=0) return;
+        state.expenses.push({type:el("expenseType").value,description:desc,value:val});
+        saveState();
+        el("expenseDescription").value="";
+        el("expenseValue").value="";
+        
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+
+      });
+    }
+
+    
+renderAll();
+
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('customerSort')?.addEventListener('change', renderCustomerHistory);
+document.getElementById('exportCustomersBtn')?.addEventListener('click', exportCustomersToExcel);
+
+  </script>
+</body>
+</html>
