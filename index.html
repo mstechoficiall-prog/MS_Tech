@@ -29,22 +29,8 @@
       color: var(--ink);
     }
 
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background:
-        linear-gradient(180deg, rgba(246, 247, 244, .72), rgba(246, 247, 244, .92)),
-        url("LOGOTIPO MS.png") center 42% / min(760px, 86vw) auto no-repeat;
-      opacity: .5;
-      pointer-events: none;
-    }
-
     header {
-      background:
-        linear-gradient(90deg, rgba(9, 31, 45, .96), rgba(10, 82, 119, .9)),
-        url("LOGOTIPO MS.png") right center / 360px auto no-repeat;
+      background: linear-gradient(90deg, rgba(9, 31, 45, .96), rgba(10, 82, 119, .9));
       color: white;
       padding: 22px clamp(16px, 4vw, 48px);
       display: flex;
@@ -52,6 +38,16 @@
       justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      min-width: min(100%, 360px);
+    }
+
+    .brand-copy {
+      min-width: 0;
     }
 
     h1 {
@@ -90,7 +86,7 @@
 
     .metrics {
       display: grid;
-      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 12px;
       margin-bottom: 18px;
     }
@@ -122,9 +118,10 @@
 
     .goals {
       display: grid;
-      grid-template-columns: minmax(280px, 420px) 1fr;
+      grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
       gap: 16px;
       margin-bottom: 18px;
+      align-items: stretch;
     }
 
     .goal-summary {
@@ -173,13 +170,14 @@
 
     .workspace {
       display: grid;
-      grid-template-columns: 370px 1fr;
+      grid-template-columns: minmax(320px, 370px) minmax(0, 1fr);
       gap: 16px;
       align-items: start;
     }
 
     .panel {
       overflow: hidden;
+      min-width: 0;
     }
 
     .panel h2 {
@@ -222,6 +220,12 @@
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -280,6 +284,7 @@
       border-bottom: 1px solid var(--line);
       background: #fbfcfa;
       overflow-x: auto;
+      align-items: stretch;
     }
 
     .tab {
@@ -287,6 +292,8 @@
       color: var(--muted);
       border: 1px solid transparent;
       white-space: nowrap;
+      flex: 1 1 110px;
+      min-height: 42px;
     }
 
     .tab.active {
@@ -358,6 +365,84 @@
       color: var(--muted);
     }
 
+    .customer-tools {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) 220px auto;
+      gap: 10px;
+      align-items: end;
+      margin-bottom: 14px;
+    }
+
+    .customer-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .customer-card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+      background: #fbfcfa;
+      min-height: 86px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .customer-card span {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 750;
+    }
+
+    .customer-card strong {
+      font-size: 1.15rem;
+      line-height: 1.2;
+    }
+
+    .customer-name-button {
+      background: transparent;
+      color: var(--brand);
+      border: 0;
+      padding: 0;
+      min-height: auto;
+      font-weight: 800;
+      text-align: left;
+      justify-content: flex-start;
+    }
+
+    .customer-name-button:hover { text-decoration: underline; }
+
+    .customer-detail {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfcfa;
+      overflow: hidden;
+    }
+
+    .customer-detail-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .customer-detail-head h3 {
+      margin: 0 0 4px;
+      font-size: 1rem;
+    }
+
+    .customer-detail-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
     .sale-row {
       display: grid;
       grid-template-columns: 1fr 110px 120px 38px;
@@ -406,12 +491,12 @@
 
     @media (max-width: 1050px) {
       .workspace { grid-template-columns: 1fr; }
-      .metrics { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
       .goals { grid-template-columns: 1fr; }
+      .customer-tools { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 640px) {
-      .metrics, .toolbar, .grid-2, .goal-summary { grid-template-columns: 1fr; }
+      .metrics, .toolbar, .grid-2, .grid-3, .goal-summary, .customer-tools, .customer-summary { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
       .sale-row button { width: 100%; }
       header { align-items: flex-start; }
@@ -516,9 +601,11 @@ function renderCustomerHistory(){
 </head>
 <body>
   <header>
-    <div>
+    <div class="brand-block">
+      <div class="brand-copy">
       <h1>MS Tech</h1>
       <p class="subtitle">Sistema de gestão MS Tech.</p>
+      </div>
     </div>
     <div class="header-actions">
       <button class="secondary" id="exportBtn" type="button">Exportar dados</button>
@@ -581,7 +668,18 @@ function renderCustomerHistory(){
           </div>
           <div id="productBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
 
-          <label>SKU<input id="sku" placeholder="Código interno"></label><label>Marca<input id="brand" placeholder="Marca"></label><label>Localização<input id="location" placeholder="Prateleira"></label><label>Produto
+          <div class="grid-3">
+            <label>SKU
+              <input id="sku" placeholder="Código interno">
+            </label>
+            <label>Marca
+              <input id="brand" placeholder="Marca">
+            </label>
+            <label>Localização
+              <input id="location" placeholder="Prateleira">
+            </label>
+          </div>
+          <label>Produto
             <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
           </label>
           <div class="grid-2">
@@ -625,7 +723,7 @@ function renderCustomerHistory(){
           <button class="tab" data-view="financial" type="button">Dashboard Financeiro</button>
         </div>
 
-        <section id="inventoryView">
+        <section id="inventoryView" class="hidden">
           <div class="toolbar">
             <input id="search" placeholder="Buscar produto, categoria ou fornecedor">
             <select id="stockFilter">
@@ -654,7 +752,7 @@ function renderCustomerHistory(){
           <div class="empty hidden" id="inventoryEmpty">Nenhum produto encontrado.</div>
         </section>
 
-        <section id="salesView" class="hidden">
+        <section id="salesView">
           <div class="panel-body">
             <h2 style="padding:0 0 12px;border:0;background:transparent;">Registrar venda</h2>
 
@@ -706,11 +804,27 @@ function renderCustomerHistory(){
 <section id="customerHistoryView" class="hidden">
 <div class="panel-body">
 <h2 style="padding:0 0 12px;border:0;background:transparent;">Consulta de Clientes</h2>
-<div class="grid-2">
+<div class="customer-tools">
+<label>Filtrar por nome
 <input id="searchCustomerName" placeholder="Nome do cliente">
+</label>
+<label>Filtrar por telefone
 <input id="searchCustomerPhone" placeholder="Celular">
+</label>
+<label>Ordenar lista
+<select id="customerSort">
+<option value="total-desc">Maior valor comprado</option>
+<option value="total-asc">Menor valor comprado</option>
+<option value="name-asc">Nome A-Z</option>
+<option value="last-desc">Compra mais recente</option>
+<option value="purchases-desc">Mais compras</option>
+</select>
+</label>
+<button type="button" class="secondary" id="exportCustomersBtn">Exportar Excel</button>
 </div>
+<div id="customerSummary" class="customer-summary"></div>
 <div id="customerHistoryResults"></div>
+<div id="customerPurchaseDetails"></div>
 </div>
 </section>
 <section id="historyView" class="hidden">
@@ -817,6 +931,7 @@ function renderCustomerHistory(){
     };
 
     let state = loadState();
+    let selectedCustomerKey = "";
     const el = id => document.getElementById(id);
 
     function loadState() {
@@ -945,6 +1060,227 @@ function renderCustomerHistory(){
         </tr>
       `).join("");
       el("historyEmpty").classList.toggle("hidden", state.sales.length > 0);
+    }
+
+    function normalizePhone(phone) {
+      return String(phone || "").replace(/\D/g, "");
+    }
+
+    function customerKeyFromSale(sale) {
+      const name = String(sale.customerName || "Nao informado").trim() || "Nao informado";
+      const phone = normalizePhone(sale.customerPhone);
+      return `${name.toLowerCase()}|${phone}`;
+    }
+
+    function buildCustomerList() {
+      const customers = {};
+      (state.sales || []).forEach(sale => {
+        const name = String(sale.customerName || "Nao informado").trim() || "Nao informado";
+        const phone = String(sale.customerPhone || "").trim();
+        const key = customerKeyFromSale(sale);
+        if (!customers[key]) {
+          customers[key] = {
+            key,
+            name,
+            phone,
+            purchases: 0,
+            total: 0,
+            lastPurchase: "",
+            sales: []
+          };
+        }
+        customers[key].purchases += 1;
+        customers[key].total += Number(sale.total || 0);
+        customers[key].sales.push(sale);
+        if (!customers[key].lastPurchase || new Date(sale.date) > new Date(customers[key].lastPurchase)) {
+          customers[key].lastPurchase = sale.date;
+        }
+      });
+
+      return Object.values(customers).map(customer => ({
+        ...customer,
+        averageTicket: customer.purchases ? customer.total / customer.purchases : 0,
+        sales: customer.sales.slice().sort((a, b) => new Date(b.date) - new Date(a.date))
+      }));
+    }
+
+    function sortCustomers(customers) {
+      const sort = el("customerSort")?.value || "total-desc";
+      return customers.slice().sort((a, b) => {
+        if (sort === "total-asc") return a.total - b.total;
+        if (sort === "name-asc") return a.name.localeCompare(b.name, "pt-BR");
+        if (sort === "last-desc") return new Date(b.lastPurchase || 0) - new Date(a.lastPurchase || 0);
+        if (sort === "purchases-desc") return b.purchases - a.purchases;
+        return b.total - a.total;
+      });
+    }
+
+    function getFilteredCustomers() {
+      const nameFilter = (el("searchCustomerName")?.value || "").trim().toLowerCase();
+      const phoneFilter = normalizePhone(el("searchCustomerPhone")?.value || "");
+      return sortCustomers(buildCustomerList().filter(customer => {
+        const matchesName = !nameFilter || customer.name.toLowerCase().includes(nameFilter);
+        const matchesPhone = !phoneFilter || normalizePhone(customer.phone).includes(phoneFilter);
+        return matchesName && matchesPhone;
+      }));
+    }
+
+    function whatsappUrl(phone) {
+      const digits = normalizePhone(phone);
+      if (!digits) return "";
+      const fullNumber = digits.startsWith("55") ? digits : `55${digits}`;
+      return `https://wa.me/${fullNumber}`;
+    }
+
+    function renderCustomerSummary(customers) {
+      const summary = el("customerSummary");
+      if (!summary) return;
+      const totalCustomers = customers.length;
+      const best = customers.slice().sort((a, b) => b.total - a.total)[0];
+      const totalBought = customers.reduce((sum, customer) => sum + customer.total, 0);
+      const totalPurchases = customers.reduce((sum, customer) => sum + customer.purchases, 0);
+      const averageTicket = totalPurchases ? totalBought / totalPurchases : 0;
+      summary.innerHTML = `
+        <article class="customer-card"><span>Clientes encontrados</span><strong>${totalCustomers}</strong></article>
+        <article class="customer-card"><span>Ranking - melhor cliente</span><strong>${best ? escapeHtml(best.name) : "Sem vendas"}</strong></article>
+        <article class="customer-card"><span>Total comprado</span><strong>${money.format(totalBought)}</strong></article>
+        <article class="customer-card"><span>Ticket medio por cliente</span><strong>${money.format(averageTicket)}</strong></article>
+      `;
+    }
+
+    function renderCustomerDetails(customerKey) {
+      const detail = el("customerPurchaseDetails");
+      if (!detail) return;
+      const customer = buildCustomerList().find(item => item.key === customerKey);
+      if (!customer) {
+        detail.innerHTML = "";
+        return;
+      }
+      const whats = whatsappUrl(customer.phone);
+      detail.innerHTML = `
+        <section class="customer-detail">
+          <div class="customer-detail-head">
+            <div>
+              <h3>${escapeHtml(customer.name)}</h3>
+              <p>${escapeHtml(customer.phone || "Celular nao informado")} | ${customer.purchases} compra(s) | ${money.format(customer.total)}</p>
+            </div>
+            ${whats ? `<a href="${whats}" target="_blank" rel="noopener"><button type="button">WhatsApp</button></a>` : ""}
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Produtos</th>
+                  <th>Pagamento</th>
+                  <th>Valor</th>
+                  <th>Ticket</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${customer.sales.map(sale => `
+                  <tr>
+                    <td>${dateFmt.format(new Date(sale.date))}</td>
+                    <td>${sale.items.map(item => `${escapeHtml(item.name)} x${item.quantity}`).join("<br>")}</td>
+                    <td>${escapeHtml(sale.paymentMethod || "")}</td>
+                    <td class="money">${money.format(Number(sale.total || 0))}</td>
+                    <td class="money">${money.format(Number(sale.total || 0))}</td>
+                  </tr>
+                `).join("")}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      `;
+    }
+
+    function renderCustomerHistory() {
+      const container = el("customerHistoryResults");
+      if (!container) return;
+      const customers = getFilteredCustomers();
+      renderCustomerSummary(customers);
+
+      if (!customers.length) {
+        container.innerHTML = `<div class="empty">Nenhum cliente encontrado.</div>`;
+        renderCustomerDetails("");
+        return;
+      }
+
+      if (selectedCustomerKey && !customers.some(customer => customer.key === selectedCustomerKey)) {
+        selectedCustomerKey = "";
+      }
+
+      const ranking = new Map(buildCustomerList().sort((a, b) => b.total - a.total).map((customer, index) => [customer.key, index + 1]));
+      container.innerHTML = `
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Ranking</th>
+                <th>Cliente</th>
+                <th>Celular</th>
+                <th>Qtd. compras</th>
+                <th>Total comprado</th>
+                <th>Ticket medio</th>
+                <th>Ultima compra</th>
+                <th>WhatsApp</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${customers.map((customer, index) => {
+                const whats = whatsappUrl(customer.phone);
+                return `
+                  <tr>
+                    <td>${ranking.get(customer.key) || index + 1}o</td>
+                    <td><button class="customer-name-button" type="button" data-customer-key="${escapeHtml(customer.key)}">${escapeHtml(customer.name)}</button></td>
+                    <td>${escapeHtml(customer.phone || "Nao informado")}</td>
+                    <td>${customer.purchases}</td>
+                    <td class="money">${money.format(customer.total)}</td>
+                    <td class="money">${money.format(customer.averageTicket)}</td>
+                    <td>${customer.lastPurchase ? dateFmt.format(new Date(customer.lastPurchase)) : "-"}</td>
+                    <td>${whats ? `<a href="${whats}" target="_blank" rel="noopener">Abrir</a>` : "-"}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      container.querySelectorAll("[data-customer-key]").forEach(button => {
+        button.addEventListener("click", () => {
+          selectedCustomerKey = button.dataset.customerKey;
+          renderCustomerDetails(selectedCustomerKey);
+        });
+      });
+
+      renderCustomerDetails(selectedCustomerKey || customers[0].key);
+    }
+
+    function exportCustomersToExcel() {
+      const customers = getFilteredCustomers();
+      const rows = [
+        ["Ranking", "Cliente", "Celular", "Quantidade de compras", "Valor total comprado", "Ticket medio", "Data da ultima compra"]
+      ];
+      customers.forEach((customer, index) => {
+        rows.push([
+          index + 1,
+          customer.name,
+          customer.phone || "",
+          customer.purchases,
+          customer.total.toFixed(2).replace(".", ","),
+          customer.averageTicket.toFixed(2).replace(".", ","),
+          customer.lastPurchase ? dateFmt.format(new Date(customer.lastPurchase)) : ""
+        ]);
+      });
+      const html = `<table>${rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</table>`;
+      const blob = new Blob(["\ufeff" + html], { type: "application/vnd.ms-excel;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `clientes-ms-tech-${new Date().toISOString().slice(0, 10)}.xls`;
+      link.click();
+      URL.revokeObjectURL(url);
     }
 
     
@@ -1368,4 +1704,11 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
     
 renderAll();
 
-document.getElementById('searchCustomerName')?.addEventListener('input', rende
+document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+document.getElementById('customerSort')?.addEventListener('change', renderCustomerHistory);
+document.getElementById('exportCustomersBtn')?.addEventListener('click', exportCustomersToExcel);
+
+  </script>
+</body>
+</html>
