@@ -71,8 +71,15 @@
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
+    }
+
+    .header-actions button {
+      min-height: 32px;
+      padding: 7px 10px;
+      font-size: .82rem;
+      border-radius: 5px;
     }
 
     main {
@@ -408,8 +415,8 @@
       .sale-row { grid-template-columns: 1fr 1fr; }
       .sale-row button { width: 100%; }
       header { align-items: flex-start; }
-      .header-actions { width: 100%; }
-      .header-actions button { flex: 1; }
+      .header-actions { width: auto; }
+      .header-actions button { flex: 0 0 auto; }
     }
   </style>
 
@@ -800,9 +807,9 @@ function renderCustomerHistory(){
 
     const seed = {
       products: [
-        { id: makeId(), name: "Camiseta básica", category: "Vestuário", supplier: "Atacado Sul", cost: 28, quantity: 34, margin: 55, minStock: 8 },
-        { id: makeId(), name: "Caneca personalizada", category: "Presentes", supplier: "Print Mais", cost: 14.5, quantity: 18, margin: 70, minStock: 6 },
-        { id: makeId(), name: "Caderno executivo", category: "Papelaria", supplier: "Office Rio", cost: 21.9, quantity: 5, margin: 45, minStock: 7 }
+        { id: makeId(), name: "Camiseta básica", category: "Vestuário", supplier: "Atacado Sul", cost: 28, quantity: 34, margin: 200, minStock: 8 },
+        { id: makeId(), name: "Caneca personalizada", category: "Presentes", supplier: "Print Mais", cost: 14.5, quantity: 18, margin: 200, minStock: 6 },
+        { id: makeId(), name: "Caderno executivo", category: "Papelaria", supplier: "Office Rio", cost: 21.9, quantity: 5, margin: 200, minStock: 7 }
       ],
       sales: [],
       expenses: [],
@@ -985,7 +992,7 @@ function renderAll() {
       el("productForm").reset();
       el("productId").value = "";
       if(el("barcode")) el("barcode").value = "";
-      el("margin").value = 45;
+      el("margin").value = 200;
       el("minStock").value = 5;
       el("saveProductBtn").textContent = "Salvar produto";
       updatePriceHint();
@@ -1361,9 +1368,4 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
     
 renderAll();
 
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
-
-  </script>
-</body>
-</html>
+document.getElementById('searchCustomerName')?.addEventListener('input', rende
