@@ -351,84 +351,6 @@
       color: var(--muted);
     }
 
-    .customer-tools {
-      display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) 220px auto;
-      gap: 10px;
-      align-items: end;
-      margin-bottom: 14px;
-    }
-
-    .customer-summary {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(150px, 1fr));
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    .customer-card {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fbfcfa;
-      min-height: 86px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .customer-card span {
-      color: var(--muted);
-      font-size: .78rem;
-      font-weight: 750;
-    }
-
-    .customer-card strong {
-      font-size: 1.15rem;
-      line-height: 1.2;
-    }
-
-    .customer-name-button {
-      background: transparent;
-      color: var(--brand);
-      border: 0;
-      padding: 0;
-      min-height: auto;
-      font-weight: 800;
-      text-align: left;
-      justify-content: flex-start;
-    }
-
-    .customer-name-button:hover { text-decoration: underline; }
-
-    .customer-detail {
-      margin-top: 16px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fbfcfa;
-      overflow: hidden;
-    }
-
-    .customer-detail-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 14px 16px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .customer-detail-head h3 {
-      margin: 0 0 4px;
-      font-size: 1rem;
-    }
-
-    .customer-detail-head p {
-      margin: 0;
-      color: var(--muted);
-      font-size: .9rem;
-    }
-
     .sale-row {
       display: grid;
       grid-template-columns: 1fr 110px 120px 38px;
@@ -482,7 +404,7 @@
     }
 
     @media (max-width: 640px) {
-      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary { grid-template-columns: 1fr; }
+      .metrics, .toolbar, .grid-2, .goal-summary { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
       .sale-row button { width: 100%; }
       header { align-items: flex-start; }
@@ -491,7 +413,8 @@
     }
   </style>
 
-<script src="https://unpkg.com/html5-qrcode">
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
 document.addEventListener("DOMContentLoaded",()=>{
  const btn=document.getElementById("scanBarcode");
  if(btn && window.Html5Qrcode){
@@ -643,8 +566,13 @@ function renderCustomerHistory(){
           <input type="hidden" id="productId">
 
           <label>Código de Barras
-            <input id="barcode" placeholder="Leia ou digite o código de barras">
+            <input id="barcode" placeholder="Leia, escaneie ou digite o código de barras">
           </label>
+          <div class="actions" style="margin:-4px 0 12px;">
+            <button type="button" class="secondary" id="scanProductBarcode">Ler pela câmera</button>
+            <button type="button" class="secondary hidden" id="stopProductBarcode">Parar leitura</button>
+          </div>
+          <div id="productBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
 
           <label>SKU<input id="sku" placeholder="Código interno"></label><label>Marca<input id="brand" placeholder="Marca"></label><label>Localização<input id="location" placeholder="Prateleira"></label><label>Produto
             <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
@@ -725,9 +653,12 @@ function renderCustomerHistory(){
 
             <label>Leitor de Código de Barras
               <input id="saleBarcode" placeholder="Passe o leitor aqui">
-<button type="button" id="scanBarcode">📷 Ler pela Câmera</button>
-<div id="reader" style="width:300px;max-width:100%;"></div>
             </label>
+            <div class="actions" style="margin:-4px 0 12px;">
+              <button type="button" class="secondary" id="scanSaleBarcode">Ler pela câmera</button>
+              <button type="button" class="secondary hidden" id="stopSaleBarcode">Parar leitura</button>
+            </div>
+            <div id="saleBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
 
             
 <div class="grid-2" style="margin-bottom:12px;">
@@ -768,27 +699,11 @@ function renderCustomerHistory(){
 <section id="customerHistoryView" class="hidden">
 <div class="panel-body">
 <h2 style="padding:0 0 12px;border:0;background:transparent;">Consulta de Clientes</h2>
-<div class="customer-tools">
-<label>Filtrar por nome
+<div class="grid-2">
 <input id="searchCustomerName" placeholder="Nome do cliente">
-</label>
-<label>Filtrar por telefone
 <input id="searchCustomerPhone" placeholder="Celular">
-</label>
-<label>Ordenar lista
-<select id="customerSort">
-<option value="total-desc">Maior valor comprado</option>
-<option value="total-asc">Menor valor comprado</option>
-<option value="name-asc">Nome A-Z</option>
-<option value="last-desc">Compra mais recente</option>
-<option value="purchases-desc">Mais compras</option>
-</select>
-</label>
-<button type="button" class="secondary" id="exportCustomersBtn">Exportar Excel</button>
 </div>
-<div id="customerSummary" class="customer-summary"></div>
 <div id="customerHistoryResults"></div>
-<div id="customerPurchaseDetails"></div>
 </div>
 </section>
 <section id="historyView" class="hidden">
@@ -895,7 +810,6 @@ function renderCustomerHistory(){
     };
 
     let state = loadState();
-    let selectedCustomerKey = "";
     const el = id => document.getElementById(id);
 
     function loadState() {
@@ -910,17 +824,6 @@ function renderCustomerHistory(){
 
     function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function updateHistoryLists() {
-      const products = [...new Set(state.products.map(p => p.name).filter(Boolean))];
-      const cats = [...new Set(state.products.map(p => p.category).filter(Boolean))];
-      const sups = [...new Set(state.products.map(p => p.supplier).filter(Boolean))];
-      const productOptions = `<datalist id="productHistory">${products.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
-      const categoryOptions = `<datalist id="categoryHistory">${cats.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
-      const supplierOptions = `<datalist id="supplierHistory">${sups.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
-      ["productHistory", "categoryHistory", "supplierHistory"].forEach(id => document.getElementById(id)?.remove());
-      document.body.insertAdjacentHTML("beforeend", productOptions + categoryOptions + supplierOptions);
     }
 
     function suggestedPrice(product) {
@@ -1035,227 +938,6 @@ function renderCustomerHistory(){
         </tr>
       `).join("");
       el("historyEmpty").classList.toggle("hidden", state.sales.length > 0);
-    }
-
-    function normalizePhone(phone) {
-      return String(phone || "").replace(/\D/g, "");
-    }
-
-    function customerKeyFromSale(sale) {
-      const name = String(sale.customerName || "Nao informado").trim() || "Nao informado";
-      const phone = normalizePhone(sale.customerPhone);
-      return `${name.toLowerCase()}|${phone}`;
-    }
-
-    function buildCustomerList() {
-      const customers = {};
-      (state.sales || []).forEach(sale => {
-        const name = String(sale.customerName || "Nao informado").trim() || "Nao informado";
-        const phone = String(sale.customerPhone || "").trim();
-        const key = customerKeyFromSale(sale);
-        if (!customers[key]) {
-          customers[key] = {
-            key,
-            name,
-            phone,
-            purchases: 0,
-            total: 0,
-            lastPurchase: "",
-            sales: []
-          };
-        }
-        customers[key].purchases += 1;
-        customers[key].total += Number(sale.total || 0);
-        customers[key].sales.push(sale);
-        if (!customers[key].lastPurchase || new Date(sale.date) > new Date(customers[key].lastPurchase)) {
-          customers[key].lastPurchase = sale.date;
-        }
-      });
-
-      return Object.values(customers).map(customer => ({
-        ...customer,
-        averageTicket: customer.purchases ? customer.total / customer.purchases : 0,
-        sales: customer.sales.slice().sort((a, b) => new Date(b.date) - new Date(a.date))
-      }));
-    }
-
-    function sortCustomers(customers) {
-      const sort = el("customerSort")?.value || "total-desc";
-      return customers.slice().sort((a, b) => {
-        if (sort === "total-asc") return a.total - b.total;
-        if (sort === "name-asc") return a.name.localeCompare(b.name, "pt-BR");
-        if (sort === "last-desc") return new Date(b.lastPurchase || 0) - new Date(a.lastPurchase || 0);
-        if (sort === "purchases-desc") return b.purchases - a.purchases;
-        return b.total - a.total;
-      });
-    }
-
-    function getFilteredCustomers() {
-      const nameFilter = (el("searchCustomerName")?.value || "").trim().toLowerCase();
-      const phoneFilter = normalizePhone(el("searchCustomerPhone")?.value || "");
-      return sortCustomers(buildCustomerList().filter(customer => {
-        const matchesName = !nameFilter || customer.name.toLowerCase().includes(nameFilter);
-        const matchesPhone = !phoneFilter || normalizePhone(customer.phone).includes(phoneFilter);
-        return matchesName && matchesPhone;
-      }));
-    }
-
-    function whatsappUrl(phone) {
-      const digits = normalizePhone(phone);
-      if (!digits) return "";
-      const fullNumber = digits.startsWith("55") ? digits : `55${digits}`;
-      return `https://wa.me/${fullNumber}`;
-    }
-
-    function renderCustomerSummary(customers) {
-      const summary = el("customerSummary");
-      if (!summary) return;
-      const totalCustomers = customers.length;
-      const best = customers.slice().sort((a, b) => b.total - a.total)[0];
-      const totalBought = customers.reduce((sum, customer) => sum + customer.total, 0);
-      const totalPurchases = customers.reduce((sum, customer) => sum + customer.purchases, 0);
-      const averageTicket = totalPurchases ? totalBought / totalPurchases : 0;
-      summary.innerHTML = `
-        <article class="customer-card"><span>Clientes encontrados</span><strong>${totalCustomers}</strong></article>
-        <article class="customer-card"><span>Ranking - melhor cliente</span><strong>${best ? escapeHtml(best.name) : "Sem vendas"}</strong></article>
-        <article class="customer-card"><span>Total comprado</span><strong>${money.format(totalBought)}</strong></article>
-        <article class="customer-card"><span>Ticket medio por cliente</span><strong>${money.format(averageTicket)}</strong></article>
-      `;
-    }
-
-    function renderCustomerDetails(customerKey) {
-      const detail = el("customerPurchaseDetails");
-      if (!detail) return;
-      const customer = buildCustomerList().find(item => item.key === customerKey);
-      if (!customer) {
-        detail.innerHTML = "";
-        return;
-      }
-      const whats = whatsappUrl(customer.phone);
-      detail.innerHTML = `
-        <section class="customer-detail">
-          <div class="customer-detail-head">
-            <div>
-              <h3>${escapeHtml(customer.name)}</h3>
-              <p>${escapeHtml(customer.phone || "Celular nao informado")} | ${customer.purchases} compra(s) | ${money.format(customer.total)}</p>
-            </div>
-            ${whats ? `<a href="${whats}" target="_blank" rel="noopener"><button type="button">WhatsApp</button></a>` : ""}
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Data</th>
-                  <th>Produtos</th>
-                  <th>Pagamento</th>
-                  <th>Valor</th>
-                  <th>Ticket</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${customer.sales.map(sale => `
-                  <tr>
-                    <td>${dateFmt.format(new Date(sale.date))}</td>
-                    <td>${sale.items.map(item => `${escapeHtml(item.name)} x${item.quantity}`).join("<br>")}</td>
-                    <td>${escapeHtml(sale.paymentMethod || "")}</td>
-                    <td class="money">${money.format(Number(sale.total || 0))}</td>
-                    <td class="money">${money.format(Number(sale.total || 0))}</td>
-                  </tr>
-                `).join("")}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      `;
-    }
-
-    function renderCustomerHistory() {
-      const container = el("customerHistoryResults");
-      if (!container) return;
-      const customers = getFilteredCustomers();
-      renderCustomerSummary(customers);
-
-      if (!customers.length) {
-        container.innerHTML = `<div class="empty">Nenhum cliente encontrado.</div>`;
-        renderCustomerDetails("");
-        return;
-      }
-
-      if (selectedCustomerKey && !customers.some(customer => customer.key === selectedCustomerKey)) {
-        selectedCustomerKey = "";
-      }
-
-      const ranking = new Map(buildCustomerList().sort((a, b) => b.total - a.total).map((customer, index) => [customer.key, index + 1]));
-      container.innerHTML = `
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Ranking</th>
-                <th>Cliente</th>
-                <th>Celular</th>
-                <th>Qtd. compras</th>
-                <th>Total comprado</th>
-                <th>Ticket medio</th>
-                <th>Ultima compra</th>
-                <th>WhatsApp</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${customers.map((customer, index) => {
-                const whats = whatsappUrl(customer.phone);
-                return `
-                  <tr>
-                    <td>${ranking.get(customer.key) || index + 1}o</td>
-                    <td><button class="customer-name-button" type="button" data-customer-key="${escapeHtml(customer.key)}">${escapeHtml(customer.name)}</button></td>
-                    <td>${escapeHtml(customer.phone || "Nao informado")}</td>
-                    <td>${customer.purchases}</td>
-                    <td class="money">${money.format(customer.total)}</td>
-                    <td class="money">${money.format(customer.averageTicket)}</td>
-                    <td>${customer.lastPurchase ? dateFmt.format(new Date(customer.lastPurchase)) : "-"}</td>
-                    <td>${whats ? `<a href="${whats}" target="_blank" rel="noopener">Abrir</a>` : "-"}</td>
-                  </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
-        </div>
-      `;
-
-      container.querySelectorAll("[data-customer-key]").forEach(button => {
-        button.addEventListener("click", () => {
-          selectedCustomerKey = button.dataset.customerKey;
-          renderCustomerDetails(selectedCustomerKey);
-        });
-      });
-
-      renderCustomerDetails(selectedCustomerKey || customers[0].key);
-    }
-
-    function exportCustomersToExcel() {
-      const customers = getFilteredCustomers();
-      const rows = [
-        ["Ranking", "Cliente", "Celular", "Quantidade de compras", "Valor total comprado", "Ticket medio", "Data da ultima compra"]
-      ];
-      customers.forEach((customer, index) => {
-        rows.push([
-          index + 1,
-          customer.name,
-          customer.phone || "",
-          customer.purchases,
-          customer.total.toFixed(2).replace(".", ","),
-          customer.averageTicket.toFixed(2).replace(".", ","),
-          customer.lastPurchase ? dateFmt.format(new Date(customer.lastPurchase)) : ""
-        ]);
-      });
-      const html = `<table>${rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(cell)}</td>`).join("")}</tr>`).join("")}</table>`;
-      const blob = new Blob(["\ufeff" + html], { type: "application/vnd.ms-excel;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `clientes-ms-tech-${new Date().toISOString().slice(0, 10)}.xls`;
-      link.click();
-      URL.revokeObjectURL(url);
     }
 
     
@@ -1397,11 +1079,79 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       el("saleNotice").textContent = invalid ? `Estoque insuficiente para ${invalid.product.name}. Disponível: ${invalid.product.quantity}.` : "";
     }
 
+    function addProductByBarcode(code) {
+      const saleBarcodeInput = el("saleBarcode");
+      const cleanCode = String(code || "").trim();
+      if (!cleanCode) return;
+
+      const product = state.products.find(p => String(p.barcode || "").trim() === cleanCode);
+      if (!product) {
+        alert("Produto não encontrado.");
+        if (saleBarcodeInput) saleBarcodeInput.value = "";
+        return;
+      }
+
+      addSaleItem();
+      const rows = document.querySelectorAll(".sale-row");
+      const row = rows[rows.length - 1];
+      row.querySelector(".sale-product").value = product.id;
+      row.querySelector(".sale-price").value = suggestedPrice(product).toFixed(2);
+      calculateSaleTotal();
+      if (saleBarcodeInput) saleBarcodeInput.value = "";
+    }
+
+    let activeBarcodeReader = null;
+
+    async function stopBarcodeReader() {
+      if (!activeBarcodeReader) return;
+      try {
+        await activeBarcodeReader.instance.stop();
+      } catch (error) {
+        console.warn("Leitor já estava parado.", error);
+      }
+      activeBarcodeReader.reader.classList.add("hidden");
+      activeBarcodeReader.stopButton.classList.add("hidden");
+      activeBarcodeReader.startButton.classList.remove("hidden");
+      activeBarcodeReader = null;
+    }
+
+    async function startBarcodeReader({ readerId, startButtonId, stopButtonId, onRead }) {
+      if (!window.Html5Qrcode) {
+        alert("Não foi possível carregar o leitor pela câmera. Verifique a internet ou use um leitor USB/digite o código.");
+        return;
+      }
+
+      await stopBarcodeReader();
+      const reader = el(readerId);
+      const startButton = el(startButtonId);
+      const stopButton = el(stopButtonId);
+      if (!reader || !startButton || !stopButton) return;
+
+      reader.classList.remove("hidden");
+      startButton.classList.add("hidden");
+      stopButton.classList.remove("hidden");
+
+      const scanner = new Html5Qrcode(readerId);
+      activeBarcodeReader = { instance: scanner, reader, startButton, stopButton };
+
+      try {
+        await scanner.start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 240, height: 160 } },
+          async decodedText => {
+            onRead(decodedText);
+            await stopBarcodeReader();
+          }
+        );
+      } catch (error) {
+        await stopBarcodeReader();
+        alert("Não foi possível abrir a câmera. Permita o acesso à câmera ou use um leitor USB/digite o código.");
+      }
+    }
+
     function clearSale() {
       el("saleItems").innerHTML = "";
       el("discount").value = 0;
-      if (el("customerName")) el("customerName").value = "";
-      if (el("customerPhone")) el("customerPhone").value = "";
       addSaleItem();
       el("saleNotice").textContent = "";
     }
@@ -1527,31 +1277,42 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
     const saleBarcodeInput = document.getElementById("saleBarcode");
     if (saleBarcodeInput) {
       saleBarcodeInput.addEventListener("change", () => {
-        const code = saleBarcodeInput.value.trim();
-
-        const product = state.products.find(
-          p => (p.barcode || "") === code
-        );
-
-        if (!product) {
-          alert("Produto não encontrado.");
-          saleBarcodeInput.value = "";
-          return;
-        }
-
-        addSaleItem();
-
-        const rows = document.querySelectorAll(".sale-row");
-        const row = rows[rows.length - 1];
-
-        row.querySelector(".sale-product").value = product.id;
-        row.querySelector(".sale-price").value = suggestedPrice(product).toFixed(2);
-
-        calculateSaleTotal();
-
-        saleBarcodeInput.value = "";
+        addProductByBarcode(saleBarcodeInput.value);
+      });
+      saleBarcodeInput.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        addProductByBarcode(saleBarcodeInput.value);
       });
     }
+
+    el("scanProductBarcode")?.addEventListener("click", () => {
+      startBarcodeReader({
+        readerId: "productBarcodeReader",
+        startButtonId: "scanProductBarcode",
+        stopButtonId: "stopProductBarcode",
+        onRead: code => {
+          el("barcode").value = String(code || "").trim();
+          el("barcode").focus();
+        }
+      });
+    });
+
+    el("stopProductBarcode")?.addEventListener("click", stopBarcodeReader);
+
+    el("scanSaleBarcode")?.addEventListener("click", () => {
+      startBarcodeReader({
+        readerId: "saleBarcodeReader",
+        startButtonId: "scanSaleBarcode",
+        stopButtonId: "stopSaleBarcode",
+        onRead: code => {
+          el("saleBarcode").value = String(code || "").trim();
+          addProductByBarcode(code);
+        }
+      });
+    });
+
+    el("stopSaleBarcode")?.addEventListener("click", stopBarcodeReader);
 
 
     el("exportBtn").addEventListener("click", () => {
@@ -1602,8 +1363,6 @@ renderAll();
 
 document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
 document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('customerSort')?.addEventListener('change', renderCustomerHistory);
-document.getElementById('exportCustomersBtn')?.addEventListener('click', exportCustomersToExcel);
 
   </script>
 </body>
