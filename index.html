@@ -905,6 +905,9 @@
     </div>
     <div class="header-actions">
       <span class="user-chip" id="currentUserChip">Usuário</span>
+      <button class="secondary" id="exportBackupBtn" type="button">Exportar backup</button>
+      <button class="secondary" id="importBackupBtn" type="button">Importar backup</button>
+      <input class="hidden" id="backupFileInput" type="file" accept="application/json,.json">
       <button class="warning" id="resetBtn" type="button">Limpar base</button>
       <button class="secondary" id="logoutBtn" type="button">Sair</button>
     </div>
@@ -1704,7 +1707,16 @@
 
     function loadState() {
       const raw = localStorage.getItem(STORAGE_KEY);
-      const loaded = raw ? JSON.parse(raw) : seed;
+      let loaded = seed;
+      if (raw) {
+        try {
+          loaded = JSON.parse(raw);
+        } catch (error) {
+          localStorage.setItem(`${STORAGE_KEY}-corrompido-${Date.now()}`, raw);
+          localStorage.removeItem(STORAGE_KEY);
+          alert("A base local estava corrompida e foi isolada. O sistema iniciou com a base padrão.");
+        }
+      }
       loaded.products ||= [];
       loaded.sales ||= [];
       loaded.expenses ||= [];
@@ -1781,7 +1793,11 @@
     }
 
     function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (error) {
+        alert("Não foi possível salvar os dados neste navegador. Verifique o espaço disponível ou exporte um backup.");
+      }
     }
 
     function exportSystemBackup() {
@@ -1982,6 +1998,8 @@
       document.querySelector(".metrics")?.classList.toggle("hidden", seller || stock);
       document.querySelector(".goals")?.classList.toggle("hidden", seller || stock);
       el("resetBtn")?.classList.toggle("hidden", !admin);
+      el("exportBackupBtn")?.classList.toggle("hidden", !admin);
+      el("importBackupBtn")?.classList.toggle("hidden", !admin);
       el("sellerGoalPanel")?.classList.toggle("hidden", !seller);
       el("passwordResetPanel")?.classList.toggle("hidden", !admin);
     }
@@ -2132,6 +2150,7 @@
         user.password = password;
         user.mustChangePassword = false;
         user.passwordResetRequested = false;
+        clearPasswordOverride(user.username);
         currentUser = effectiveUser(user);
         saveState();
         closeChangePasswordModal();
@@ -3060,6 +3079,7 @@
       user.password = FIRST_ACCESS_PASSWORD;
       user.mustChangePassword = true;
       user.passwordResetRequested = false;
+      clearPasswordOverride(user.username);
       saveState();
       renderAccesses();
       renderPasswordResetRequests();
@@ -3851,6 +3871,8 @@ function renderAll() {
         alert("Você não pode excluir o usuário logado.");
         return;
       }
+      const user = (state.users || []).find(item => item.id === id);
+      if (user) clearPasswordOverride(user.username);
       state.users = (state.users || []).filter(item => item.id !== id);
       saveState();
       renderAccesses();
@@ -4341,15 +4363,21 @@ loadProductIntoPricing(product);
       const typedPassword = el("accessPassword").value;
       const role = el("accessRole").value;
       const selectedPermissions = [...document.querySelectorAll("#permissionList input:checked")].map(input => input.value);
+      if (existing && normalizeUsername(existing.username) !== normalizeUsername(username)) {
+        clearPasswordOverride(existing.username);
+      }
       const user = {
         id,
         name: el("accessName").value.trim(),
-        username,
-        password: typedPassword || existing?.password || "acesso123",
+        username: normalizeUsername(username),
+        password: typedPassword || effectivePasswordForUser(existing) || "acesso123",
         role,
         active: existing?.active ?? true,
+        mustChangePassword: typedPassword ? false : (existing?.mustChangePassword ?? true),
+        passwordResetRequested: existing?.passwordResetRequested || false,
         permissions: permissionsForRole(role, selectedPermissions)
       };
+      clearPasswordOverride(user.username);
       const index = state.users.findIndex(item => item.id === id);
       if (index >= 0) state.users[index] = user;
       else state.users.push(user);
@@ -4530,8 +4558,42 @@ renderAll();
 
 
     el("exportFinancialBtn")?.addEventListener("click", exportFinancialReportToExcel);
+    el("exportBackupBtn")?.addEventListener("click", exportSystemBackup);
+    el("importBackupBtn")?.addEventListener("click", () => el("backupFileInput")?.click());
+    el("backupFileInput")?.addEventListener("change", event => {
+      importSystemBackupFile(event.target.files?.[0]);
+      event.target.value = "";
+    });
 
     el("resetBtn").addEventListener("click", () => {
       if (!confirm("Limpar todos os produtos e vendas cadastrados?")) return;
       state = {
-    
+        products: [],
+        sales: [],
+        expenses: [],
+        fixedExpenses: [],
+        monthlyExpenses: {},
+        fixedExpenseMonths: {},
+        cashFlows: {},
+        users: state.users || [],
+        passwordOverrides: state.passwordOverrides || {},
+        goals: { salesGoal: 0, salesPeople: 1 },
+        goalMonth: currentMonthKey(),
+        monthlyGoals: {},
+        expenseMonth: currentMonthKey(),
+        historyMonth: currentMonthKey(),
+        financialMonth: currentMonthKey(),
+        pricingSettings: { cardFee: 4.98, taxes: 6, operational: 15, margin: 25 },
+        pricingProducts: [],
+        pricingHistory: []
+      };
+      saveState();
+      clearSale();
+      renderAll();
+      switchView(firstAccessibleView());
+    });
+
+    initAuth();
+  </script>
+</body>
+</html>
