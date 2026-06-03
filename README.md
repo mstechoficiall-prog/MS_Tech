@@ -105,7 +105,7 @@ create table if not exists pricing_history (
 
 - Este app é estático e pode ser publicado pelo GitHub Pages.
 - Já há um workflow em `.github/workflows/pages.yml` que faz deploy automático quando você envia para `main`.
-- Após ativar o Pages em `Settings > Pages`, a URL provável será:
+- A URL pública do site é:
   `https://mstechoficiall-prog.github.io/MS_Tech`
 - Certifique-se de que `index.html` contenha sua `SUPABASE_URL` e `SUPABASE_ANON_KEY` antes de usar a versão pública.
 
