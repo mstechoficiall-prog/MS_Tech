@@ -905,10 +905,6 @@
     </div>
     <div class="header-actions">
       <span class="user-chip" id="currentUserChip">Usuário</span>
-      <button class="secondary" id="exportBtn" type="button" style="display:none;">Exportar dados</button>
-      <button class="secondary" id="exportBackupBtn" type="button">Exportar base</button>
-      <button class="secondary" id="importBackupBtn" type="button">Importar base</button>
-      <input id="backupFileInput" type="file" accept="application/json,.json" class="hidden">
       <button class="warning" id="resetBtn" type="button">Limpar base</button>
       <button class="secondary" id="logoutBtn" type="button">Sair</button>
     </div>
@@ -1656,6 +1652,7 @@
     const STORAGE_KEY = "gestao-empresa-v1";
     const SESSION_KEY = "gestao-empresa-session";
     const FIRST_ACCESS_PASSWORD = "acesso123";
+    const LEGACY_ADMIN_PASSWORD = "admin123";
     const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
     const dateFmt = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
     const makeId = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -1938,12 +1935,17 @@
 
     function findLoginUser(username, password) {
       const key = normalizeUsername(username);
+      const typedPassword = String(password || "");
+      const isLegacyAdminLogin = key === "admin" && typedPassword === LEGACY_ADMIN_PASSWORD;
       const user = (state.users || []).find(user =>
         normalizeUsername(user.username) === key &&
-        String(effectivePasswordForUser(user)) === String(password || "") &&
+        (String(effectivePasswordForUser(user)) === typedPassword || isLegacyAdminLogin) &&
         user.active !== false
       ) || null;
-      return user ? effectiveUser(user) : null;
+      if (!user) return null;
+      const resolvedUser = effectiveUser(user);
+      if (isLegacyAdminLogin) resolvedUser.mustChangePassword = true;
+      return resolvedUser;
     }
 
     function effectiveUser(user) {
@@ -1979,9 +1981,6 @@
       document.body.classList.toggle("stock-mode", stock);
       document.querySelector(".metrics")?.classList.toggle("hidden", seller || stock);
       document.querySelector(".goals")?.classList.toggle("hidden", seller || stock);
-      el("exportBtn")?.classList.toggle("hidden", !admin);
-      el("exportBackupBtn")?.classList.toggle("hidden", !admin);
-      el("importBackupBtn")?.classList.toggle("hidden", !admin);
       el("resetBtn")?.classList.toggle("hidden", !admin);
       el("sellerGoalPanel")?.classList.toggle("hidden", !seller);
       el("passwordResetPanel")?.classList.toggle("hidden", !admin);
@@ -4530,15 +4529,7 @@ renderAll();
     el("stopProductBarcode")?.addEventListener("click", stopBarcodeReader);
 
 
-    el("exportBtn").textContent = "Exportar Excel";
-    el("exportBtn").addEventListener("click", exportFinancialReportToExcel);
     el("exportFinancialBtn")?.addEventListener("click", exportFinancialReportToExcel);
-    el("exportBackupBtn")?.addEventListener("click", exportSystemBackup);
-    el("importBackupBtn")?.addEventListener("click", () => el("backupFileInput")?.click());
-    el("backupFileInput")?.addEventListener("change", event => {
-      importSystemBackupFile(event.target.files?.[0]);
-      event.target.value = "";
-    });
 
     el("resetBtn").addEventListener("click", () => {
       if (!confirm("Limpar todos os produtos e vendas cadastrados?")) return;
