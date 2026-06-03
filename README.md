@@ -101,6 +101,14 @@ create table if not exists pricing_history (
 - Quando Supabase estiver configurado, ele também sincroniza os dados em tabelas separadas
 - Diferentes dispositivos que usam a mesma URL e `anon` key irão compartilhar o mesmo banco de dados
 
+## Publicação no GitHub Pages
+
+- Este app é estático e pode ser publicado pelo GitHub Pages.
+- Já há um workflow em `.github/workflows/pages.yml` que faz deploy automático quando você envia para `main`.
+- Após ativar o Pages em `Settings > Pages`, a URL provável será:
+  `https://mstechoficiall-prog.github.io/MS_Tech`
+- Certifique-se de que `index.html` contenha sua `SUPABASE_URL` e `SUPABASE_ANON_KEY` antes de usar a versão pública.
+
 ## Observações
 
 - A sincronização remota agora usa tabelas por entidade, em vez de um único JSON global
