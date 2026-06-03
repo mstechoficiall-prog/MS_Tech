@@ -6,18 +6,19 @@
   <title>MS Tech - Sistema de Gestão</title>
   <style>
     :root {
-      --bg: #f6f7f4;
+      --bg: #f7f8fa;
       --panel: #ffffff;
-      --ink: #1f2a2e;
-      --muted: #647174;
-      --line: #dce2dc;
-      --brand: #176b5b;
-      --brand-2: #b2552d;
-      --ok: #237a46;
-      --warn: #b26a00;
-      --danger: #b93b3b;
-      --soft: #edf4ef;
-      --shadow: 0 16px 40px rgba(31, 42, 46, .08);
+      --ink: #172026;
+      --muted: #68737d;
+      --line: #e5e9ee;
+      --brand: #0f766e;
+      --brand-2: #a16207;
+      --ok: #15803d;
+      --warn: #b45309;
+      --danger: #b42318;
+      --soft: #f0fdfa;
+      --shadow: 0 10px 30px rgba(15, 23, 42, .06);
+      --radius: 8px;
       font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
@@ -25,82 +26,73 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(180deg, rgba(246, 247, 244, .9), rgba(246, 247, 244, .97)), var(--bg);
+      background: var(--bg);
       color: var(--ink);
+      font-size: 15px;
     }
 
     header {
-      background: linear-gradient(90deg, rgba(9, 31, 45, .96), rgba(10, 82, 119, .9));
-      color: white;
-      padding: 22px clamp(16px, 4vw, 48px);
+      background: rgba(255, 255, 255, .88);
+      color: var(--ink);
+      padding: 18px clamp(16px, 4vw, 48px);
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
       flex-wrap: wrap;
-    }
-
-    .brand-block {
-      display: flex;
-      align-items: center;
-      min-width: min(100%, 360px);
-    }
-
-    .brand-copy {
-      min-width: 0;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      position: sticky;
+      top: 0;
+      z-index: 10;
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.35rem, 2.4vw, 2.15rem);
+      font-size: clamp(1.25rem, 2vw, 1.8rem);
       letter-spacing: 0;
+      font-weight: 850;
     }
 
     .subtitle {
-      margin: 6px 0 0;
-      color: #cfe3dc;
+      margin: 4px 0 0;
+      color: var(--muted);
       max-width: 760px;
       line-height: 1.45;
-      font-size: .96rem;
+      font-size: .92rem;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       flex-wrap: wrap;
-    }
-
-    .header-actions button {
-      min-height: 32px;
-      padding: 7px 10px;
-      font-size: .82rem;
-      border-radius: 5px;
+      max-width: 100%;
     }
 
     main {
-      width: min(1440px, 100%);
+      width: min(1360px, 100%);
       margin: 0 auto;
-      padding: 22px clamp(14px, 3vw, 34px) 42px;
+      padding: 24px clamp(14px, 3vw, 34px) 42px;
     }
 
     .metrics {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 12px;
-      margin-bottom: 18px;
+      grid-template-columns: repeat(4, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
     }
 
     .metric, .panel, dialog {
-      background: rgba(255, 255, 255, .94);
+      background: rgba(255, 255, 255, .96);
       border: 1px solid var(--line);
-      border-radius: 8px;
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
 
     .metric {
-      padding: 16px;
-      min-height: 108px;
+      padding: 18px;
+      min-height: 104px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -108,20 +100,22 @@
 
     .metric span {
       color: var(--muted);
-      font-size: .88rem;
+      font-size: .78rem;
+      font-weight: 750;
+      text-transform: uppercase;
     }
 
     .metric strong {
-      font-size: clamp(1.35rem, 2vw, 1.9rem);
+      font-size: clamp(1.25rem, 2vw, 1.7rem);
       line-height: 1.1;
+      font-weight: 850;
     }
 
     .goals {
       display: grid;
-      grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
-      gap: 16px;
+      grid-template-columns: minmax(280px, 420px) 1fr;
+      gap: 14px;
       margin-bottom: 18px;
-      align-items: stretch;
     }
 
     .goal-summary {
@@ -130,11 +124,15 @@
       gap: 10px;
     }
 
+    #historyPaymentSummary {
+      grid-template-columns: repeat(5, minmax(130px, 1fr));
+    }
+
     .goal-card {
       border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fbfcfa;
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #ffffff;
       min-height: 92px;
       display: flex;
       flex-direction: column;
@@ -154,7 +152,7 @@
 
     .progress {
       height: 12px;
-      background: #e4ebe5;
+      background: #eef2f6;
       border-radius: 999px;
       overflow: hidden;
       margin-top: 12px;
@@ -170,51 +168,61 @@
 
     .workspace {
       display: grid;
-      grid-template-columns: minmax(320px, 370px) minmax(0, 1fr);
+      grid-template-columns: 1fr;
       gap: 16px;
       align-items: start;
     }
 
     .panel {
       overflow: hidden;
-      min-width: 0;
     }
 
     .panel h2 {
       margin: 0;
-      padding: 16px 18px;
+      padding: 18px 20px;
       font-size: 1rem;
       border-bottom: 1px solid var(--line);
-      background: #fbfcfa;
+      background: #ffffff;
+      font-weight: 820;
     }
 
     form, .panel-body {
-      padding: 16px 18px 18px;
+      padding: 18px 20px 20px;
     }
 
     label {
       display: grid;
-      gap: 6px;
+      gap: 7px;
       color: var(--muted);
-      font-size: .84rem;
+      font-size: .78rem;
       font-weight: 650;
       margin-bottom: 12px;
+      text-transform: uppercase;
     }
 
     input, select {
       width: 100%;
-      border: 1px solid #ccd5cf;
-      border-radius: 6px;
-      padding: 10px 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 11px 12px;
       color: var(--ink);
-      background: white;
+      background: #ffffff;
       font: inherit;
-      min-height: 42px;
+      min-height: 44px;
+      transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
     }
 
     input:focus, select:focus {
-      outline: 3px solid rgba(23, 107, 91, .18);
+      outline: 0;
       border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(15, 118, 110, .12);
+    }
+
+
+    input:disabled {
+      background: #f1f5f9;
+      color: var(--muted);
+      cursor: not-allowed;
     }
 
     .grid-2 {
@@ -223,19 +231,13 @@
       gap: 10px;
     }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-    }
-
     .hint {
       background: var(--soft);
-      border: 1px solid #d7e8dc;
-      border-radius: 8px;
+      border: 1px solid #ccfbf1;
+      border-radius: var(--radius);
       padding: 12px;
       margin: 8px 0 14px;
-      color: #295448;
+      color: #115e59;
       font-size: .9rem;
       line-height: 1.4;
     }
@@ -249,11 +251,11 @@
 
     button {
       border: 0;
-      border-radius: 6px;
-      min-height: 40px;
-      padding: 10px 13px;
+      border-radius: var(--radius);
+      min-height: 42px;
+      padding: 10px 14px;
       font: inherit;
-      font-weight: 750;
+      font-weight: 760;
       cursor: pointer;
       background: var(--brand);
       color: white;
@@ -261,12 +263,20 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      text-align: center;
+      max-width: 100%;
+      transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, .08);
     }
 
     button.secondary {
-      background: #eef3ef;
-      color: #24443d;
-      border: 1px solid #d6ded8;
+      background: #ffffff;
+      color: var(--ink);
+      border: 1px solid var(--line);
     }
 
     button.warning { background: var(--brand-2); }
@@ -277,42 +287,75 @@
       flex: 0 0 auto;
     }
 
-    .tabs {
+    .area-menu {
       display: flex;
-      gap: 4px;
-      padding: 8px;
+      gap: 6px;
+      padding: 10px;
       border-bottom: 1px solid var(--line);
-      background: #fbfcfa;
-      overflow-x: auto;
-      align-items: stretch;
+      background: #ffffff;
+      flex-wrap: wrap;
     }
 
-    .tab {
+    .area-button {
       background: transparent;
       color: var(--muted);
       border: 1px solid transparent;
       white-space: nowrap;
-      flex: 1 1 110px;
-      min-height: 42px;
+      box-shadow: none;
+    }
+
+    .area-button.active {
+      background: #ecfdf5;
+      color: #065f46;
+      border-color: #a7f3d0;
+    }
+
+    .subarea-menu {
+      display: none;
+      gap: 8px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fafafa;
+      flex-wrap: wrap;
+    }
+
+    .subarea-menu.active {
+      display: flex;
+    }
+
+    .subarea-placeholder {
+      padding: 34px;
+      color: var(--muted);
+      text-align: center;
+      background: #ffffff;
+    }
+
+    .tab {
+      background: #ffffff;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      white-space: nowrap;
+      box-shadow: none;
     }
 
     .tab.active {
-      background: #e7f1eb;
-      color: #173e36;
-      border-color: #cdded2;
+      background: var(--brand);
+      color: #ffffff;
+      border-color: var(--brand);
     }
 
     .toolbar {
       display: grid;
       grid-template-columns: 1fr 180px;
       gap: 10px;
-      padding: 14px 16px;
+      padding: 14px;
       border-bottom: 1px solid var(--line);
-      background: white;
+      background: #ffffff;
     }
 
     .table-wrap {
       overflow-x: auto;
+      background: #ffffff;
     }
 
     table {
@@ -323,7 +366,7 @@
 
     th, td {
       text-align: left;
-      padding: 12px 14px;
+      padding: 13px 16px;
       border-bottom: 1px solid var(--line);
       vertical-align: middle;
       font-size: .92rem;
@@ -331,13 +374,15 @@
 
     th {
       color: var(--muted);
-      font-size: .78rem;
+      font-size: .72rem;
       text-transform: uppercase;
-      background: #fbfcfa;
+      background: #f9fafb;
       letter-spacing: 0;
     }
 
-    tr.low-stock td { background: #fff7e8; }
+    tbody tr:hover td { background: #f8fafc; }
+
+    tr.low-stock td { background: #fff8eb; }
     .pill {
       display: inline-flex;
       align-items: center;
@@ -346,8 +391,8 @@
       border-radius: 999px;
       font-size: .78rem;
       font-weight: 750;
-      background: #eef3ef;
-      color: #2f4a43;
+      background: #f1f5f9;
+      color: #334155;
       white-space: nowrap;
     }
 
@@ -367,7 +412,7 @@
 
     .customer-tools {
       display: grid;
-      grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) 220px auto;
+      grid-template-columns: minmax(180px, 1fr) minmax(160px, 1fr) 220px;
       gap: 10px;
       align-items: end;
       margin-bottom: 14px;
@@ -382,13 +427,14 @@
 
     .customer-card {
       border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 12px;
-      background: #fbfcfa;
-      min-height: 86px;
+      border-radius: var(--radius);
+      padding: 14px;
+      background: #ffffff;
+      min-height: 96px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 8px;
     }
 
     .customer-card span {
@@ -400,6 +446,12 @@
     .customer-card strong {
       font-size: 1.15rem;
       line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .customer-card small {
+      color: var(--muted);
+      line-height: 1.35;
     }
 
     .customer-name-button {
@@ -415,11 +467,127 @@
 
     .customer-name-button:hover { text-decoration: underline; }
 
+    .access-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: start;
+      width: 100%;
+    }
+
+    .access-grid > div,
+    #passwordResetPanel,
+    #accessView .table-wrap {
+      width: 100%;
+    }
+
+    #accessView .table-wrap table {
+      min-width: 100%;
+    }
+
+    .access-summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .access-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 14px;
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .access-card span {
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .access-card strong {
+      font-size: 1.25rem;
+      line-height: 1.1;
+    }
+
+    .access-card small {
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .access-form-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 16px;
+      width: 100%;
+    }
+
+    .access-form-card.hidden { display: none; }
+
+    .access-form-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .access-form-title h3 {
+      margin: 0;
+      font-size: 1rem;
+    }
+
+    .access-profile-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .access-profile-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      padding: 12px;
+      min-height: 106px;
+    }
+
+    .access-profile-card strong { display: block; margin-bottom: 6px; }
+    .access-profile-card p { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.35; }
+
+    .permission-list {
+      display: grid;
+      gap: 8px;
+      margin: 8px 0 14px;
+    }
+
+    .permission-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+      color: var(--ink);
+      text-transform: none;
+    }
+
+    .permission-list input {
+      width: 18px;
+      min-height: 18px;
+      flex: 0 0 auto;
+    }
+
     .customer-detail {
       margin-top: 16px;
       border: 1px solid var(--line);
-      border-radius: 8px;
-      background: #fbfcfa;
+      border-radius: var(--radius);
+      background: #ffffff;
       overflow: hidden;
     }
 
@@ -445,10 +613,22 @@
 
     .sale-row {
       display: grid;
-      grid-template-columns: 1fr 110px 120px 38px;
+      grid-template-columns: minmax(180px, 1fr) 110px 120px 42px;
       gap: 8px;
       align-items: end;
       margin-bottom: 10px;
+    }
+
+    .sale-row label {
+      margin-bottom: 0;
+    }
+
+    .sale-row button {
+      width: 42px;
+      height: 44px;
+      min-height: 44px;
+      padding: 0;
+      align-self: end;
     }
 
     .sale-total {
@@ -489,142 +669,268 @@
 
     .dialog-head h3 { margin: 0; font-size: 1rem; }
 
+    .login-screen {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: clamp(22px, 6vw, 72px);
+    }
+
+    .login-card {
+      background: rgba(255, 255, 255, .96);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px;
+      width: min(440px, 100%);
+    }
+
+    .login-screen > [aria-hidden="true"] {
+      display: none;
+    }
+
+    .login-card h1 {
+      margin-bottom: 6px;
+    }
+
+    .login-card p {
+      color: var(--muted);
+      line-height: 1.45;
+      margin: 0 0 18px;
+    }
+
+    .login-note {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: .88rem;
+      line-height: 1.45;
+    }
+
+    .auth-link {
+      margin-top: 10px;
+      width: 100%;
+      background: transparent;
+      color: var(--brand);
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .auth-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(23, 32, 38, .34);
+      backdrop-filter: blur(12px);
+    }
+
+    .auth-card {
+      width: min(440px, 100%);
+      background: #ffffff;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: 0 24px 70px rgba(15, 23, 42, .22);
+      padding: 24px;
+    }
+
+    .auth-card h2 {
+      margin: 0 0 8px;
+      font-size: 1.25rem;
+    }
+
+    .auth-card p {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .compact-date-fields {
+      margin-bottom: 12px;
+    }
+
+    .seller-goal,
+    .seller-ranking {
+      margin-bottom: 18px;
+    }
+
+    .login-error {
+      min-height: 22px;
+      margin-top: 10px;
+      color: var(--danger);
+      font-weight: 750;
+    }
+
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--muted);
+      font-weight: 750;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+
+    .pricing-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 420px) minmax(0, 1fr);
+      gap: 16px;
+      align-items: start;
+    }
+    .pricing-results, .pricing-dashboard {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(145px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .pricing-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 13px;
+      background: #ffffff;
+      min-height: 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .pricing-card span {
+      color: var(--muted);
+      font-size: .74rem;
+      font-weight: 780;
+      text-transform: uppercase;
+    }
+    .pricing-card strong { font-size: 1.12rem; line-height: 1.2; }
+    .pricing-card.ok { border-color: #bbf7d0; background: #f0fdf4; }
+    .pricing-card.warn { border-color: #fde68a; background: #fffbeb; }
+    .pricing-card.danger { border-color: #fecaca; background: #fef2f2; }
+    .pricing-status {
+      border-radius: var(--radius);
+      padding: 12px;
+      font-weight: 800;
+      margin: 8px 0 14px;
+    }
+    .pricing-status.ok { color: #166534; background: #dcfce7; border: 1px solid #86efac; }
+    .pricing-status.warn { color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; }
+    .pricing-status.danger { color: #991b1b; background: #fee2e2; border: 1px solid #fca5a5; }
+    @media (max-width: 900px) {
+      .pricing-layout, .pricing-results, .pricing-dashboard { grid-template-columns: 1fr; }
+    }
+
     @media (max-width: 1050px) {
       .workspace { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
       .goals { grid-template-columns: 1fr; }
-      .customer-tools { grid-template-columns: 1fr 1fr; }
     }
 
     @media (max-width: 640px) {
-      .metrics, .toolbar, .grid-2, .grid-3, .goal-summary, .customer-tools, .customer-summary { grid-template-columns: 1fr; }
+      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid { grid-template-columns: 1fr; }
+      #historyPaymentSummary { grid-template-columns: 1fr; }
+      .access-grid { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
       .sale-row button { width: 100%; }
       header { align-items: flex-start; }
-      .header-actions { width: auto; }
-      .header-actions button { flex: 0 0 auto; }
+      .header-actions { width: 100%; }
+      .header-actions button { flex: 1; }
+      .login-screen { grid-template-columns: 1fr; }
     }
   </style>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
-<script>
-document.addEventListener("DOMContentLoaded",()=>{
- const btn=document.getElementById("scanBarcode");
- if(btn && window.Html5Qrcode){
-   btn.addEventListener("click",()=>{
-      const qr=new Html5Qrcode("reader");
-      qr.start(
-        {facingMode:"environment"},
-        {fps:10, qrbox:250},
-        (decodedText)=>{
-          const campo=document.getElementById("saleBarcode");
-          campo.value=decodedText;
-          campo.dispatchEvent(new Event("change"));
-          qr.stop();
-        }
-      );
-   });
- }
-});
-
-
-function updateHistoryLists(){
- const products=[...new Set(state.products.map(p=>p.name).filter(Boolean))];
- const cats=[...new Set(state.products.map(p=>p.category).filter(Boolean))];
- const sups=[...new Set(state.products.map(p=>p.supplier).filter(Boolean))];
-
- let p='<datalist id="productHistory">'+products.map(v=>`<option value="${v}">`).join('')+'</datalist>';
- let c='<datalist id="categoryHistory">'+cats.map(v=>`<option value="${v}">`).join('')+'</datalist>';
- let s='<datalist id="supplierHistory">'+sups.map(v=>`<option value="${v}">`).join('')+'</datalist>';
-
- ['productHistory','categoryHistory','supplierHistory'].forEach(id=>document.getElementById(id)?.remove());
- document.body.insertAdjacentHTML('beforeend',p+c+s);
-}
-
-
-function renderCustomerHistory(){
-  const div=document.getElementById('customerHistoryResults');
-  if(!div) return;
-
-  const nomeFiltro=(document.getElementById('searchCustomerName')?.value||'').toLowerCase();
-  const foneFiltro=(document.getElementById('searchCustomerPhone')?.value||'').toLowerCase();
-
-  const clientes={};
-
-  (state.sales||[]).forEach(venda=>{
-      const nome=venda.customerName || "Não informado";
-      const fone=venda.customerPhone || "";
-      const chave=nome+"|"+fone;
-
-      if(!clientes[chave]){
-          clientes[chave]={
-              nome:nome,
-              fone:fone,
-              compras:0,
-              total:0
-          };
-      }
-
-      clientes[chave].compras += 1;
-      clientes[chave].total += Number(venda.total || 0);
-  });
-
-  const lista=Object.values(clientes).filter(c=>
-      (!nomeFiltro || c.nome.toLowerCase().includes(nomeFiltro)) &&
-      (!foneFiltro || c.fone.toLowerCase().includes(foneFiltro))
-  );
-
-  div.innerHTML=`
-    <table style="width:100%;border-collapse:collapse">
-      <thead>
-        <tr>
-          <th>Cliente</th>
-          <th>Celular</th>
-          <th>Qtd. Compras</th>
-          <th>Total Comprado</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${lista.map(c=>`
-          <tr>
-            <td>${c.nome}</td>
-            <td>${c.fone}</td>
-            <td>${c.compras}</td>
-            <td>${money.format(c.total)}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>`;
-}
-
-
-</script>
 </head>
 <body>
+  <section class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <h1>MS Tech</h1>
+      <p>Sistema de gestão MS Tech</p>
+      <form id="loginForm">
+        <label>Usuário
+          <input id="loginUser" autocomplete="username" required placeholder="Digite seu usuário">
+        </label>
+        <label>Senha
+          <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Digite sua senha">
+        </label>
+        <button type="submit">Entrar</button>
+        <div class="login-error" id="loginError"></div>
+      </form>
+      <button type="button" class="auth-link" id="forgotPasswordBtn">Recuperar senha</button>
+    </div>
+    <div aria-hidden="true"></div>
+  </section>
+
+  <div class="auth-modal hidden" id="changePasswordModal">
+    <div class="auth-card">
+      <h2>Alterar senha obrigatória</h2>
+      <p>Por segurança, altere a senha de primeiro acesso antes de usar o sistema.</p>
+      <form id="changePasswordForm">
+        <label>Nova senha
+          <input id="newPasswordInput" type="password" required minlength="6" placeholder="Digite a nova senha">
+        </label>
+        <label>Confirmar nova senha
+          <input id="confirmPasswordInput" type="password" required minlength="6" placeholder="Confirme a nova senha">
+        </label>
+        <div class="actions"><button type="submit">Salvar nova senha</button></div>
+        <div class="notice" id="changePasswordNotice"></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="auth-modal hidden" id="recoverPasswordModal">
+    <div class="auth-card">
+      <h2>Recuperar senha</h2>
+      <p>Informe seu usuário. O administrador precisa autorizar o retorno da senha ao padrão de primeiro acesso.</p>
+      <form id="recoverPasswordForm">
+        <label>Usuário
+          <input id="recoverUsername" required placeholder="Digite seu usuário">
+        </label>
+        <div class="actions">
+          <button type="submit">Solicitar recuperação</button>
+          <button type="button" class="secondary" id="closeRecoverPasswordBtn">Cancelar</button>
+        </div>
+        <div class="notice" id="recoverPasswordNotice"></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="appShell" class="hidden">
   <header>
-    <div class="brand-block">
-      <div class="brand-copy">
+    <div>
       <h1>MS Tech</h1>
       <p class="subtitle">Sistema de gestão MS Tech.</p>
-      </div>
     </div>
     <div class="header-actions">
-      <button class="secondary" id="exportBtn" type="button">Exportar dados</button>
+      <span class="user-chip" id="currentUserChip">Usuário</span>
+      <button class="secondary" id="exportBtn" type="button" style="display:none;">Exportar dados</button>
       <button class="warning" id="resetBtn" type="button">Limpar base</button>
+      <button class="secondary" id="logoutBtn" type="button">Sair</button>
     </div>
   </header>
 
   <main>
-    <section class="metrics" aria-label="Resumo da empresa">
+    <section class="metrics company-only" id="companyMetrics" aria-label="Resumo da empresa">
       <article class="metric"><span>Saldo em vendas</span><strong id="metricRevenue">R$ 0,00</strong></article>
       <article class="metric"><span>Lucro estimado</span><strong id="metricProfit">R$ 0,00</strong></article>
       <article class="metric"><span>Valor em estoque</span><strong id="metricStockValue">R$ 0,00</strong></article>
       <article class="metric"><span>Itens em estoque</span><strong id="metricUnits">0</strong></article>
     </section>
 
-    <section class="goals" aria-label="Metas de vendas">
+    <section class="goals company-only" id="companyGoals" aria-label="Metas de vendas">
       <div class="panel">
         <h2>Metas de vendas</h2>
         <form id="goalForm">
+          <div class="grid-2 compact-date-fields">
+            <label>Mês
+              <select id="goalMonthNumber"></select>
+            </label>
+            <label>Ano
+              <select id="goalYear"></select>
+            </label>
+          </div>
           <div class="grid-2">
             <label>Meta de vendas
               <input id="salesGoal" type="number" min="0" step="0.01" placeholder="Ex.: 25000">
@@ -655,73 +961,80 @@ function renderCustomerHistory(){
 
     <section class="workspace">
       <div class="panel">
-        <h2>Entrada de produto</h2>
-        <form id="productForm">
-          <input type="hidden" id="productId">
-
-          <label>Código de Barras
-            <input id="barcode" placeholder="Leia, escaneie ou digite o código de barras">
-          </label>
-          <div class="actions" style="margin:-4px 0 12px;">
-            <button type="button" class="secondary" id="scanProductBarcode">Ler pela câmera</button>
-            <button type="button" class="secondary hidden" id="stopProductBarcode">Parar leitura</button>
-          </div>
-          <div id="productBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
-
-          <div class="grid-3">
-            <label>SKU
-              <input id="sku" placeholder="Código interno">
-            </label>
-            <label>Marca
-              <input id="brand" placeholder="Marca">
-            </label>
-            <label>Localização
-              <input id="location" placeholder="Prateleira">
-            </label>
-          </div>
-          <label>Produto
-            <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
-          </label>
-          <div class="grid-2">
-            <label>Categoria
-              <input id="category" list="categoryHistory" placeholder="Ex.: Vestuário">
-            </label>
-            <label>Fornecedor
-              <input id="supplier" list="supplierHistory" placeholder="Ex.: Atacado ABC">
-            </label>
-          </div>
-          <div class="grid-2">
-            <label>Custo unitário
-              <input id="cost" type="number" min="0" step="0.01" required>
-            </label>
-            <label>Quantidade de entrada
-              <input id="quantity" type="number" min="0" step="1" required>
-            </label>
-          </div>
-          <div class="grid-2">
-            <label>Margem desejada (%)
-              <input id="margin" type="number" min="0" step="1" value="200">
-            </label>
-            <label>Estoque mínimo
-              <input id="minStock" type="number" min="0" step="1" value="5">
-            </label>
-          </div>
-          <div class="hint" id="priceHint">Informe o custo para ver a sugestão de preço.</div>
-          <div class="actions">
-            <button type="submit" id="saveProductBtn">Salvar produto</button>
-            <button type="button" class="secondary" id="clearProductBtn">Novo</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="panel">
-        <div class="tabs" role="tablist">
-          <button class="tab active" data-view="sales" type="button">Vendas</button>
-          <button class="tab" data-view="inventory" type="button">Estoque</button>
-          <button class="tab" data-view="history" type="button">Histórico</button><button class="tab" data-view="customerHistory" type="button">Clientes</button>
-          <button class="tab" data-view="expenses" type="button">Despesas</button>
-          <button class="tab" data-view="financial" type="button">Dashboard Financeiro</button>
+        <div class="area-menu" aria-label="Áreas do sistema">
+          <button class="area-button" data-area="salesArea" type="button">Vendas</button>
+          <button class="area-button" data-area="stockArea" type="button">Estoque</button>
+          <button class="area-button" data-area="customersArea" type="button">Clientes</button>
+          <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
+          <button class="area-button" data-area="accessArea" type="button">Acessos</button>
         </div>
+
+        <div class="subarea-menu" data-subarea="salesArea" aria-label="Subáreas de vendas">
+          <button class="tab" data-view="sales" type="button">Registrar venda</button>
+          <button class="tab" data-view="cashFlow" type="button">Fluxo de caixa</button>
+          <button class="tab" data-view="history" type="button">Histórico de vendas</button>
+          <button class="tab" data-view="ranking" type="button">Ranking</button>
+        </div>
+        <div class="subarea-menu" data-subarea="stockArea" aria-label="Subáreas de estoque">
+          <button class="tab" data-view="stockEntry" type="button">Entrada de produto</button>
+          <button class="tab" data-view="inventory" type="button">Produtos e estoque</button>
+        </div>
+        <div class="subarea-menu" data-subarea="customersArea" aria-label="Subáreas de clientes">
+          <button class="tab" data-view="customerHistory" type="button">Consulta de clientes</button>
+        </div>
+        <div class="subarea-menu" data-subarea="financialArea" aria-label="Subáreas financeiras">
+          <button class="tab" data-view="expenses" type="button">Despesas</button>
+          <button class="tab" data-view="financial" type="button">Dashboard financeiro</button>
+        </div>
+        <div class="subarea-menu" data-subarea="accessArea" aria-label="Subáreas de acessos">
+          <button class="tab" data-view="access" type="button">Controle de acessos</button>
+        </div>
+        <div class="subarea-placeholder" id="subareaPlaceholder">Escolha uma área para ver as subáreas.</div>
+
+        <section id="stockEntryView" class="hidden">
+          <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Entrada de produto</h2>
+            <form id="productForm">
+              <input type="hidden" id="productId">
+
+              <label>Código de Barras
+                <input id="barcode" list="barcodeHistory" placeholder="Leia, escaneie ou digite o código de barras">
+              </label>
+              <div class="actions" style="margin:-4px 0 12px;">
+                <button type="button" class="secondary" id="scanProductBarcode">Ler pela câmera</button>
+                <button type="button" class="secondary hidden" id="stopProductBarcode">Parar leitura</button>
+              </div>
+              <div id="productBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
+
+              <label>SKU<input id="sku" placeholder="Código interno"></label><label>Marca<input id="brand" placeholder="Marca"></label><label>Localização<input id="location" placeholder="Prateleira"></label><label>Produto
+                <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
+              </label>
+              <div class="grid-2">
+                <label>Categoria
+                  <input id="category" list="categoryHistory" placeholder="Ex.: Vestuário">
+                </label>
+                <label>Fornecedor
+                  <input id="supplier" list="supplierHistory" placeholder="Ex.: Atacado ABC">
+                </label>
+              </div>
+              <div class="grid-2">
+                <label>Custo unitário
+                  <input id="cost" type="number" min="0" step="0.01" required>
+                </label>
+                <label>Quantidade de entrada
+                  <input id="quantity" type="number" min="0" step="1" required>
+                </label>
+              </div>
+              <label>Estoque mínimo
+                <input id="minStock" type="number" min="0" step="1" value="5">
+              </label>
+              <div class="actions">
+                <button type="submit" id="saveProductBtn">Salvar produto</button>
+                <button type="button" class="secondary" id="clearProductBtn">Novo</button>
+              </div>
+            </form>
+          </div>
+        </section>
 
         <section id="inventoryView" class="hidden">
           <div class="toolbar">
@@ -731,6 +1044,7 @@ function renderCustomerHistory(){
               <option value="low">Estoque baixo</option>
               <option value="available">Disponíveis</option>
             </select>
+            <button type="button" class="secondary" id="newProductFromInventoryBtn">Novo produto</button>
           </div>
           <div class="table-wrap">
             <table>
@@ -752,12 +1066,148 @@ function renderCustomerHistory(){
           <div class="empty hidden" id="inventoryEmpty">Nenhum produto encontrado.</div>
         </section>
 
-        <section id="salesView">
+
+        <section id="pricingView" class="hidden">
           <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Precificação</h2>
+            <p class="hint">Calcule o preço de venda considerando custo, frete, taxas, impostos, despesas operacionais e lucro desejado.</p>
+            <div class="pricing-layout">
+              <div class="panel">
+                <h2>Configurações padrão da loja</h2>
+                <div class="panel-body">
+                  <div class="grid-2">
+                    <label>Taxa Cartão (%)
+                      <input id="pricingDefaultCardFee" type="text" min="0" step="0.01" inputmode="decimal" value="4,98">
+                    </label>
+                    <label>Impostos (%)
+                      <input id="pricingDefaultTaxes" type="text" min="0" step="0.01" inputmode="decimal" value="6,00">
+                    </label>
+                  </div>
+                  <div class="grid-2">
+                    <label>Despesas Operacionais (%)
+                      <input id="pricingDefaultOperational" type="text" min="0" step="0.01" inputmode="decimal" value="15,00">
+                    </label>
+                    <label>Margem de Lucro (%)
+                      <input id="pricingDefaultMargin" type="text" min="25" step="0.01" inputmode="decimal" value="25,00">
+                    </label>
+                  </div>
+                  <div class="actions">
+                    <button type="button" id="applyPricingConfigBtn">Aplicar no cálculo</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <h2>Calcular preço</h2>
+                <div class="panel-body">
+                  <input type="hidden" id="pricingId">
+                  <div class="pricing-card" style="margin:0 0 12px;">
+                    <span>Preço sugerido</span>
+                    <strong id="pricingInlineSalePrice">R$ 0,00</strong>
+                  </div>
+                  <div class="grid-2">
+                    <label>Nome do Produto
+                      <input id="pricingProductName" placeholder="Ex.: Cabo USB-C" disabled>
+                    </label>
+                    <label>Categoria
+                      <input id="pricingCategory" placeholder="Ex.: Acessórios" disabled>
+                    </label>
+                  </div>
+                  <div class="grid-2">
+                    <label>Custo de Compra (R$)
+                      <input id="pricingCost" type="number" min="0" step="0.01" placeholder="0,00" disabled>
+                    </label>
+                    <label>Frete Unitário (R$)
+                    <input id="pricingFreight" type="text" inputmode="decimal" placeholder="0,00">
+                    </label>
+                  </div>
+                  <div class="grid-2">
+                    <label>Taxa de Cartão (%)
+                      <input id="pricingCardFee" type="text" min="0" step="0.01" inputmode="decimal" disabled>
+                    </label>
+                    <label>Impostos (%)
+                      <input id="pricingTaxes" type="text" min="0" step="0.01" inputmode="decimal" disabled>
+                    </label>
+                  </div>
+                  <div class="grid-2">
+                    <label>Despesas Operacionais (%)
+                      <input id="pricingOperational" type="text" min="0" step="0.01" inputmode="decimal" disabled>
+                    </label>
+                    <label>Margem de Lucro Desejada (%)
+                      <input id="pricingMargin" type="text" min="25" step="0.01" inputmode="decimal" disabled>
+                    </label>
+                  </div>
+                  <div class="actions">
+                    <button type="button" class="secondary" id="savePricingProductBtn">Salvar no relatório</button>
+                    <button type="button" class="secondary" id="savePricingAndBackBtn">Salvar e voltar ao estoque</button>
+                  </div>
+                  <div id="pricingStatus" class="pricing-status warn">Preencha o custo para calcular.</div>
+                </div>
+              </div>
+            </div>
+
+            <h2 style="padding:18px 0 12px;border:0;background:transparent;">Resultados</h2>
+            <div class="pricing-results">
+              <article class="pricing-card"><span>Custo Total</span><strong id="pricingCostTotalResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Preço de Venda Sugerido</span><strong id="pricingSalePriceResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Taxas de Cartão</span><strong id="pricingCardValueResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Impostos</span><strong id="pricingTaxValueResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Despesas Operacionais</span><strong id="pricingOperationalValueResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Lucro Bruto</span><strong id="pricingGrossProfitResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Lucro Líquido</span><strong id="pricingNetProfitResult">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Lucro % / Markup</span><strong id="pricingProfitPercentResult">0% · 0,00x</strong></article>
+            </div>
+
+            <h2 style="padding:8px 0 12px;border:0;background:transparent;">Dashboard de precificação</h2>
+            <div class="pricing-dashboard">
+              <article class="pricing-card"><span>Margem média da loja</span><strong id="pricingAvgMargin">0%</strong></article>
+              <article class="pricing-card"><span>Lucro total estimado</span><strong id="pricingTotalProfit">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Faturamento projetado</span><strong id="pricingProjectedRevenue">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Ticket médio projetado</span><strong id="pricingAvgTicket">R$ 0,00</strong></article>
+              <article class="pricing-card"><span>Maior margem</span><strong id="pricingBestMargin">-</strong></article>
+              <article class="pricing-card"><span>Menor margem</span><strong id="pricingWorstMargin">-</strong></article>
+            </div>
+
+            <h2 style="padding:8px 0 12px;border:0;background:transparent;">Relatório de preços</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Produto</th>
+                  <th>Categoria</th>
+                  <th>Custo</th>
+                  <th>Preço de Venda</th>
+                  <th>Lucro R$</th>
+                  <th>Lucro %</th>
+                  <th>Markup</th>
+                  <th>Status</th>
+                  <th>Ações</th>
+                </tr>
+              </thead>
+              <tbody id="pricingReportBody"></tbody>
+            </table>
+          </div>
+          <div class="empty hidden" id="pricingReportEmpty">Nenhum produto precificado.</div>
+        </section>
+
+        <section id="salesView" class="hidden">
+          <div class="panel-body">
+            <section class="seller-goal hidden" id="sellerGoalPanel">
+              <h2 style="padding:0 0 12px;border:0;background:transparent;">Minha meta</h2>
+              <div class="goal-summary">
+                <article class="goal-card"><span>Realizado</span><strong id="sellerGoalPercent">0%</strong></article>
+                <article class="goal-card"><span>Minha venda</span><strong id="sellerRevenue">R$ 0,00</strong></article>
+                <article class="goal-card"><span>Falta vender</span><strong id="sellerRemaining">R$ 0,00</strong></article>
+                <article class="goal-card"><span>Vendas feitas</span><strong id="sellerSalesCount">0</strong></article>
+              </div>
+              <div class="progress" aria-label="Progresso da minha meta"><div class="progress-bar" id="sellerGoalProgress"></div></div>
+              <p class="hint" id="sellerGoalHint">Sua meta será definida pelo administrador.</p>
+            </section>
             <h2 style="padding:0 0 12px;border:0;background:transparent;">Registrar venda</h2>
 
-            <label>Leitor de Código de Barras
-              <input id="saleBarcode" placeholder="Passe o leitor aqui">
+            <label>Leitor de código de barras
+              <input id="saleBarcode" list="barcodeHistory" placeholder="Passe o leitor aqui">
             </label>
             <div class="actions" style="margin:-4px 0 12px;">
               <button type="button" class="secondary" id="scanSaleBarcode">Ler pela câmera</button>
@@ -768,27 +1218,99 @@ function renderCustomerHistory(){
             
 <div class="grid-2" style="margin-bottom:12px;">
 <label>Nome do Cliente
-<input id="customerName" placeholder="Nome do cliente">
+<input id="customerName" list="customerNameHistory" placeholder="Nome do cliente">
 </label>
 <label>Celular
-<input id="customerPhone" placeholder="(11) 99999-9999">
+<input id="customerPhone" list="customerPhoneHistory" inputmode="numeric" maxlength="11" placeholder="11999999999">
 </label>
 </div>
 <div id="saleItems"></div>
 
             <button type="button" class="secondary" id="addSaleItemBtn">Adicionar item</button>
             <div class="grid-2" style="margin-top:14px;">
-              <label>Desconto total
-                <input id="discount" type="number" min="0" step="0.01" value="0">
+              <label>Desconto (%)
+                <input id="discountPercent" type="number" min="0" max="10" step="0.01" value="0" placeholder="0 a 10">
               </label>
+              <label>Valor do desconto aplicado
+                <input id="discountValue" type="text" value="R$ 0,00" readonly>
+              </label>
+            </div>
+            <div class="grid-2" style="margin-top:2px;">
               <label>Forma de pagamento
                 <select id="paymentMethod">
                   <option>Dinheiro</option>
                   <option>Pix</option>
                   <option>Cartão de crédito</option>
                   <option>Cartão de débito</option>
-                  <option>Boleto</option>
+                  
                 </select>
+              </label>
+            </div>
+            <div class="grid-2 hidden" id="creditPaymentCard" style="margin-top:2px;">
+              <label>Tipo do crédito
+                <select id="creditType">
+                  <option value="avista">À vista</option>
+                  <option value="parcelado">Parcelado</option>
+                </select>
+              </label>
+              <label>Bandeira do cartão
+                <select id="creditBrand">
+                  <option value="Visa">Visa</option>
+                  <option value="MasterCard">MasterCard</option>
+                  <option value="Elo">Elo</option>
+                  <option value="Hipercard">Hipercard</option>
+                  <option value="American Express">American Express</option>
+                </select>
+              </label>
+            </div>
+            <div class="grid-2 hidden" id="creditInstallmentCard" style="margin-top:2px;">
+              <label>Quantidade de parcelas
+                <select id="creditInstallments">
+                  <option value="2">2x</option>
+                  <option value="3">3x</option>
+                  <option value="4">4x</option>
+                  <option value="5">5x</option>
+                  <option value="6">6x</option>
+                  <option value="7">7x</option>
+                  <option value="8">8x</option>
+                  <option value="9">9x</option>
+                  <option value="10">10x</option>
+                  <option value="11">11x</option>
+                  <option value="12">12x</option>
+                  <option value="13">13x</option>
+                  <option value="14">14x</option>
+                  <option value="15">15x</option>
+                  <option value="16">16x</option>
+                  <option value="17">17x</option>
+                  <option value="18">18x</option>
+                </select>
+              </label>
+              <label>Taxa total Mercado Pago
+                <input id="creditInterestValue" type="text" value="0,00% · R$ 0,00" readonly>
+              </label>
+            </div>
+            <div class="grid-2 hidden" id="creditFeeBreakdownCard" style="margin-top:2px;">
+              <label>Taxa por venda
+                <input id="creditSaleFeeValue" type="text" value="0,00% · R$ 0,00" readonly>
+              </label>
+              <label>Juros do parcelamento
+                <input id="creditInstallmentInterestValue" type="text" value="0,00% · R$ 0,00" readonly>
+              </label>
+            </div>
+            <div class="grid-2 hidden" id="creditTotalCard" style="margin-top:2px;">
+              <label>Valor da parcela
+                <input id="creditInstallmentValue" type="text" value="R$ 0,00" readonly>
+              </label>
+              <label>Total com juros
+                <input id="creditTotalWithInterest" type="text" value="R$ 0,00" readonly>
+              </label>
+            </div>
+            <div class="grid-2" id="cashPaymentCard" style="margin-top:2px;">
+              <label>Valor recebido em dinheiro
+                <input id="cashReceived" type="number" min="0" step="0.01" placeholder="Informe o valor entregue pelo cliente">
+              </label>
+              <label>Troco
+                <input id="cashChange" type="text" value="R$ 0,00" readonly>
               </label>
             </div>
             <div class="sale-total"><span>Total</span><span id="saleTotal">R$ 0,00</span></div>
@@ -798,6 +1320,69 @@ function renderCustomerHistory(){
               <button type="button" class="secondary" id="clearSaleBtn">Cancelar</button>
             </div>
           </div>
+        </section>
+
+        <section id="cashFlowView" class="hidden">
+          <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Fluxo de caixa diário</h2>
+            <div class="grid-2 compact-date-fields">
+              <label>Consultar dia
+                <input id="cashFlowDateFilter" type="date">
+              </label>
+              <label>Resumo
+                <input id="cashFlowDateLabel" disabled value="Hoje">
+              </label>
+            </div>
+            <div class="panel" style="box-shadow:none;margin-bottom:14px;">
+              <h2>Caixa</h2>
+              <div class="panel-body">
+                <div class="goal-summary" style="margin-bottom:14px;">
+                  <article class="goal-card"><span>Status</span><strong id="cashStatus">Fechado</strong></article>
+                  <article class="goal-card"><span>Saldo inicial</span><strong id="cashInitialSummary">R$ 0,00</strong></article>
+                  <article class="goal-card"><span>Saldo esperado</span><strong id="cashExpectedSummary">R$ 0,00</strong></article>
+                  <article class="goal-card"><span>Diferença</span><strong id="cashDifferenceSummary">R$ 0,00</strong></article>
+                </div>
+                <div class="grid-2">
+                  <label>Ação
+                    <select id="cashAction">
+                      <option value="open">Abrir caixa</option>
+                      <option value="pause">Pausar</option>
+                      <option value="close">Fechar</option>
+                      <option value="entry">Registrar entrada</option>
+                      <option value="exit">Registrar saída</option>
+                    </select>
+                  </label>
+                  <label>Valor
+                    <input id="cashActionValue" type="number" min="0" step="0.01" placeholder="Informe o valor">
+                  </label>
+                </div>
+                <label>Descrição
+                  <input id="cashActionDescription" placeholder="Opcional para entrada ou saída">
+                </label>
+                <div class="actions">
+                  <button type="button" id="applyCashActionBtn">Aplicar ação</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="hint" id="cashFlowHint">Abra o caixa para iniciar o controle diário. As vendas em dinheiro entram automaticamente no saldo esperado.</div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data/Hora</th>
+                  <th>Tipo</th>
+                  <th>Descrição</th>
+                  <th>Entrada</th>
+                  <th>Saída</th>
+                  <th>Saldo</th>
+                </tr>
+              </thead>
+              <tbody id="cashFlowBody"></tbody>
+            </table>
+          </div>
+          <div class="empty hidden" id="cashFlowEmpty">Nenhum movimento de caixa hoje.</div>
         </section>
 
         
@@ -820,7 +1405,6 @@ function renderCustomerHistory(){
 <option value="purchases-desc">Mais compras</option>
 </select>
 </label>
-<button type="button" class="secondary" id="exportCustomersBtn">Exportar Excel</button>
 </div>
 <div id="customerSummary" class="customer-summary"></div>
 <div id="customerHistoryResults"></div>
@@ -828,6 +1412,18 @@ function renderCustomerHistory(){
 </div>
 </section>
 <section id="historyView" class="hidden">
+          <div class="panel-body">
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Histórico de vendas</h2>
+            <div class="grid-2 compact-date-fields">
+              <label>Mês
+                <select id="historyMonthNumber"></select>
+              </label>
+              <label>Ano
+                <select id="historyYear"></select>
+              </label>
+            </div>
+            <div class="goal-summary" id="historyPaymentSummary"></div>
+          </div>
           <div class="table-wrap">
             <table>
               <thead>
@@ -835,7 +1431,9 @@ function renderCustomerHistory(){
                   <th>Data</th>
                   <th>Itens</th>
                   <th>Pagamento</th>
-                  <th>Total</th>
+                  <th>Total pago</th>
+                  <th>Valor recebido</th>
+                  <th>Taxas/Juros</th>
                   <th>Lucro estimado</th>
                 </tr>
               </thead>
@@ -847,12 +1445,21 @@ function renderCustomerHistory(){
 
         <section id="expensesView" class="hidden">
           <div class="panel-body">
-            <h2 style="padding:0 0 12px;border:0;background:transparent;">Controle de Despesas</h2>
+            <h2 style="padding:0 0 12px;border:0;background:transparent;">Controle mensal de despesas</h2>
+            <div class="grid-2 compact-date-fields">
+              <label>Mês
+                <select id="expenseMonthNumber"></select>
+              </label>
+              <label>Ano
+                <select id="expenseYear"></select>
+              </label>
+            </div>
+            <input type="hidden" id="expenseId">
             <div class="grid-2">
               <label>Tipo
                 <select id="expenseType">
-                  <option value="Fixa">Fixa</option>
-                  <option value="Variável">Variável</option>
+                  <option value="Fixa">Fixa recorrente</option>
+                  <option value="Variável">Variável do mês</option>
                 </select>
               </label>
               <label>Valor
@@ -862,22 +1469,150 @@ function renderCustomerHistory(){
             <label>Descrição
               <input id="expenseDescription" placeholder="Ex.: Aluguel, Energia, Internet">
             </label>
-            <button type="button" id="addExpenseBtn">Adicionar Despesa</button>
-            <table>
-              <thead><tr><th>Tipo</th><th>Descrição</th><th>Valor</th></tr></thead>
-              <tbody id="expenseBody"></tbody>
-            </table>
+            <div class="actions" style="margin-bottom:14px;">
+              <button type="button" id="addExpenseBtn">Salvar despesa</button>
+            </div>
+            <h2 style="padding:6px 0 12px;border:0;background:transparent;">Fixas recorrentes</h2>
+            <div class="actions" style="margin:-4px 0 12px;">
+              <button type="button" class="secondary" id="validateFixedExpensesBtn">Validar despesas fixas deste mês</button>
+              <span class="hint" id="fixedExpenseMonthStatus">Despesas fixas ainda não validadas neste mês.</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead>
+                <tbody id="fixedExpenseBody"></tbody>
+              </table>
+            </div>
+            <div class="empty hidden" id="fixedExpenseEmpty">Nenhuma despesa fixa cadastrada.</div>
+            <h2 style="padding:18px 0 12px;border:0;background:transparent;">Variáveis do mês</h2>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Descrição</th><th>Valor</th><th>Ações</th></tr></thead>
+                <tbody id="variableExpenseBody"></tbody>
+              </table>
+            </div>
+            <div class="empty hidden" id="variableExpenseEmpty">Nenhuma despesa variável neste mês.</div>
+          </div>
+        </section>
+
+        <section id="rankingView" class="hidden">
+          <div class="panel-body">
+            <div class="seller-ranking" id="sellerRankingPanel">
+              <h2 style="padding:0 0 12px;border:0;background:transparent;">Ranking de vendedores</h2>
+              <div class="goal-summary" id="sellerRankingSummary"></div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Posição</th>
+                      <th>Vendedor</th>
+                      <th>Meta</th>
+                      <th>Vendido</th>
+                      <th>Progresso</th>
+                      <th>Status</th>
+                      <th>Falta vender</th>
+                      <th>Vendas</th>
+                    </tr>
+                  </thead>
+                  <tbody id="sellerRankingBody"></tbody>
+                </table>
+              </div>
+              <div class="empty hidden" id="sellerRankingEmpty">Nenhum vendedor cadastrado.</div>
+            </div>
           </div>
         </section>
 
         <section id="financialView" class="hidden">
           <div class="panel-body">
             <h2 style="padding:0 0 12px;border:0;background:transparent;">Dashboard Financeiro</h2>
+            <div class="grid-2 compact-date-fields">
+              <label>Mês
+                <select id="financialMonthNumber"></select>
+              </label>
+              <label>Ano
+                <select id="financialYear"></select>
+              </label>
+            </div>
             <div class="goal-summary">
               <article class="goal-card"><span>Receitas</span><strong id="finRevenue">R$ 0,00</strong></article>
               <article class="goal-card"><span>Despesas</span><strong id="finExpenses">R$ 0,00</strong></article>
               <article class="goal-card"><span>Lucro Líquido</span><strong id="finNet">R$ 0,00</strong></article>
               <article class="goal-card"><span>Margem</span><strong id="finMargin">0%</strong></article>
+            </div>
+            <div class="actions" style="margin-top:14px;">
+              <button class="secondary" id="exportFinancialBtn" type="button">Exportar Excel</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="accessView" class="hidden">
+          <div class="panel-body">
+            <div class="access-form-title">
+              <h2 style="padding:0;border:0;background:transparent;">Controle de acessos</h2>
+              <button type="button" id="newUserBtn">Novo usuário</button>
+            </div>
+
+            <div class="access-summary" id="accessSummaryCards"></div>
+
+            <div class="access-profile-grid">
+              <article class="access-profile-card">
+                <strong>Administrador</strong>
+                <p>Acesso completo a vendas, estoque, financeiro, clientes, ranking e usuários.</p>
+              </article>
+              <article class="access-profile-card">
+                <strong>Vendedor</strong>
+                <p>Acesso para registrar vendas, consultar histórico, fluxo de caixa e clientes.</p>
+              </article>
+              <article class="access-profile-card">
+                <strong>Estoque</strong>
+                <p>Acesso restrito à entrada de produto e consulta de produtos em estoque.</p>
+              </article>
+            </div>
+
+            <div class="access-grid">
+              <form id="accessForm" class="access-form-card hidden">
+                <div class="access-form-title">
+                  <h3 id="accessFormTitle">Novo acesso</h3>
+                  <span class="pill ok">Primeiro acesso: acesso123</span>
+                </div>
+                <input type="hidden" id="accessUserId">
+                <label>Nome
+                  <input id="accessName" required placeholder="Nome do usuário">
+                </label>
+                <label>Usuário
+                  <input id="accessUsername" required placeholder="Ex.: vendedor01">
+                </label>
+                <label>Senha
+                  <input id="accessPassword" type="password" placeholder="Deixe em branco para usar acesso123">
+                </label>
+                <label>Perfil
+                  <select id="accessRole">
+                    <option value="Administrador">Administrador</option>
+                    <option value="Vendedor">Vendedor</option>
+                    <option value="Estoque">Estoque</option>
+                  </select>
+                </label>
+                <div class="permission-list" id="permissionList"></div>
+                <div class="actions">
+                  <button type="submit" id="saveAccessBtn">Salvar</button>
+                  <button type="button" class="secondary" id="cancelAccessBtn">Cancelar</button>
+                </div>
+              </form>
+
+              <div>
+                <div class="panel" id="passwordResetPanel" style="margin-bottom:14px;">
+                  <h2>Solicitações de recuperação de senha</h2>
+                  <div class="panel-body" id="passwordResetRequests"><div class="empty">Nenhuma solicitação pendente.</div></div>
+                </div>
+                <div class="hint">Use os cards acima para acompanhar usuários ativos, bloqueados e solicitações de senha.</div>
+                <div class="table-wrap">
+                  <table>
+                    <thead><tr><th>Nome</th><th>Usuário</th><th>Perfil</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="accessBody"></tbody>
+                  </table>
+                </div>
+                <div class="empty hidden" id="accessEmpty">Nenhum acesso cadastrado.</div>
+              </div>
             </div>
           </div>
         </section>
@@ -912,27 +1647,60 @@ function renderCustomerHistory(){
       </div>
     </form>
   </dialog>
+  </div>
 
   <script>
     const STORAGE_KEY = "gestao-empresa-v1";
+    const SESSION_KEY = "gestao-empresa-session";
+    const FIRST_ACCESS_PASSWORD = "acesso123";
     const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
     const dateFmt = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
     const makeId = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 
     const seed = {
       products: [
-        { id: makeId(), name: "Camiseta básica", category: "Vestuário", supplier: "Atacado Sul", cost: 28, quantity: 34, margin: 200, minStock: 8 },
-        { id: makeId(), name: "Caneca personalizada", category: "Presentes", supplier: "Print Mais", cost: 14.5, quantity: 18, margin: 200, minStock: 6 },
-        { id: makeId(), name: "Caderno executivo", category: "Papelaria", supplier: "Office Rio", cost: 21.9, quantity: 5, margin: 200, minStock: 7 }
+        { id: makeId(), name: "Camiseta básica", category: "Vestuário", supplier: "Atacado Sul", cost: 28, quantity: 34, margin: 55, minStock: 8 },
+        { id: makeId(), name: "Caneca personalizada", category: "Presentes", supplier: "Print Mais", cost: 14.5, quantity: 18, margin: 70, minStock: 6 },
+        { id: makeId(), name: "Caderno executivo", category: "Papelaria", supplier: "Office Rio", cost: 21.9, quantity: 5, margin: 45, minStock: 7 }
       ],
       sales: [],
       expenses: [],
-      goals: { salesGoal: 25000, salesPeople: 3 }
+      fixedExpenses: [],
+      monthlyExpenses: {},
+      fixedExpenseMonths: {},
+      cashFlows: {},
+      expenseMonth: currentMonthKey(),
+      historyMonth: currentMonthKey(),
+      financialMonth: currentMonthKey(),
+      users: [
+        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
+      ],
+      goals: { salesGoal: 25000, salesPeople: 3 },
+      goalMonth: currentMonthKey(),
+      monthlyGoals: {}
     };
 
     let state = loadState();
     let selectedCustomerKey = "";
+    let currentUser = null;
+    let activeBarcodeReader = null;
     const el = id => document.getElementById(id);
+
+    function currentMonthKey(date = new Date()) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+    }
+
+    function saleMonthKey(sale) {
+      const date = new Date(sale.date || Date.now());
+      return currentMonthKey(date);
+    }
+
+    function monthLabel(monthKey) {
+      const [year, month] = String(monthKey || currentMonthKey()).split("-");
+      const date = new Date(Number(year), Number(month) - 1, 1);
+      const label = new Intl.DateTimeFormat("pt-BR", { month: "long", year: "numeric" }).format(date);
+      return label.charAt(0).toUpperCase() + label.slice(1);
+    }
 
     function loadState() {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -940,7 +1708,75 @@ function renderCustomerHistory(){
       loaded.products ||= [];
       loaded.sales ||= [];
       loaded.expenses ||= [];
+      loaded.fixedExpenses ||= [];
+      loaded.monthlyExpenses ||= {};
+      loaded.fixedExpenseMonths ||= {};
+      loaded.cashFlows ||= {};
+      loaded.expenseMonth ||= currentMonthKey();
+      loaded.historyMonth ||= currentMonthKey();
+      loaded.financialMonth ||= currentMonthKey();
+      loaded.goalMonth ||= currentMonthKey();
+      loaded.monthlyGoals ||= {};
+      if ((loaded.expenses || []).length && !loaded.fixedExpenses.length && !Object.keys(loaded.monthlyExpenses).length) {
+        loaded.expenses.forEach(expense => {
+          const normalized = { id: expense.id || makeId(), type: expense.type || "Variável", description: expense.description || "", value: Number(expense.value || 0) };
+          if (normalized.type === "Fixa") loaded.fixedExpenses.push(normalized);
+          else {
+            const key = expense.month || loaded.expenseMonth || currentMonthKey();
+            loaded.monthlyExpenses[key] ||= [];
+            loaded.monthlyExpenses[key].push(normalized);
+          }
+        });
+      }
+      loaded.users ||= [];
+      if (!loaded.users.length && Array.isArray(loaded.accesses) && loaded.accesses.length) {
+        loaded.users = loaded.accesses.map(access => ({
+          id: access.id || makeId(),
+          name: access.name || access.login || "Usuário",
+          username: access.login || access.name || "usuario",
+          password: "acesso123",
+          role: access.role === "Vendas" ? "Vendedor" : (access.role || "Vendedor"),
+          active: access.status !== "Bloqueado",
+          permissions: []
+        }));
+      }
+      if (!loaded.users.length) {
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+      }
+      loaded.users = loaded.users.map(user => {
+        const role = ["Administrador", "Vendedor", "Estoque"].includes(user.role) ? user.role : "Vendedor";
+        const defaults = role === "Administrador"
+          ? ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"]
+          : role === "Estoque"
+            ? ["stockEntry", "inventory"]
+            : ["sales", "cashFlow", "history", "customerHistory"];
+        const username = String(user.username || "").toLowerCase() === "admin@ms-tech.local" ? "admin" : user.username;
+        return { active: true, permissions: defaults, password: FIRST_ACCESS_PASSWORD, ...user, username, role, permissions: user.permissions?.length ? user.permissions : defaults };
+      });
       loaded.goals ||= { salesGoal: 0, salesPeople: 1 };
+      loaded.monthlyGoals[loaded.goalMonth] ||= loaded.goals;
+
+      loaded.pricingSettings ||= {};
+      if (!Number(loaded.pricingSettings.cardFee)) loaded.pricingSettings.cardFee = 4.98;
+      if (!Number(loaded.pricingSettings.taxes)) loaded.pricingSettings.taxes = 6;
+      if (!Number(loaded.pricingSettings.operational)) loaded.pricingSettings.operational = 15;
+      if (!Number(loaded.pricingSettings.margin)) loaded.pricingSettings.margin = 25;
+
+      loaded.pricingSettings ||= {};
+      loaded.pricingSettings.cardFee = normalizePercentValue(loaded.pricingSettings.cardFee || 4.98) || 4.98;
+      loaded.pricingSettings.taxes = normalizePercentValue(loaded.pricingSettings.taxes || 6) || 6;
+      loaded.pricingSettings.operational = normalizePercentValue(loaded.pricingSettings.operational || 15) || 15;
+      loaded.pricingSettings.margin = normalizeMarginValue(loaded.pricingSettings.margin);
+      loaded.pricingProducts ||= [];
+      loaded.pricingHistory ||= [];
+      if (!loaded.pricingHistory.length && loaded.pricingProducts.length) {
+        loaded.pricingHistory = loaded.pricingProducts.map(product => ({
+          ...product,
+          productId: product.id,
+          historyId: product.historyId || makeId(),
+          date: product.date || new Date().toISOString()
+        }));
+      }
       return loaded;
     }
 
@@ -948,7 +1784,338 @@ function renderCustomerHistory(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
+    function normalizeUsername(value) {
+      return String(value || "").trim().toLowerCase();
+    }
+
+    function normalizeAccessUsername(value) {
+      return normalizeUsername(value);
+    }
+
+    function usersByUsername() {
+      return new Map((state.users || []).map(user => [normalizeUsername(user.username), user]));
+    }
+
+    function findCanonicalUser(username) {
+      return usersByUsername().get(normalizeUsername(username)) || null;
+    }
+
+    function canonicalizeAccessUsers() {
+      const seen = new Set();
+      state.users = (state.users || []).filter(user => {
+        const key = normalizeUsername(user.username);
+        if (!key || seen.has(key)) return false;
+        seen.add(key);
+        user.username = key === "admin@ms-tech.local" ? "admin" : user.username;
+        return true;
+      });
+    }
+
+    function passwordOverrides() {
+      state.passwordOverrides ||= {};
+      return state.passwordOverrides;
+    }
+
+    function getPasswordOverride(username) {
+      return passwordOverrides()[normalizeUsername(username)] || "";
+    }
+
+    function setPasswordOverride(username, password) {
+      passwordOverrides()[normalizeUsername(username)] = password;
+    }
+
+    function clearPasswordOverride(username) {
+      delete passwordOverrides()[normalizeUsername(username)];
+    }
+
+    function hasCustomPassword(user) {
+      return Boolean(user && user.password && user.password !== FIRST_ACCESS_PASSWORD);
+    }
+
+    function effectivePasswordForUser(user) {
+      return getPasswordOverride(user?.username) || user?.password || FIRST_ACCESS_PASSWORD;
+    }
+
+    function updatePasswordForUsername(username, password) {
+      const user = findCanonicalUser(username);
+      if (!user) return false;
+      user.password = password;
+      user.mustChangePassword = false;
+      setPasswordOverride(user.username, password);
+      saveState();
+      return true;
+    }
+
+    function migrateAccessSecurity() {
+      state.passwordOverrides ||= {};
+      canonicalizeAccessUsers();
+    }
+
+    function getStoredUser() {
+      const storedUserId = sessionStorage.getItem(SESSION_KEY);
+      return (state.users || []).find(user => user.id === storedUserId && user.active !== false) || null;
+    }
+
+    function isAdminUser() {
+      return currentUser?.role === "Administrador";
+    }
+
+    function isSellerMode() {
+      return currentUser?.role === "Vendedor";
+    }
+
+    function isStockUser() {
+      return currentUser?.role === "Estoque";
+    }
+
+    function getLoggedUserRole() {
+      return currentUser?.role || "";
+    }
+
+    function currentViewName() {
+      return viewNames.find(name => !el(`${name}View`)?.classList.contains("hidden")) || "";
+    }
+
+    function selectedGoalMonthKey() {
+      return selectedMonthFrom("goalMonthNumber", "goalYear");
+    }
+
+    function selectedHistoryMonthKey() {
+      return selectedMonthFrom("historyMonthNumber", "historyYear");
+    }
+
+    function selectedExpenseMonthKey() {
+      return selectedMonthFrom("expenseMonthNumber", "expenseYear");
+    }
+
+    function selectedFinancialMonthKey() {
+      return selectedMonthFrom("financialMonthNumber", "financialYear");
+    }
+
+    function findLoginUser(username, password) {
+      const key = normalizeUsername(username);
+      const user = (state.users || []).find(user =>
+        normalizeUsername(user.username) === key &&
+        String(effectivePasswordForUser(user)) === String(password || "") &&
+        user.active !== false
+      ) || null;
+      return user ? effectiveUser(user) : null;
+    }
+
+    function effectiveUser(user) {
+      return { ...user, permissions: permissionsForRole(user.role, user.permissions || []) };
+    }
+
+    function canAccess(view) {
+      return Boolean(currentUser && (currentUser.role === "Administrador" || (currentUser.permissions || []).includes(view)));
+    }
+
+    function firstAccessibleView() {
+      return permissionOptions.find(([view]) => canAccess(view))?.[0] || "sales";
+    }
+
+    function applyProfileSettings() {
+      if (!currentUser) return;
+      const visibleAreas = new Set();
+      permissionOptions.forEach(([view]) => {
+        const allowed = canAccess(view);
+        document.querySelectorAll(`[data-view="${view}"]`).forEach(button => button.classList.toggle("hidden", !allowed));
+        if (allowed && areaByView[view]) visibleAreas.add(areaByView[view]);
+      });
+      document.querySelectorAll(".area-button").forEach(button => {
+        button.classList.toggle("hidden", !visibleAreas.has(button.dataset.area));
+      });
+      document.querySelectorAll(".subarea-menu").forEach(menu => {
+        menu.classList.toggle("hidden", !visibleAreas.has(menu.dataset.subarea));
+      });
+      const admin = currentUser.role === "Administrador";
+      const seller = currentUser.role === "Vendedor";
+      const stock = currentUser.role === "Estoque";
+      document.body.classList.toggle("seller-mode", seller);
+      document.body.classList.toggle("stock-mode", stock);
+      document.querySelector(".metrics")?.classList.toggle("hidden", seller || stock);
+      document.querySelector(".goals")?.classList.toggle("hidden", seller || stock);
+      el("exportBtn")?.classList.toggle("hidden", !admin);
+      el("resetBtn")?.classList.toggle("hidden", !admin);
+      el("sellerGoalPanel")?.classList.toggle("hidden", !seller);
+      el("passwordResetPanel")?.classList.toggle("hidden", !admin);
+    }
+
+    function applyRoleLayout() {
+      applyProfileSettings();
+    }
+
+    function applyPermissionVisibility() {
+      applyProfileSettings();
+    }
+
+    function showOnlyInventoryForStockRole() {
+      if (isStockUser()) switchView(canAccess("stockEntry") ? "stockEntry" : "inventory");
+    }
+
+    function enforceStockUserPermissions() {
+      if (!isStockUser()) return;
+      currentUser.permissions = ["stockEntry", "inventory"];
+      applyProfileSettings();
+    }
+
+    function applyInventoryExpandedLayout() {
+      switchView("inventory");
+    }
+
+    function openProductEntryForm() {
+      switchView("stockEntry");
+      el("productForm")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function closeProductEntryForm() {
+      clearProductForm();
+      switchView("inventory");
+    }
+
+    function showAdminView(view = "sales") {
+      if (canAccess(view)) switchView(view);
+    }
+
+    function showAdminHome() {
+      switchView(firstAccessibleView());
+    }
+
+    function initAdminPanel() {
+      applyProfileSettings();
+      if (isAdminUser()) renderSellerRanking();
+    }
+
+    function showLogin() {
+      currentUser = null;
+      sessionStorage.removeItem(SESSION_KEY);
+      el("loginScreen").classList.remove("hidden");
+      el("appShell").classList.add("hidden");
+      el("changePasswordModal")?.classList.add("hidden");
+      el("recoverPasswordModal")?.classList.add("hidden");
+      if (el("loginPassword")) el("loginPassword").value = "";
+      el("loginUser")?.focus();
+    }
+
+    function openChangePasswordModal() {
+      el("changePasswordModal")?.classList.remove("hidden");
+      el("newPasswordInput")?.focus();
+    }
+
+    function closeChangePasswordModal() {
+      el("changePasswordModal")?.classList.add("hidden");
+      el("changePasswordForm")?.reset();
+      if (el("changePasswordNotice")) el("changePasswordNotice").textContent = "";
+    }
+
+    function showApp(user) {
+      currentUser = effectiveUser(user);
+      sessionStorage.setItem(SESSION_KEY, user.id);
+      el("currentUserChip").textContent = `${currentUser.name || currentUser.username} · ${currentUser.role}`;
+      el("loginScreen").classList.add("hidden");
+      el("appShell").classList.remove("hidden");
+      el("loginError").textContent = "";
+      renderAll();
+      applyProfileSettings();
+      switchView(firstAccessibleView());
+      if (currentUser.mustChangePassword || currentUser.password === FIRST_ACCESS_PASSWORD) {
+        const liveUser = state.users.find(item => item.id === currentUser.id);
+        if (liveUser) liveUser.mustChangePassword = true;
+        currentUser.mustChangePassword = true;
+        saveState();
+        setTimeout(openChangePasswordModal, 80);
+      }
+    }
+
+    function initAuth() {
+      migrateAccessSecurity();
+      const storedUser = getStoredUser();
+      if (storedUser) showApp(storedUser);
+      else showLogin();
+
+      el("loginForm").addEventListener("submit", event => {
+        event.preventDefault();
+        const user = findLoginUser(el("loginUser").value, el("loginPassword").value);
+        if (!user) {
+          el("loginError").textContent = "Usuário ou senha inválidos.";
+          return;
+        }
+        showApp(user);
+      });
+
+      el("logoutBtn").addEventListener("click", showLogin);
+
+      el("forgotPasswordBtn")?.addEventListener("click", () => {
+        el("recoverPasswordModal")?.classList.remove("hidden");
+        el("recoverUsername")?.focus();
+      });
+      el("closeRecoverPasswordBtn")?.addEventListener("click", () => el("recoverPasswordModal")?.classList.add("hidden"));
+      el("recoverPasswordForm")?.addEventListener("submit", event => {
+        event.preventDefault();
+        const username = normalizeUsername(el("recoverUsername")?.value);
+        const user = state.users.find(item => normalizeUsername(item.username) === username);
+        const notice = el("recoverPasswordNotice");
+        if (!user) {
+          if (notice) {
+            notice.style.color = "var(--danger)";
+            notice.textContent = "Usuário não encontrado.";
+          }
+          return;
+        }
+        user.passwordResetRequested = true;
+        saveState();
+        if (notice) {
+          notice.style.color = "var(--ok)";
+          notice.textContent = "Solicitação enviada. Aguarde o administrador autorizar.";
+        }
+        renderPasswordResetRequests();
+      });
+      el("changePasswordForm")?.addEventListener("submit", event => {
+        event.preventDefault();
+        const password = el("newPasswordInput").value;
+        const confirm = el("confirmPasswordInput").value;
+        const notice = el("changePasswordNotice");
+        if (notice) {
+          notice.style.color = "var(--danger)";
+          notice.textContent = "";
+        }
+        if (password.length < 6) { if (notice) notice.textContent = "A senha precisa ter pelo menos 6 caracteres."; return; }
+        if (password === FIRST_ACCESS_PASSWORD) { if (notice) notice.textContent = "Escolha uma senha diferente de acesso123."; return; }
+        if (password !== confirm) { if (notice) notice.textContent = "As senhas não conferem."; return; }
+        const user = state.users.find(item => item.id === currentUser?.id);
+        if (!user) { if (notice) notice.textContent = "Usuário logado não encontrado. Saia e entre novamente."; return; }
+        user.password = password;
+        user.mustChangePassword = false;
+        user.passwordResetRequested = false;
+        currentUser = effectiveUser(user);
+        saveState();
+        closeChangePasswordModal();
+        renderAccesses();
+        renderPasswordResetRequests();
+        renderAll();
+        alert("Senha alterada com sucesso. Use a nova senha no próximo login.");
+      });
+    }
+
+    function updateHistoryLists() {
+      const barcodes = [...new Set(state.products.map(p => p.barcode).filter(Boolean))];
+      const products = [...new Set(state.products.map(p => p.name).filter(Boolean))];
+      const cats = [...new Set(state.products.map(p => p.category).filter(Boolean))];
+      const sups = [...new Set(state.products.map(p => p.supplier).filter(Boolean))];
+      const barcodeOptions = `<datalist id="barcodeHistory">${barcodes.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const productOptions = `<datalist id="productHistory">${products.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const categoryOptions = `<datalist id="categoryHistory">${cats.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const supplierOptions = `<datalist id="supplierHistory">${sups.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const customerNames = [...new Set((state.sales || []).map(sale => sale.customerName).filter(Boolean))];
+      const customerPhones = [...new Set((state.sales || []).map(sale => sale.customerPhone).filter(Boolean))];
+      const customerNameOptions = `<datalist id="customerNameHistory">${customerNames.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      const customerPhoneOptions = `<datalist id="customerPhoneHistory">${customerPhones.map(v => `<option value="${escapeHtml(v)}">`).join("")}</datalist>`;
+      ["barcodeHistory", "productHistory", "categoryHistory", "supplierHistory", "customerNameHistory", "customerPhoneHistory"].forEach(id => document.getElementById(id)?.remove());
+      document.body.insertAdjacentHTML("beforeend", barcodeOptions + productOptions + categoryOptions + supplierOptions + customerNameOptions + customerPhoneOptions);
+    }
+
     function suggestedPrice(product) {
+      if (Number(product.salePrice || 0) > 0) return Number(product.salePrice || 0);
       return Number(product.cost || 0) * (1 + Number(product.margin || 0) / 100);
     }
 
@@ -969,11 +2136,60 @@ function renderCustomerHistory(){
       el("metricUnits").textContent = units;
     }
 
+    function renderDateSelectors(monthSelectId, yearSelectId, selectedMonth) {
+      const monthSelect = el(monthSelectId);
+      const yearSelect = el(yearSelectId);
+      if (!monthSelect || !yearSelect) return;
+      const [selectedYear, selectedMonthNumber] = String(selectedMonth || currentMonthKey()).split("-");
+      const months = Array.from({ length: 12 }, (_, index) => {
+        const value = String(index + 1).padStart(2, "0");
+        const label = new Intl.DateTimeFormat("pt-BR", { month: "long" }).format(new Date(2026, index, 1));
+        return [value, label.charAt(0).toUpperCase() + label.slice(1)];
+      });
+      const currentYear = new Date().getFullYear();
+      const years = [];
+      for (let year = currentYear - 3; year <= currentYear + 5; year += 1) years.push(String(year));
+      if (selectedYear && !years.includes(selectedYear)) years.unshift(selectedYear);
+      monthSelect.innerHTML = months.map(([value, label]) => `<option value="${value}">${label}</option>`).join("");
+      yearSelect.innerHTML = years.map(year => `<option value="${year}">${year}</option>`).join("");
+      monthSelect.value = selectedMonthNumber || currentMonthKey().slice(5, 7);
+      yearSelect.value = selectedYear || currentMonthKey().slice(0, 4);
+    }
+
+    function selectedMonthFrom(monthId, yearId) {
+      return `${el(yearId)?.value || currentMonthKey().slice(0, 4)}-${el(monthId)?.value || currentMonthKey().slice(5, 7)}`;
+    }
+
+    function renderMonthOptions(selectedMonth = state.goalMonth || currentMonthKey()) {
+      renderDateSelectors("goalMonthNumber", "goalYear", selectedMonth);
+    }
+
+    function renderHistoryMonthOptions(selectedMonth = state.historyMonth || currentMonthKey()) {
+      renderDateSelectors("historyMonthNumber", "historyYear", selectedMonth);
+    }
+
+    function renderExpenseMonthOptions(selectedMonth = state.expenseMonth || currentMonthKey()) {
+      renderDateSelectors("expenseMonthNumber", "expenseYear", selectedMonth);
+    }
+
+    function renderFinancialMonthOptions(selectedMonth = state.financialMonth || currentMonthKey()) {
+      renderDateSelectors("financialMonthNumber", "financialYear", selectedMonth);
+    }
+
+    function salesForMonth(monthKey) {
+      return (state.sales || []).filter(sale => saleMonthKey(sale) === monthKey);
+    }
+
     function renderGoals() {
-      const revenue = state.sales.reduce((sum, sale) => sum + sale.total, 0);
-      const totalSales = state.sales.length;
-      const goal = Number(state.goals.salesGoal || 0);
-      const people = Math.max(1, Number(state.goals.salesPeople || 1));
+      state.goalMonth ||= currentMonthKey();
+      state.monthlyGoals ||= {};
+      const monthGoal = state.monthlyGoals[state.goalMonth] || state.goals || { salesGoal: 0, salesPeople: 1 };
+      renderMonthOptions(state.goalMonth);
+      const monthSales = salesForMonth(state.goalMonth);
+      const revenue = monthSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+      const totalSales = monthSales.length;
+      const goal = Number(monthGoal.salesGoal || 0);
+      const people = Math.max(1, Number(monthGoal.salesPeople || 1));
       const averageSaleTicket = totalSales ? revenue / totalSales : 0;
       const averageProductTicket = state.products.length
         ? state.products.reduce((sum, product) => sum + suggestedPrice(product), 0) / state.products.length
@@ -994,15 +2210,16 @@ function renderCustomerHistory(){
       el("goalProgress").style.width = `${percent}%`;
 
       if (!goal) {
-        el("goalHint").textContent = "Defina uma meta para acompanhar quantas vendas faltam.";
+        el("goalHint").textContent = `Defina uma meta mensal para ${monthLabel(state.goalMonth)}.`;
       } else if (!ticketBase) {
         el("goalHint").textContent = "Cadastre produtos ou registre vendas para o sistema estimar quantas vendas faltam.";
       } else if (remaining <= 0) {
         el("goalHint").textContent = "Meta batida. Continue acompanhando as próximas vendas.";
       } else {
         const ticketSource = averageSaleTicket ? "ticket médio real das vendas" : "preço médio sugerido dos produtos";
-        el("goalHint").textContent = `Faltam ${salesNeeded} venda(s), cerca de ${salesPerPerson} por pessoa. Cada pessoa precisa vender em média ${money.format(ticketPerPerson)} para bater a meta. Cálculo baseado no ${ticketSource}: ${money.format(ticketBase)}.`;
+        el("goalHint").textContent = `Em ${monthLabel(state.goalMonth)}, faltam ${salesNeeded} venda(s), cerca de ${salesPerPerson} por pessoa. Cada pessoa precisa vender em média ${money.format(ticketPerPerson)} para bater a meta. Cálculo baseado no ${ticketSource}: ${money.format(ticketBase)}.`;
       }
+      updateAutomaticSellerGoals();
     }
 
     function renderInventory() {
@@ -1049,21 +2266,106 @@ function renderCustomerHistory(){
       calculateSaleTotal();
     }
 
+    function saleGrossPaid(sale) {
+      return Number(sale.total || 0);
+    }
+
+    function saleNetReceived(sale) {
+      const method = String(sale.paymentMethod || "").toLowerCase();
+      const isCard = method.includes("cartão") || method.includes("cartao");
+      if (isCard) {
+        const base = Number(sale.totalBeforeInterest || 0);
+        return base > 0 ? base : Math.max(0, Number(sale.total || 0) - Number(sale.creditInterest || 0));
+      }
+      return Number(sale.total || 0);
+    }
+
+    function saleTotalFees(sale) {
+      return Math.max(0, saleGrossPaid(sale) - saleNetReceived(sale));
+    }
+
+    function salePaymentDetails(sale) {
+      const parts = [sale.paymentMethod || "Nao informado"];
+      if (sale.creditType) parts.push(sale.creditType === "parcelado" ? `${sale.creditInstallments || 2}x` : "à vista");
+      if (sale.creditBrand) parts.push(sale.creditBrand);
+      return parts.filter(Boolean).join(" · ");
+    }
+
     function renderHistory() {
-      el("historyBody").innerHTML = state.sales.slice().reverse().map(sale => `
+      state.historyMonth ||= currentMonthKey();
+      renderHistoryMonthOptions(state.historyMonth);
+      const sales = salesForMonth(state.historyMonth);
+      const totalReceived = sales.reduce((sum, sale) => sum + saleNetReceived(sale), 0);
+      const totalCash = sales
+        .filter(sale => sale.paymentMethod === "Dinheiro")
+        .reduce((sum, sale) => sum + saleNetReceived(sale), 0);
+      const totalDebit = sales
+        .filter(sale => sale.paymentMethod === "Cartão de débito")
+        .reduce((sum, sale) => sum + saleNetReceived(sale), 0);
+      const totalCredit = sales
+        .filter(sale => sale.paymentMethod === "Cartão de crédito")
+        .reduce((sum, sale) => sum + saleNetReceived(sale), 0);
+      const totalPix = sales
+        .filter(sale => sale.paymentMethod === "Pix")
+        .reduce((sum, sale) => sum + saleNetReceived(sale), 0);
+      if (el("historyPaymentSummary")) {
+        el("historyPaymentSummary").innerHTML = `
+          <article class="goal-card"><span>Total recebido</span><strong>${money.format(totalReceived)}</strong></article>
+          <article class="goal-card"><span>Dinheiro</span><strong>${money.format(totalCash)}</strong></article>
+          <article class="goal-card"><span>Pix</span><strong>${money.format(totalPix)}</strong></article>
+          <article class="goal-card"><span>Cartão de débito</span><strong>${money.format(totalDebit)}</strong></article>
+          <article class="goal-card"><span>Cartão de crédito</span><strong>${money.format(totalCredit)}</strong></article>
+        `;
+      }
+      el("historyBody").innerHTML = sales.slice().reverse().map(sale => {
+        const paid = saleGrossPaid(sale);
+        const received = saleNetReceived(sale);
+        const fees = saleTotalFees(sale);
+        const profit = received - (sale.items || []).reduce((sum, item) => sum + Number(item.cost || 0) * Number(item.quantity || 0), 0);
+        return `
         <tr>
           <td>${dateFmt.format(new Date(sale.date))}</td>
-          <td>${sale.items.map(item => `${escapeHtml(item.name)} x${item.quantity}`).join("<br>")}</td>
-          <td>${escapeHtml(sale.paymentMethod)}</td>
-          <td class="money">${money.format(sale.total)}</td>
-          <td class="money">${money.format(sale.profit)}</td>
-        </tr>
-      `).join("");
-      el("historyEmpty").classList.toggle("hidden", state.sales.length > 0);
+          <td>${(sale.items || []).map(item => `${escapeHtml(item.name)} x${item.quantity}`).join("<br>")}</td>
+          <td>${escapeHtml(salePaymentDetails(sale))}</td>
+          <td class="money">${money.format(paid)}</td>
+          <td class="money">${money.format(received)}</td>
+          <td class="money">${fees ? money.format(fees) : "-"}</td>
+          <td class="money">${money.format(profit)}</td>
+        </tr>`;
+      }).join("");
+      el("historyEmpty").classList.toggle("hidden", sales.length > 0);
     }
 
     function normalizePhone(phone) {
       return String(phone || "").replace(/\D/g, "");
+    }
+
+    function limitCustomerPhoneInput() {
+      const input = el("customerPhone");
+      if (input) input.value = normalizePhone(input.value).slice(0, 11);
+    }
+
+    function findKnownCustomerByName(name) {
+      const key = String(name || "").trim().toLowerCase();
+      if (!key) return null;
+      return buildCustomerList().find(customer => customer.name.toLowerCase() === key) || null;
+    }
+
+    function findKnownCustomerByPhone(phone) {
+      const digits = normalizePhone(phone);
+      if (!digits) return null;
+      return buildCustomerList().find(customer => normalizePhone(customer.phone) === digits) || null;
+    }
+
+    function autoFillCustomerFromName() {
+      const customer = findKnownCustomerByName(el("customerName")?.value);
+      if (customer && el("customerPhone") && !el("customerPhone").value) el("customerPhone").value = normalizePhone(customer.phone).slice(0, 11);
+    }
+
+    function autoFillCustomerFromPhone() {
+      limitCustomerPhoneInput();
+      const customer = findKnownCustomerByPhone(el("customerPhone")?.value);
+      if (customer && el("customerName") && !el("customerName").value) el("customerName").value = customer.name;
     }
 
     function customerKeyFromSale(sale) {
@@ -1141,10 +2443,10 @@ function renderCustomerHistory(){
       const totalPurchases = customers.reduce((sum, customer) => sum + customer.purchases, 0);
       const averageTicket = totalPurchases ? totalBought / totalPurchases : 0;
       summary.innerHTML = `
-        <article class="customer-card"><span>Clientes encontrados</span><strong>${totalCustomers}</strong></article>
-        <article class="customer-card"><span>Ranking - melhor cliente</span><strong>${best ? escapeHtml(best.name) : "Sem vendas"}</strong></article>
-        <article class="customer-card"><span>Total comprado</span><strong>${money.format(totalBought)}</strong></article>
-        <article class="customer-card"><span>Ticket medio por cliente</span><strong>${money.format(averageTicket)}</strong></article>
+        <article class="customer-card"><span>Clientes encontrados</span><strong>${totalCustomers}</strong><small>${totalPurchases} compra(s) no filtro</small></article>
+        <article class="customer-card"><span>Melhor cliente</span><strong>${best ? escapeHtml(best.name) : "Sem vendas"}</strong><small>${best ? money.format(best.total) : "Nenhuma compra registrada"}</small></article>
+        <article class="customer-card"><span>Total comprado</span><strong>${money.format(totalBought)}</strong><small>Soma das vendas filtradas</small></article>
+        <article class="customer-card"><span>Ticket medio</span><strong>${money.format(averageTicket)}</strong><small>Media por compra</small></article>
       `;
     }
 
@@ -1283,72 +2585,1230 @@ function renderCustomerHistory(){
       URL.revokeObjectURL(url);
     }
 
+    function excelValue(value) {
+      if (typeof value === "number") return value.toFixed(2).replace(".", ",");
+      return value ?? "";
+    }
+
+    function excelTable(title, headers, rows) {
+      const head = headers.length ? `<tr>${headers.map(header => `<th>${escapeHtml(header)}</th>`).join("")}</tr>` : "";
+      const body = rows.map(row => `<tr>${row.map(cell => `<td>${escapeHtml(excelValue(cell))}</td>`).join("")}</tr>`).join("");
+      return `<h2>${escapeHtml(title)}</h2><table border="1">${head}${body}</table><br>`;
+    }
+
+    function selectedExportMonthKey() {
+      const view = currentViewName();
+      if (view === "history") return state.historyMonth || currentMonthKey();
+      if (view === "expenses") return state.expenseMonth || currentMonthKey();
+      if (view === "financial") return state.financialMonth || currentMonthKey();
+      if (view === "ranking") return state.goalMonth || currentMonthKey();
+      return state.financialMonth || state.historyMonth || currentMonthKey();
+    }
+
+    function customerListFromSales(sales) {
+      const customers = {};
+      sales.forEach(sale => {
+        const key = customerKeyFromSale(sale);
+        if (!customers[key]) {
+          customers[key] = {
+            name: String(sale.customerName || "Nao informado").trim() || "Nao informado",
+            phone: String(sale.customerPhone || "").trim(),
+            purchases: 0,
+            total: 0
+          };
+        }
+        customers[key].purchases += 1;
+        customers[key].total += Number(sale.total || 0);
+      });
+      return Object.values(customers);
+    }
+
+    function cashFlowRowsForMonth(monthKey) {
+      return Object.entries(state.cashFlows || {})
+        .filter(([date]) => String(date).startsWith(monthKey))
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([date, flow]) => {
+          const totals = cashManualTotals(flow);
+          const cashSales = cashSalesTotalForDate(date);
+          const expected = cashExpectedBalance(flow, date);
+          const closing = Number(flow.closing || 0);
+          return [
+            new Date(`${date}T00:00:00`).toLocaleDateString("pt-BR"),
+            flow.closed ? "Fechado" : flow.paused ? "Pausado" : flow.opened ? "Aberto" : "Fechado",
+            Number(flow.initial || 0),
+            totals.entries,
+            totals.exits,
+            cashSales,
+            expected,
+            flow.closed ? closing : "",
+            flow.closed ? closing - expected : ""
+          ];
+        });
+    }
+
+    function pricingHistoryRowsForMonth(monthKey) {
+      return (state.pricingHistory || [])
+        .filter(item => String(item.date || "").slice(0, 7) === monthKey)
+        .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+        .map(item => [
+          item.date ? dateFmt.format(new Date(item.date)) : "",
+          item.name || "",
+          item.category || "",
+          Number(item.costTotal || 0),
+          Number(item.salePrice || 0),
+          Number(item.netProfit || 0),
+          `${Number(item.profitPercent || 0).toFixed(2)}%`,
+          `${Number(item.markup || 0).toFixed(2)}x`
+        ]);
+    }
+
+    function exportFinancialReportToExcel() {
+      const monthKey = selectedExportMonthKey();
+      const monthSales = salesForMonth(monthKey);
+      const revenue = monthSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+      const profit = monthSales.reduce((sum, sale) => sum + Number(sale.profit || 0), 0);
+      const expenseTotals = financialExpensesForMonth(monthKey);
+      const expenses = expenseTotals.total;
+      const net = revenue - expenses;
+      const stockValue = state.products.reduce((sum, product) => sum + Number(product.quantity || 0) * Number(product.cost || 0), 0);
+      const stockUnits = state.products.reduce((sum, product) => sum + Number(product.quantity || 0), 0);
+      const paymentTotals = {};
+      monthSales.forEach(sale => {
+        const method = sale.paymentMethod || "Nao informado";
+        paymentTotals[method] = (paymentTotals[method] || 0) + Number(sale.total || 0);
+      });
+      const customers = customerListFromSales(monthSales);
+      const reportDate = new Date().toISOString().slice(0, 10);
+
+      const report = [
+        `<html><head><meta charset="utf-8"></head><body><h1>Relatorio MS Tech - ${monthLabel(monthKey)} - ${reportDate}</h1>`,
+        excelTable("Resumo financeiro", ["Indicador", "Valor"], [
+          ["Receitas", revenue],
+          ["Lucro estimado das vendas", profit],
+          ["Total de despesas", expenses],
+          ["Despesas fixas validadas", expenseTotals.fixed],
+          ["Despesas variaveis", expenseTotals.variable],
+          ["Lucro liquido", net],
+          ["Margem", revenue ? `${((net / revenue) * 100).toFixed(2)}%` : "0%"],
+          ["Valor atual em estoque", stockValue],
+          ["Itens atuais em estoque", stockUnits]
+        ]),
+        excelTable("Formas de pagamento", ["Forma de pagamento", "Valor"], Object.entries(paymentTotals)),
+        excelTable("Vendas", ["Data", "Cliente", "Celular", "Vendedor", "Forma de pagamento", "Itens", "Desconto", "Total", "Lucro estimado"], monthSales.map(sale => [
+          dateFmt.format(new Date(sale.date)),
+          sale.customerName || "",
+          sale.customerPhone || "",
+          sale.sellerName || "",
+          sale.paymentMethod || "",
+          (sale.items || []).map(item => `${item.name} x${item.quantity}`).join("; "),
+          Number(sale.discount || 0),
+          Number(sale.total || 0),
+          Number(sale.profit || 0)
+        ])),
+        excelTable("Fluxo de caixa", ["Data", "Status", "Saldo inicial", "Entradas", "Saidas", "Vendas em dinheiro", "Saldo esperado", "Saldo contado", "Diferenca"], cashFlowRowsForMonth(monthKey)),
+        excelTable("Despesas", ["Tipo", "Descricao", "Valor"], [
+          ...(fixedExpensesValidatedForMonth(monthKey) ? (state.fixedExpenses || []).map(expense => ["Fixa", expense.description || "", Number(expense.value || 0)]) : []),
+          ...variableExpensesForMonth(monthKey).map(expense => [
+          "Variável",
+          expense.description || "",
+          Number(expense.value || 0)
+        ])
+        ]),
+        excelTable("Estoque atual", ["Produto", "Categoria", "Fornecedor", "Quantidade", "Custo", "Preco sugerido", "Valor em estoque", "Estoque minimo"], state.products.map(product => [
+          product.name || "",
+          product.category || "",
+          product.supplier || "",
+          Number(product.quantity || 0),
+          Number(product.cost || 0),
+          suggestedPrice(product),
+          Number(product.quantity || 0) * Number(product.cost || 0),
+          Number(product.minStock || 0)
+        ])),
+        excelTable("Clientes", ["Cliente", "Celular", "Compras", "Total comprado"], customers.map(customer => [
+          customer.name,
+          customer.phone,
+          customer.purchases,
+          customer.total
+        ])),
+        excelTable("Historico de precificacao", ["Data", "Produto", "Categoria", "Custo", "Preco sugerido", "Lucro liquido", "Lucro %", "Markup"], pricingHistoryRowsForMonth(monthKey)),
+        excelTable("Metas", ["Meta de vendas", "Pessoas na venda", "Realizado", "Falta vender"], [[
+          Number((state.monthlyGoals?.[monthKey] || state.goals)?.salesGoal || 0),
+          Number((state.monthlyGoals?.[monthKey] || state.goals)?.salesPeople || 1),
+          revenue,
+          Math.max(0, Number((state.monthlyGoals?.[monthKey] || state.goals)?.salesGoal || 0) - revenue)
+        ]]),
+        excelTable("Acessos cadastrados", ["Nome", "Usuario", "Perfil", "Status"], (state.users || []).map(user => [
+          user.name || "",
+          user.username || "",
+          user.role || "",
+          user.active !== false ? "Ativo" : "Bloqueado"
+        ])),
+        "</body></html>"
+      ].join("");
+
+      const blob = new Blob(["\ufeff" + report], { type: "application/vnd.ms-excel;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `relatorio-ms-tech-${monthKey}-${reportDate}.xls`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
     
+    function variableExpensesForMonth(monthKey = state.expenseMonth || currentMonthKey()) {
+      state.monthlyExpenses ||= {};
+      state.monthlyExpenses[monthKey] ||= [];
+      return state.monthlyExpenses[monthKey];
+    }
+
+    function fixedExpensesValidatedForMonth(monthKey = state.expenseMonth || currentMonthKey()) {
+      state.fixedExpenseMonths ||= {};
+      return Boolean(state.fixedExpenseMonths[monthKey]);
+    }
+
+    function financialExpensesForMonth(monthKey = state.financialMonth || currentMonthKey()) {
+      const variable = variableExpensesForMonth(monthKey).reduce((sum, expense) => sum + Number(expense.value || 0), 0);
+      const fixed = fixedExpensesValidatedForMonth(monthKey)
+        ? (state.fixedExpenses || []).reduce((sum, expense) => sum + Number(expense.value || 0), 0)
+        : 0;
+      return { fixed, variable, total: fixed + variable };
+    }
+
+    function totalExpensesForMonth(monthKey = state.financialMonth || currentMonthKey()) {
+      return financialExpensesForMonth(monthKey).total;
+    }
+
+    function hasFinancialMonthData(monthKey = state.financialMonth || currentMonthKey()) {
+      return salesForMonth(monthKey).length > 0 || totalExpensesForMonth(monthKey) > 0;
+    }
+
+    function clearExpenseForm() {
+      el("expenseId").value = "";
+      el("expenseDescription").value = "";
+      el("expenseValue").value = "";
+      el("expenseType").value = "Fixa";
+      el("addExpenseBtn").textContent = "Salvar despesa";
+    }
+
+    function editExpense(type, id) {
+      const list = type === "Fixa" ? (state.fixedExpenses || []) : variableExpensesForMonth(state.expenseMonth);
+      const expense = list.find(item => item.id === id);
+      if (!expense) return;
+      el("expenseId").value = id;
+      el("expenseType").value = type;
+      el("expenseDescription").value = expense.description || "";
+      el("expenseValue").value = Number(expense.value || 0);
+      el("addExpenseBtn").textContent = "Atualizar despesa";
+    }
+
+    function deleteExpense(type, id) {
+      if (!confirm("Remover esta despesa?")) return;
+      if (type === "Fixa") state.fixedExpenses = (state.fixedExpenses || []).filter(item => item.id !== id);
+      else state.monthlyExpenses[state.expenseMonth] = variableExpensesForMonth(state.expenseMonth).filter(item => item.id !== id);
+      saveState();
+      renderAll();
+    }
+
+    function validateFixedExpensesForSelectedMonth() {
+      state.fixedExpenseMonths ||= {};
+      state.fixedExpenseMonths[state.expenseMonth || currentMonthKey()] = true;
+      saveState();
+      renderAll();
+    }
+
     function renderExpenses(){
-      const body=el("expenseBody");
-      if(!body) return;
-      body.innerHTML=(state.expenses||[]).map(e=>`<tr><td>${e.type}</td><td>${e.description}</td><td>${money.format(e.value)}</td></tr>`).join("");
+      if(!el("fixedExpenseBody")) return;
+      state.expenseMonth ||= currentMonthKey();
+      renderExpenseMonthOptions(state.expenseMonth);
+      const variables = variableExpensesForMonth(state.expenseMonth);
+      const fixedTotal = (state.fixedExpenses || []).reduce((sum, expense) => sum + Number(expense.value || 0), 0);
+      const validated = fixedExpensesValidatedForMonth(state.expenseMonth);
+      if (el("fixedExpenseMonthStatus")) {
+        el("fixedExpenseMonthStatus").textContent = validated
+          ? `Despesas fixas validadas em ${monthLabel(state.expenseMonth)}: ${money.format(fixedTotal)}.`
+          : `Despesas fixas ainda não validadas em ${monthLabel(state.expenseMonth)}.`;
+      }
+      if (el("validateFixedExpensesBtn")) {
+        el("validateFixedExpensesBtn").textContent = validated ? "Despesas fixas validadas" : "Validar despesas fixas deste mês";
+        el("validateFixedExpensesBtn").disabled = validated;
+      }
+      el("fixedExpenseBody").innerHTML = (state.fixedExpenses || []).map(expense => `
+        <tr>
+          <td>${escapeHtml(expense.description || "")}</td>
+          <td class="money">${money.format(Number(expense.value || 0))}</td>
+          <td><div class="actions"><button class="secondary" type="button" onclick="editExpense('Fixa','${expense.id}')">Editar</button><button class="danger" type="button" onclick="deleteExpense('Fixa','${expense.id}')">Remover</button></div></td>
+        </tr>
+      `).join("");
+      el("variableExpenseBody").innerHTML = variables.map(expense => `
+        <tr>
+          <td>${escapeHtml(expense.description || "")}</td>
+          <td class="money">${money.format(Number(expense.value || 0))}</td>
+          <td><div class="actions"><button class="secondary" type="button" onclick="editExpense('Variável','${expense.id}')">Editar</button><button class="danger" type="button" onclick="deleteExpense('Variável','${expense.id}')">Remover</button></div></td>
+        </tr>
+      `).join("");
+      el("fixedExpenseEmpty")?.classList.toggle("hidden", Boolean((state.fixedExpenses || []).length));
+      el("variableExpenseEmpty")?.classList.toggle("hidden", Boolean(variables.length));
     }
 
     function renderFinancial(){
-      const revenue=state.sales.reduce((s,v)=>s+v.total,0);
-      const expenses=(state.expenses||[]).reduce((s,e)=>s+e.value,0);
+      state.financialMonth ||= currentMonthKey();
+      renderFinancialMonthOptions(state.financialMonth);
+      const monthSales=salesForMonth(state.financialMonth);
+      const revenue=monthSales.reduce((s,v)=>s+Number(v.total||0),0);
+      const expenses=financialExpensesForMonth(state.financialMonth).total;
       const net=revenue-expenses;
       if(el("finRevenue")){
         el("finRevenue").textContent=money.format(revenue);
         el("finExpenses").textContent=money.format(expenses);
         el("finNet").textContent=money.format(net);
-        el("finMargin").textContent=revenue?((net/revenue)*100).toFixed(1)+"%":"0%";
+        el("finMargin").textContent=revenue?((net/revenue)*100).toFixed(2)+"%":"0%";
       }
+    }
+
+    function updateAutomaticSellerGoals() {
+      const currentMonth = state.goalMonth || currentMonthKey();
+      const monthConfig = state.monthlyGoals?.[currentMonth] || state.goals || { salesGoal: 0 };
+      const totalGoal = Number(monthConfig.salesGoal || 0);
+      const activeSellers = (state.users || []).filter(user => user.active !== false && user.role === "Vendedor");
+      if (!activeSellers.length || !totalGoal) return;
+      const individualGoal = totalGoal / activeSellers.length;
+      activeSellers.forEach(user => {
+        user.sellerGoals ||= {};
+        user.sellerGoals[currentMonth] = individualGoal;
+      });
+    }
+
+    function automaticSellerGoal(monthKey = state.goalMonth || currentMonthKey(), user = currentUser) {
+      if (!user) return 0;
+      if (user.sellerGoals?.[monthKey]) return Number(user.sellerGoals[monthKey] || 0);
+      const monthConfig = state.monthlyGoals?.[monthKey] || state.goals || { salesGoal: 0 };
+      const sellers = (state.users || []).filter(item => item.active !== false && item.role === "Vendedor");
+      return sellers.length ? Number(monthConfig.salesGoal || 0) / sellers.length : 0;
+    }
+
+    function salesForCurrentSeller() {
+      if (!currentUser) return [];
+      const monthKey = state.goalMonth || currentMonthKey();
+      return (state.sales || []).filter(sale => sale.sellerId === currentUser.id && saleMonthKey(sale) === monthKey);
+    }
+
+    function renderSellerGoal() {
+      if (!el("sellerGoalPanel")) return;
+      const seller = currentUser?.role === "Vendedor";
+      el("sellerGoalPanel").classList.toggle("hidden", !seller);
+      if (!seller) return;
+      const sellerSales = salesForCurrentSeller();
+      const revenue = sellerSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+      const goal = automaticSellerGoal(state.goalMonth || currentMonthKey());
+      const remaining = Math.max(0, goal - revenue);
+      const percent = goal > 0 ? Math.min(100, (revenue / goal) * 100) : 0;
+      el("sellerGoalPercent").textContent = `${Math.round(percent)}%`;
+      el("sellerRevenue").textContent = money.format(revenue);
+      el("sellerRemaining").textContent = money.format(remaining);
+      el("sellerSalesCount").textContent = sellerSales.length;
+      el("sellerGoalProgress").style.width = `${percent}%`;
+      el("sellerGoalHint").textContent = !goal
+        ? "Sua meta ainda não foi definida pelo administrador."
+        : remaining <= 0
+          ? "Meta batida. Continue registrando suas vendas."
+          : `Faltam ${money.format(remaining)} para bater sua meta individual de ${money.format(goal)}.`;
+    }
+
+    function buildSellerRanking() {
+      const monthKey = state.goalMonth || currentMonthKey();
+      return (state.users || [])
+        .filter(user => user.active !== false && user.role === "Vendedor")
+        .map(user => {
+          const sales = (state.sales || []).filter(sale => sale.sellerId === user.id && saleMonthKey(sale) === monthKey);
+          const revenue = sales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+          const goal = automaticSellerGoal(monthKey, user);
+          const remaining = Math.max(0, goal - revenue);
+          const percent = goal > 0 ? Math.min(100, (revenue / goal) * 100) : 0;
+          return { seller: user, sales, revenue, goal, remaining, percent, hitGoal: goal > 0 && revenue >= goal };
+        })
+        .sort((a, b) => b.revenue - a.revenue);
+    }
+
+    function renderSellerRanking() {
+      if (!el("sellerRankingBody")) return;
+      const ranking = buildSellerRanking();
+      const hitGoals = ranking.filter(item => item.hitGoal).length;
+      const totalRevenue = ranking.reduce((sum, item) => sum + item.revenue, 0);
+      const totalGoal = ranking.reduce((sum, item) => sum + item.goal, 0);
+      const totalRemaining = Math.max(0, totalGoal - totalRevenue);
+      el("sellerRankingSummary").innerHTML = `
+        <article class="goal-card"><span>Meta individual</span><strong>${money.format(automaticSellerGoal(state.goalMonth || currentMonthKey()))}</strong></article>
+        <article class="goal-card"><span>Vendedores</span><strong>${ranking.length}</strong></article>
+        <article class="goal-card"><span>Metas batidas</span><strong>${hitGoals}</strong></article>
+        <article class="goal-card"><span>Falta geral</span><strong>${money.format(totalRemaining)}</strong></article>
+      `;
+      el("sellerRankingBody").innerHTML = ranking.map((item, index) => `
+        <tr>
+          <td><strong>${index + 1}º</strong></td>
+          <td><strong>${escapeHtml(item.seller.name || item.seller.username)}</strong><br><span class="muted">${escapeHtml(item.seller.username || "")}</span></td>
+          <td class="money">${item.goal ? money.format(item.goal) : "Sem meta"}</td>
+          <td class="money">${money.format(item.revenue)}</td>
+          <td>${Math.round(item.percent)}%</td>
+          <td><span class="pill ${item.hitGoal ? "ok" : "warn"}">${item.hitGoal ? "Meta batida" : "Em andamento"}</span></td>
+          <td class="money">${item.goal ? money.format(item.remaining) : "Definir meta"}</td>
+          <td>${item.sales.length}</td>
+        </tr>
+      `).join("");
+      el("sellerRankingEmpty")?.classList.toggle("hidden", Boolean(ranking.length));
+    }
+
+    const permissionOptions = [
+      ["sales", "Registrar venda"],
+      ["cashFlow", "Fluxo de caixa"],
+      ["stockEntry", "Entrada de produto"],
+      ["inventory", "Produtos e estoque"],
+      ["pricing", "Precificação"],
+      ["history", "Histórico"],
+      ["ranking", "Ranking de vendedores"],
+      ["customerHistory", "Clientes"],
+      ["expenses", "Despesas"],
+      ["financial", "Dashboard financeiro"],
+      ["access", "Gerenciar acessos"]
+    ];
+
+    function permissionsForRole(role, selected = []) {
+      const all = permissionOptions.map(([value]) => value);
+      if (role === "Administrador") return all;
+      if (role === "Vendedor") return ["sales", "cashFlow", "history", "customerHistory"];
+      if (role === "Estoque") return ["stockEntry", "inventory", "pricing"];
+      return selected.length ? selected : ["sales"];
+    }
+
+    function renderPermissionList(selected = []) {
+      const list = el("permissionList");
+      if (!list) return;
+      const checked = new Set(permissionsForRole(el("accessRole")?.value || "Vendedor", selected));
+      list.innerHTML = permissionOptions.map(([value, label]) => `
+        <label><input type="checkbox" value="${value}" ${checked.has(value) ? "checked" : ""}> ${label}</label>
+      `).join("");
+    }
+
+    function renderPasswordResetRequests() {
+      const box = el("passwordResetRequests");
+      if (!box) return;
+      const requests = (state.users || []).filter(user => user.passwordResetRequested);
+      if (!requests.length) {
+        box.innerHTML = '<div class="empty">Nenhuma solicitação pendente.</div>';
+        return;
+      }
+      box.innerHTML = requests.map(user => `
+        <div class="goal-card" style="margin-bottom:8px;">
+          <span>${escapeHtml(user.name || user.username || "Usuário")}</span>
+          <strong>${escapeHtml(user.username || "")}</strong>
+          <div class="actions" style="margin-top:10px;">
+            <button type="button" onclick="approvePasswordReset('${user.id}')">Autorizar reset</button>
+            <button type="button" class="secondary" onclick="denyPasswordReset('${user.id}')">Recusar</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function approvePasswordReset(userId) {
+      const user = state.users.find(item => item.id === userId);
+      if (!user) return;
+      user.password = FIRST_ACCESS_PASSWORD;
+      user.mustChangePassword = true;
+      user.passwordResetRequested = false;
+      saveState();
+      renderAccesses();
+      renderPasswordResetRequests();
+    }
+
+    function denyPasswordReset(userId) {
+      const user = state.users.find(item => item.id === userId);
+      if (!user) return;
+      user.passwordResetRequested = false;
+      saveState();
+      renderAccesses();
+      renderPasswordResetRequests();
+    }
+
+    function renderAccessSummaryCards() {
+      const box = el("accessSummaryCards");
+      if (!box) return;
+      const users = state.users || [];
+      const active = users.filter(user => user.active !== false).length;
+      const blocked = users.filter(user => user.active === false).length;
+      const admins = users.filter(user => user.role === "Administrador").length;
+      const resets = users.filter(user => user.passwordResetRequested).length;
+      box.innerHTML = `
+        <article class="access-card"><span>Usuários ativos</span><strong>${active}</strong><small>Podem acessar o sistema.</small></article>
+        <article class="access-card"><span>Bloqueados</span><strong>${blocked}</strong><small>Sem permissão de login.</small></article>
+        <article class="access-card"><span>Administradores</span><strong>${admins}</strong><small>Possuem acesso completo.</small></article>
+        <article class="access-card"><span>Recuperação de senha</span><strong>${resets}</strong><small>Solicitações pendentes.</small></article>
+      `;
+    }
+
+    function renderAccesses() {
+      renderAccessSummaryCards();
+      const body = el("accessBody");
+      if (!body) return;
+      const users = state.users || [];
+      body.innerHTML = users.map(user => `
+        <tr>
+          <td>${escapeHtml(user.name)}</td>
+          <td>${escapeHtml(user.username)}</td>
+          <td>${escapeHtml(user.role)}</td>
+          <td><span class="pill ${user.active !== false ? "ok" : "danger"}">${user.active !== false ? "Ativo" : "Bloqueado"}</span></td>
+          <td>
+            <div class="actions">
+              <button class="secondary icon" title="Editar acesso" onclick="editAccess('${user.id}')">✎</button>
+              <button class="secondary icon" title="${user.active !== false ? "Bloquear" : "Ativar"}" onclick="toggleAccess('${user.id}')">${user.active !== false ? "–" : "+"}</button>
+              <button class="danger icon" title="Excluir acesso" onclick="deleteAccess('${user.id}')">×</button>
+            </div>
+          </td>
+        </tr>
+      `).join("");
+      el("accessEmpty")?.classList.toggle("hidden", users.length > 0);
+    }
+
+
+    function todayKey(date = new Date()) {
+      return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+    }
+
+    function selectedCashFlowDateKey() {
+      return el("cashFlowDateFilter")?.value || todayKey();
+    }
+
+    function cashFlowForDate(dateKey = selectedCashFlowDateKey()) {
+      state.cashFlows ||= {};
+      const key = dateKey || todayKey();
+      state.cashFlows[key] ||= { date: key, opened: false, closed: false, initial: 0, closing: 0, movements: [] };
+      state.cashFlows[key].movements ||= [];
+      return state.cashFlows[key];
+    }
+
+    function cashFlowForToday() {
+      return cashFlowForDate(todayKey());
+    }
+
+    function isCashRegisterOpenForSales() {
+      const flow = cashFlowForToday();
+      return Boolean(flow.opened && !flow.closed && !flow.paused);
+    }
+
+    function showCashRequiredNotice() {
+      const flow = cashFlowForToday();
+      const message = flow.closed
+        ? "Caixa fechado. Abra um novo caixa antes de iniciar uma venda."
+        : flow.paused
+          ? "Caixa pausado. Abra o caixa novamente antes de registrar vendas."
+          : "Abra o caixa antes de iniciar ou finalizar qualquer venda.";
+      const notice = el("saleNotice");
+      if (notice) {
+        notice.textContent = message;
+        notice.style.color = "var(--danger)";
+      }
+      alert(message);
+      switchView("cashFlow");
+      el("cashActionValue")?.focus();
+    }
+
+    function updateSalesCashLock() {
+      const open = isCashRegisterOpenForSales();
+      const flow = cashFlowForToday();
+      const blockedTitle = flow.paused
+        ? "Caixa pausado. Retome o caixa para registrar vendas."
+        : flow.closed
+          ? "Caixa fechado. Abra um novo caixa para registrar vendas."
+          : "Abra o caixa para registrar vendas.";
+      const addButton = el("addSaleItemBtn");
+      const finishButton = el("finishSaleBtn");
+      if (addButton) {
+        addButton.disabled = false;
+        addButton.title = open ? "Adicionar item" : blockedTitle;
+      }
+      if (finishButton) {
+        finishButton.disabled = !open;
+        finishButton.title = open ? "Finalizar venda" : blockedTitle;
+      }
+      el("saleBarcode")?.toggleAttribute("disabled", !open);
+      el("scanSaleBarcode")?.toggleAttribute("disabled", !open);
+      if (!open && !el("salesView")?.classList.contains("hidden")) {
+        const notice = el("saleNotice");
+        if (notice) notice.textContent = flow.closed
+          ? "Caixa fechado. Abra um novo caixa para registrar vendas."
+          : flow.paused
+            ? "Caixa pausado. Retome o caixa para registrar vendas."
+          : "Abra o caixa antes de registrar vendas.";
+      }
+    }
+
+    function cashSalesForDate(dateKey = selectedCashFlowDateKey()) {
+      const key = dateKey || todayKey();
+      return (state.sales || []).filter(sale => String(sale.date || "").slice(0, 10) === key && sale.paymentMethod === "Dinheiro");
+    }
+
+    function todayCashSales() {
+      return cashSalesForDate(todayKey());
+    }
+
+    function cashSalesTotalForDate(dateKey = selectedCashFlowDateKey()) {
+      return cashSalesForDate(dateKey).reduce((sum, sale) => sum + Number(sale.total || 0), 0);
+    }
+
+    function todayCashSalesTotal() {
+      return cashSalesTotalForDate(todayKey());
+    }
+
+    function cashManualTotals(flow = cashFlowForToday()) {
+      return (flow.movements || []).reduce((acc, movement) => {
+        const value = Number(movement.value || 0);
+        if (movement.type === "Entrada") acc.entries += value;
+        if (movement.type === "Saída") acc.exits += value;
+        return acc;
+      }, { entries: 0, exits: 0 });
+    }
+
+    function cashExpectedBalance(flow = cashFlowForDate(), dateKey = flow.date || selectedCashFlowDateKey()) {
+      const totals = cashManualTotals(flow);
+      return Number(flow.initial || 0) + totals.entries + cashSalesTotalForDate(dateKey) - totals.exits;
+    }
+
+    function addCashMovement(type, description, value) {
+      const flow = cashFlowForDate();
+      if (!flow.opened || flow.closed) {
+        alert("Abra o caixa antes de registrar movimentações.");
+        return false;
+      }
+      const amount = Number(value || 0);
+      if (amount <= 0) {
+        alert("Informe um valor maior que zero.");
+        return false;
+      }
+      flow.movements.push({ id: makeId(), date: new Date().toISOString(), type, description: description || type, value: amount });
+      saveState();
+      renderCashFlow();
+      return true;
+    }
+
+    function applyCashAction() {
+      const flow = cashFlowForDate();
+      const action = el("cashAction")?.value || "open";
+      const value = parseBrazilianNumber(el("cashActionValue")?.value || 0);
+      const description = el("cashActionDescription")?.value || "";
+
+      if (action === "open") {
+        if (!flow.opened || flow.closed) {
+          if (value <= 0) {
+            alert("Informe o saldo inicial para abrir o caixa.");
+            return;
+          }
+          flow.opened = true;
+          flow.closed = false;
+          flow.paused = false;
+          flow.initial = value;
+          flow.closing = 0;
+          flow.movements ||= [];
+        } else if (flow.paused) {
+          flow.paused = false;
+          flow.movements.push({ id: makeId(), date: new Date().toISOString(), type: "Reabertura", description: "Caixa retomado", value: 0 });
+        } else {
+          alert("O caixa já está aberto.");
+          return;
+        }
+      }
+
+      if (action === "pause") {
+        if (!flow.opened || flow.closed) {
+          alert("Abra o caixa antes de pausar.");
+          return;
+        }
+        flow.paused = true;
+        flow.movements ||= [];
+        flow.movements.push({ id: makeId(), date: new Date().toISOString(), type: "Pausa", description: "Caixa pausado", value: 0 });
+      }
+
+      if (action === "close") {
+        if (!flow.opened || flow.closed) {
+          alert("Abra o caixa antes de fechar.");
+          return;
+        }
+        flow.paused = false;
+        flow.closing = value;
+        flow.closed = true;
+        flow.closedAt = new Date().toISOString();
+      }
+
+      if (action === "entry" && !addCashMovement("Entrada", description || "Entrada", value)) return;
+      if (action === "exit" && !addCashMovement("Saída", description || "Saída", value)) return;
+
+      saveState();
+      if (el("cashActionValue")) el("cashActionValue").value = "";
+      if (el("cashActionDescription")) el("cashActionDescription").value = "";
+      renderCashFlow();
+    }
+
+    function renderCashFlow() {
+      const statusEl = el("cashStatus");
+      if (!statusEl) return;
+      const selectedDate = selectedCashFlowDateKey();
+      if (el("cashFlowDateFilter") && !el("cashFlowDateFilter").value) el("cashFlowDateFilter").value = selectedDate;
+      if (el("cashFlowDateLabel")) {
+        const isToday = selectedDate === todayKey();
+        el("cashFlowDateLabel").value = `${isToday ? "Hoje - " : ""}${new Date(`${selectedDate}T00:00:00`).toLocaleDateString("pt-BR")}`;
+      }
+      const flow = cashFlowForDate(selectedDate);
+      const totals = cashManualTotals(flow);
+      const expected = cashExpectedBalance(flow, selectedDate);
+      const closing = Number(flow.closing || 0);
+      const difference = flow.closed ? closing - expected : 0;
+      statusEl.textContent = flow.closed ? "Fechado" : flow.paused ? "Pausado" : flow.opened ? "Aberto" : "Fechado";
+      el("cashInitialSummary").textContent = money.format(Number(flow.initial || 0));
+      el("cashExpectedSummary").textContent = money.format(expected);
+      el("cashDifferenceSummary").textContent = flow.closed ? money.format(difference) : money.format(0);
+
+      const events = (flow.movements || []).map(movement => {
+        const value = Number(movement.value || 0);
+        return {
+          date: movement.date,
+          type: movement.type,
+          description: movement.description,
+          entry: movement.type === "Entrada" ? value : 0,
+          exit: movement.type === "Saída" ? value : 0
+        };
+      });
+      cashSalesForDate(selectedDate).forEach((sale, index) => {
+        const saleTotal = Number(sale.total || 0);
+        const received = Number(sale.cashReceived || saleTotal || 0);
+        const change = Number(sale.cashChange || Math.max(0, received - saleTotal));
+        events.push({
+          date: sale.date || new Date().toISOString(),
+          type: "Venda em dinheiro",
+          description: `Venda em dinheiro ${index + 1} · Recebido: ${money.format(received)} · Troco: ${money.format(change)}`,
+          entry: saleTotal,
+          exit: 0
+        });
+      });
+      let running = Number(flow.initial || 0);
+      const rows = events
+        .sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0))
+        .map(event => {
+          running += Number(event.entry || 0);
+          running -= Number(event.exit || 0);
+          return { ...event, balance: running };
+        });
+      const body = el("cashFlowBody");
+      if (body) {
+        body.innerHTML = rows.map(row => `
+          <tr>
+            <td>${dateFmt.format(new Date(row.date || Date.now()))}</td>
+            <td><span class="pill ${row.type === "Saída" ? "danger" : "ok"}">${escapeHtml(row.type)}</span></td>
+            <td>${escapeHtml(row.description || "")}</td>
+            <td class="money">${row.entry ? money.format(row.entry) : "-"}</td>
+            <td class="money">${row.exit ? money.format(row.exit) : "-"}</td>
+            <td class="money">${money.format(row.balance ?? expected)}</td>
+          </tr>
+        `).join("");
+      }
+      el("cashFlowEmpty")?.classList.toggle("hidden", rows.length > 0);
+      const hint = el("cashFlowHint");
+      if (hint) {
+        hint.textContent = flow.closed
+          ? `Caixa fechado. Saldo contado: ${money.format(closing)}. Diferença: ${money.format(difference)}.`
+          : flow.paused
+            ? `Caixa pausado. Saldo esperado: ${money.format(expected)}. Reabra o caixa para registrar vendas.`
+          : flow.opened
+            ? `Caixa aberto. Entradas manuais: ${money.format(totals.entries)}. Saídas: ${money.format(totals.exits)}. Vendas em dinheiro: ${money.format(cashSalesTotalForDate(selectedDate))}.`
+            : "Abra o caixa para iniciar o controle diário. As vendas em dinheiro entram automaticamente no saldo esperado.";
+      }
+      updateSalesCashLock();
+    }
+
+
+    function pricingDefaults() {
+      const defaults = { cardFee: 4.98, taxes: 6, operational: 15, margin: 25 };
+      state.pricingSettings = {
+        ...defaults,
+        ...(state.pricingConfig || {}),
+        ...(state.pricingSettings || {})
+      };
+      state.pricingSettings.cardFee = normalizePercentValue(state.pricingSettings.cardFee) || defaults.cardFee;
+      state.pricingSettings.taxes = normalizePercentValue(state.pricingSettings.taxes) || defaults.taxes;
+      state.pricingSettings.operational = normalizePercentValue(state.pricingSettings.operational) || defaults.operational;
+      state.pricingSettings.margin = normalizeMarginValue(state.pricingSettings.margin);
+      state.pricingConfig = state.pricingSettings;
+      state.pricingProducts ||= [];
+      return state.pricingSettings;
+    }
+
+    function parsePricingNumber(id) {
+      const field = el(id);
+      if (!field) return 0;
+      return parseBrazilianNumber(field.value);
+    }
+
+    function setPricingValue(id, value) {
+      const field = el(id);
+      if (!field) return;
+      const number = Number(value || 0);
+      field.value = field.type === "number"
+        ? number.toFixed(2)
+        : formatBrazilianDecimal(number);
+    }
+
+    function roundPsychological(value) {
+      value = Math.max(0, Number(value || 0));
+      if (!value) return 0;
+      const base = Math.floor(value);
+      const cents = value - base;
+      const rounded = cents <= 0.90 ? base + 0.90 : base + 1.90;
+      return Math.round(rounded * 100) / 100;
+    }
+
+    function getPricingInputData() {
+      const cost = parsePricingNumber("pricingCost");
+      const freight = parsePricingNumber("pricingFreight");
+      const cardFee = parsePricingNumber("pricingCardFee");
+      const taxes = parsePricingNumber("pricingTaxes");
+      const operational = parsePricingNumber("pricingOperational");
+      const margin = Math.max(25, parsePricingNumber("pricingMargin"));
+      const costTotal = cost + freight;
+      const feePercentTotal = cardFee + taxes + operational;
+      const percentTotal = feePercentTotal + margin;
+      const basePrice = costTotal > 0 && feePercentTotal < 100 ? costTotal * (1 + margin / 100) / (1 - feePercentTotal / 100) : 0;
+      const salePrice = roundPsychological(basePrice);
+      const cardValue = salePrice * cardFee / 100;
+      const taxValue = salePrice * taxes / 100;
+      const operationalValue = salePrice * operational / 100;
+      const grossProfit = salePrice - costTotal;
+      const netProfit = salePrice - costTotal - cardValue - taxValue - operationalValue;
+      const profitPercent = costTotal > 0 ? (netProfit / costTotal) * 100 : 0;
+      const markup = costTotal > 0 ? salePrice / costTotal : 0;
+      return {
+        id: el("pricingId")?.value || "",
+        name: el("pricingProductName")?.value?.trim() || "Produto sem nome",
+        category: el("pricingCategory")?.value?.trim() || "Sem categoria",
+        cost, freight, cardFee, taxes, operational, margin, costTotal,
+        feePercentTotal, percentTotal, basePrice, salePrice, cardValue, taxValue, operationalValue,
+        grossProfit, netProfit, profitPercent, markup
+      };
+    }
+
+    function pricingStatusClass(data) {
+      if (!data.costTotal || data.feePercentTotal >= 100) return "danger";
+      if (data.profitPercent >= data.margin) return "ok";
+      if (data.profitPercent >= data.margin * 0.85) return "warn";
+      return "danger";
+    }
+
+
+    function formatDecimalInput(value) {
+      const number = Number(value || 0);
+      return number.toFixed(2).replace(".", ",");
+    }
+
+
+    function parseBrazilianNumber(value) {
+      if (value === null || value === undefined) return 0;
+      let text = String(value).trim();
+      if (!text) return 0;
+      text = text.replace(/[^\d,.-]/g, "");
+      if (text.includes(",") && text.includes(".")) {
+        text = text.replace(/\./g, "").replace(",", ".");
+      } else if (text.includes(",")) {
+        text = text.replace(",", ".");
+      }
+      const number = Number(text);
+      return Number.isFinite(number) ? number : 0;
+    }
+
+    function formatBrazilianDecimal(value) {
+      const number = Number(value || 0);
+      return number.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function normalizePercentValue(value) {
+      let number = parseBrazilianNumber(value);
+      while (number >= 100) {
+        number = number / 100;
+      }
+      return Number.isFinite(number) ? number : 0;
+    }
+
+    function normalizeMarginValue(value) {
+      const number = parseBrazilianNumber(value);
+      return Number.isFinite(number) && number >= 25 ? number : 25;
+    }
+
+    function ensurePricingDefaultSettings() {
+      state.pricingSettings ||= {};
+
+      const defaults = {
+        cardFee: 4.98,
+        taxes: 6,
+        operational: 15,
+        margin: 25
+      };
+
+      state.pricingSettings.cardFee = normalizePercentValue(state.pricingSettings.cardFee || defaults.cardFee) || defaults.cardFee;
+      state.pricingSettings.taxes = normalizePercentValue(state.pricingSettings.taxes || defaults.taxes) || defaults.taxes;
+      state.pricingSettings.operational = normalizePercentValue(state.pricingSettings.operational || defaults.operational) || defaults.operational;
+      state.pricingSettings.margin = normalizeMarginValue(state.pricingSettings.margin || defaults.margin);
+
+      saveState();
+
+      const fields = {
+        pricingDefaultCardFee: state.pricingSettings.cardFee,
+        pricingDefaultTaxes: state.pricingSettings.taxes,
+        pricingDefaultOperational: state.pricingSettings.operational,
+        pricingDefaultMargin: state.pricingSettings.margin
+      };
+
+      Object.entries(fields).forEach(([id, value]) => {
+        const field = el(id);
+        if (field) field.value = formatBrazilianDecimal(value);
+      });
+    }
+
+function calculatePricing() {
+      if (!el("pricingCostTotalResult")) return null;
+      syncPricingLockedFields();
+      const data = getPricingInputData();
+      el("pricingCostTotalResult").textContent = money.format(data.costTotal);
+      el("pricingSalePriceResult").textContent = money.format(data.salePrice);
+      if (el("pricingInlineSalePrice")) el("pricingInlineSalePrice").textContent = money.format(data.salePrice);
+      el("pricingCardValueResult").textContent = money.format(data.cardValue);
+      el("pricingTaxValueResult").textContent = money.format(data.taxValue);
+      el("pricingOperationalValueResult").textContent = money.format(data.operationalValue);
+      el("pricingGrossProfitResult").textContent = money.format(data.grossProfit);
+      el("pricingNetProfitResult").textContent = money.format(data.netProfit);
+      el("pricingProfitPercentResult").textContent = `${data.profitPercent.toFixed(2)}% · ${data.markup.toFixed(2)}x`;
+      const status = el("pricingStatus");
+      if (status) {
+        const cls = pricingStatusClass(data);
+        status.className = `pricing-status ${cls}`;
+        if (!data.costTotal) status.textContent = "Preencha o custo para calcular.";
+        else if (data.feePercentTotal >= 100) status.textContent = "Taxas, impostos e despesas precisam ficar abaixo de 100%.";
+        else if (cls === "ok") status.textContent = "Margem saudável: acima da meta definida.";
+        else if (cls === "warn") status.textContent = "Atenção: margem próxima da meta.";
+        else status.textContent = "Margem abaixo da meta. Revise custos, taxas ou preço.";
+      }
+      return data;
+    }
+
+    function loadPricingConfig() {
+      const cfg = pricingDefaults();
+      setPricingValue("pricingDefaultCardFee", cfg.cardFee ?? 4.98);
+      setPricingValue("pricingDefaultTaxes", cfg.taxes ?? 6);
+      setPricingValue("pricingDefaultOperational", cfg.operational ?? 15);
+      setPricingValue("pricingDefaultMargin", cfg.margin ?? 25);
+    }
+
+    function applyPricingConfigToForm() {
+      state.pricingSettings = {
+        cardFee: normalizePercentValue(parsePricingNumber("pricingDefaultCardFee")) || 4.98,
+        taxes: normalizePercentValue(parsePricingNumber("pricingDefaultTaxes")) || 6,
+        operational: normalizePercentValue(parsePricingNumber("pricingDefaultOperational")) || 15,
+        margin: normalizeMarginValue(parsePricingNumber("pricingDefaultMargin"))
+      };
+      state.pricingConfig = state.pricingSettings;
+      saveState();
+      const cfg = pricingDefaults();
+      setPricingValue("pricingCardFee", cfg.cardFee ?? 4.98);
+      setPricingValue("pricingTaxes", cfg.taxes ?? 6);
+      setPricingValue("pricingOperational", cfg.operational ?? 15);
+      setPricingValue("pricingMargin", cfg.margin ?? 25);
+      calculatePricing();
+    }
+
+    function savePricingConfig() {
+      state.pricingSettings = {
+        cardFee: normalizePercentValue(parsePricingNumber("pricingDefaultCardFee")) || 4.98,
+        taxes: normalizePercentValue(parsePricingNumber("pricingDefaultTaxes")) || 6,
+        operational: normalizePercentValue(parsePricingNumber("pricingDefaultOperational")) || 15,
+        margin: normalizeMarginValue(parsePricingNumber("pricingDefaultMargin"))
+      };
+      state.pricingConfig = state.pricingSettings;
+      saveState();
+      applyPricingConfigToForm();
+      alert("Configurações padrão salvas.");
+    }
+
+    function clearPricingForm() {
+      ["pricingId", "pricingProductName", "pricingCategory", "pricingCost", "pricingFreight"].forEach(id => { if (el(id)) el(id).value = ""; });
+      applyPricingConfigToForm();
+    }
+
+    function syncPricingLockedFields() {
+      const product = state.products.find(item => item.id === el("pricingId")?.value);
+      if (product) {
+        el("pricingProductName").value = product.name || "";
+        el("pricingCategory").value = product.category || "";
+        setPricingValue("pricingCost", product.cost || 0);
+      }
+      const defaults = {
+        cardFee: normalizePercentValue(parsePricingNumber("pricingDefaultCardFee")) || 4.98,
+        taxes: normalizePercentValue(parsePricingNumber("pricingDefaultTaxes")) || 6,
+        operational: normalizePercentValue(parsePricingNumber("pricingDefaultOperational")) || 15,
+        margin: normalizeMarginValue(parsePricingNumber("pricingDefaultMargin"))
+      };
+      setPricingValue("pricingCardFee", defaults.cardFee);
+      setPricingValue("pricingTaxes", defaults.taxes);
+      setPricingValue("pricingOperational", defaults.operational);
+      setPricingValue("pricingMargin", defaults.margin);
+      state.pricingSettings = defaults;
+      state.pricingConfig = defaults;
+    }
+
+    function loadProductIntoPricing(product) {
+      if (!product) return;
+      switchView("pricing");
+      const existing = (state.pricingProducts || []).find(item => item.id === product.id);
+      el("pricingId").value = product.id;
+      el("pricingProductName").value = product.name || "";
+      el("pricingCategory").value = product.category || "";
+      setPricingValue("pricingCost", product.cost || 0);
+      setPricingValue("pricingFreight", existing?.freight || 0);
+      syncPricingLockedFields();
+      calculatePricing();
+      renderPricingReport();
+      el("pricingFreight")?.focus();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function savePricingProduct() {
+      const data = calculatePricing();
+      if (!data || !data.costTotal || data.feePercentTotal >= 100) {
+        alert("Preencha os dados corretamente antes de salvar.");
+        return null;
+      }
+      state.pricingProducts ||= [];
+      const item = { ...data, id: data.id || makeId(), date: new Date().toISOString() };
+      const index = state.pricingProducts.findIndex(product => product.id === item.id);
+      if (index >= 0) state.pricingProducts[index] = item;
+      else state.pricingProducts.push(item);
+      state.pricingHistory ||= [];
+      state.pricingHistory.push({
+        ...item,
+        historyId: makeId(),
+        productId: item.id,
+        date: new Date().toISOString()
+      });
+      const product = state.products.find(product => product.id === item.id);
+      if (product) {
+        product.cost = item.cost;
+        product.category = item.category;
+        product.salePrice = item.salePrice;
+        product.margin = item.cost > 0 ? (item.salePrice / item.cost - 1) * 100 : item.margin;
+      }
+      saveState();
+      renderInventory();
+      renderPricingReport();
+      return item;
+    }
+
+    function savePricingAndBackToStock() {
+      const saved = savePricingProduct();
+      if (!saved) return;
+      renderAll();
+      switchView("inventory");
+    }
+
+    function editPricingProduct(id) {
+      const item = (state.pricingProducts || []).find(product => product.id === id);
+      if (!item) return;
+      el("pricingId").value = item.id;
+      el("pricingProductName").value = item.name || "";
+      el("pricingCategory").value = item.category || "";
+      setPricingValue("pricingCost", item.cost || 0);
+      setPricingValue("pricingFreight", item.freight || 0);
+      setPricingValue("pricingCardFee", item.cardFee || 0);
+      setPricingValue("pricingTaxes", item.taxes || 0);
+      setPricingValue("pricingOperational", item.operational || 0);
+      setPricingValue("pricingMargin", item.margin || 0);
+      calculatePricing();
+      el("pricingFreight")?.focus();
+    }
+
+    function deletePricingProduct(id) {
+      if (!confirm("Remover este produto do relatório de precificação?")) return;
+      state.pricingHistory = (state.pricingHistory || []).filter(product => product.historyId !== id);
+      state.pricingProducts = (state.pricingProducts || []).filter(product => product.id !== id);
+      saveState();
+      renderPricingReport();
+    }
+
+    function renderPricingReport() {
+      state.pricingProducts ||= [];
+      state.pricingHistory ||= [];
+      const currentPricingId = el("pricingId")?.value || "";
+      const historyCurrent = currentPricingId
+        ? state.pricingHistory.filter(product => product.productId === currentPricingId)
+        : [];
+      const legacyCurrent = currentPricingId
+        ? state.pricingProducts.filter(product => product.id === currentPricingId).map(product => ({
+          ...product,
+          productId: product.id,
+          historyId: product.historyId || product.id
+        }))
+        : [];
+      const products = currentPricingId
+        ? (historyCurrent.length ? historyCurrent : legacyCurrent)
+            .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
+        : [];
+      const body = el("pricingReportBody");
+      if (body) {
+        body.innerHTML = products.map(item => {
+          const cls = pricingStatusClass(item);
+          const label = cls === "ok" ? "Acima da meta" : cls === "warn" ? "Próxima da meta" : "Abaixo da meta";
+          const date = item.date ? new Date(item.date).toLocaleString("pt-BR") : "-";
+          return `<tr>
+            <td><strong>${escapeHtml(item.name || "Produto")}</strong><br><span class="muted">${escapeHtml(date)}</span></td>
+            <td>${escapeHtml(item.category || "-")}</td>
+            <td class="money">${money.format(item.costTotal || 0)}</td>
+            <td class="money">${money.format(item.salePrice || 0)}</td>
+            <td class="money">${money.format(item.netProfit || 0)}</td>
+            <td>${Number(item.profitPercent || 0).toFixed(2)}%</td>
+            <td>${Number(item.markup || 0).toFixed(2)}x</td>
+            <td><span class="pill ${cls}">${label}</span></td>
+            <td class="actions"><button type="button" class="danger" onclick="deletePricingProduct('${item.historyId}')">Excluir</button></td>
+          </tr>`;
+        }).join("");
+      }
+      el("pricingReportEmpty")?.classList.toggle("hidden", Boolean(products.length));
+      const count = products.length || 1;
+      const avgMargin = products.reduce((sum, item) => sum + Number(item.profitPercent || 0), 0) / count;
+      const totalProfit = products.reduce((sum, item) => sum + Number(item.netProfit || 0), 0);
+      const projectedRevenue = products.reduce((sum, item) => sum + Number(item.salePrice || 0), 0);
+      const avgTicket = products.length ? projectedRevenue / products.length : 0;
+      const sorted = [...products].sort((a, b) => Number(b.profitPercent || 0) - Number(a.profitPercent || 0));
+      if (el("pricingAvgMargin")) el("pricingAvgMargin").textContent = `${avgMargin.toFixed(2)}%`;
+      if (el("pricingTotalProfit")) el("pricingTotalProfit").textContent = money.format(totalProfit);
+      if (el("pricingProjectedRevenue")) el("pricingProjectedRevenue").textContent = money.format(projectedRevenue);
+      if (el("pricingAvgTicket")) el("pricingAvgTicket").textContent = money.format(avgTicket);
+      if (el("pricingBestMargin")) el("pricingBestMargin").textContent = sorted[0] ? `${sorted[0].name} · ${Number(sorted[0].profitPercent || 0).toFixed(2)}%` : "-";
+      if (el("pricingWorstMargin")) el("pricingWorstMargin").textContent = sorted.at(-1) ? `${sorted.at(-1).name} · ${Number(sorted.at(-1).profitPercent || 0).toFixed(2)}%` : "-";
+    }
+
+    function renderPricing() {
+      if (!el("pricingView")) return;
+      loadPricingConfig();
+      if (!el("pricingCardFee")?.value) applyPricingConfigToForm();
+      calculatePricing();
+      renderPricingReport();
     }
 
 function renderAll() {
       renderMetrics();
       renderGoals();
       renderInventory();
+      ensurePricingDefaultSettings();
+      renderPricing();
       renderSaleItems();
+      renderCashFlow();
       renderHistory();
       renderExpenses();
-      renderFinancial(); updateHistoryLists(); renderCustomerHistory();
-    }
-
-    function updatePriceHint() {
-      const cost = Number(el("cost").value || 0);
-      const margin = Number(el("margin").value || 0);
-      if (!cost) {
-        el("priceHint").textContent = "Informe o custo para ver a sugestão de preço.";
-        return;
-      }
-      const price = cost * (1 + margin / 100);
-      const profit = price - cost;
-      el("priceHint").textContent = `Preço sugerido: ${money.format(price)}. Lucro estimado por unidade: ${money.format(profit)}.`;
+      renderFinancial();
+      renderAccesses();
+      renderPasswordResetRequests();
+      renderSellerGoal();
+      renderSellerRanking();
+      updateHistoryLists();
+      renderCustomerHistory();
     }
 
     function clearProductForm() {
       el("productForm").reset();
       el("productId").value = "";
       if(el("barcode")) el("barcode").value = "";
-      el("margin").value = 200;
+      if (el("sku")) el("sku").value = "";
+      if (el("brand")) el("brand").value = "";
+      if (el("location")) el("location").value = "";
       el("minStock").value = 5;
       el("saveProductBtn").textContent = "Salvar produto";
-      updatePriceHint();
     }
 
     function editProduct(id) {
       const p = state.products.find(item => item.id === id);
       if (!p) return;
+      switchView("stockEntry");
       el("productId").value = p.id;
       el("barcode").value = p.barcode || "";
+      if (el("sku")) el("sku").value = p.sku || "";
+      if (el("brand")) el("brand").value = p.brand || "";
+      if (el("location")) el("location").value = p.location || "";
       el("name").value = p.name;
       el("category").value = p.category || "";
       el("supplier").value = p.supplier || "";
       el("cost").value = p.cost;
       el("quantity").value = p.quantity;
-      el("margin").value = p.margin;
       el("minStock").value = p.minStock;
       el("saveProductBtn").textContent = "Atualizar produto";
-      updatePriceHint();
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function normalizeBarcode(value) {
+      return String(value || "").replace(/[\s-]/g, "").trim();
+    }
+
+    function findProductByBarcode(code) {
+      const cleanCode = normalizeBarcode(code);
+      if (!cleanCode) return null;
+      return state.products.find(item => normalizeBarcode(item.barcode) === cleanCode) || null;
+    }
+
+    function fillProductFormFromBarcode(code) {
+      const cleanCode = normalizeBarcode(code);
+      if (!cleanCode) return false;
+      const product = findProductByBarcode(cleanCode);
+      if (!product) return false;
+      editProduct(product.id);
+      if (el("barcode")) el("barcode").value = cleanCode;
+      return true;
+    }
+
+    function clearAccessForm() {
+      el("accessForm")?.reset();
+      el("accessUserId").value = "";
+      el("accessPassword").value = "";
+      el("saveAccessBtn").textContent = "Salvar";
+      if (el("accessFormTitle")) el("accessFormTitle").textContent = "Novo acesso";
+      renderPermissionList(permissionsForRole(el("accessRole")?.value || "Vendedor"));
+    }
+
+    function editAccess(id) {
+      const user = (state.users || []).find(item => item.id === id);
+      if (!user) return;
+      el("accessUserId").value = user.id;
+      el("accessName").value = user.name || "";
+      el("accessUsername").value = user.username || "";
+      el("accessPassword").value = "";
+      el("accessRole").value = user.role || "Vendedor";
+      renderPermissionList(permissionsForRole(user.role, user.permissions || []));
+      el("saveAccessBtn").textContent = "Atualizar";
+      if (el("accessFormTitle")) el("accessFormTitle").textContent = "Editar acesso";
+      el("accessForm").classList.remove("hidden");
+      el("accessName").focus();
+    }
+
+    function toggleAccess(id) {
+      if (currentUser?.id === id) {
+        alert("Você não pode bloquear o usuário logado.");
+        return;
+      }
+      const user = (state.users || []).find(item => item.id === id);
+      if (!user) return;
+      user.active = user.active === false;
+      saveState();
+      renderAccesses();
+    }
+
+    function deleteAccess(id) {
+      if (currentUser?.id === id) {
+        alert("Você não pode excluir o usuário logado.");
+        return;
+      }
+      state.users = (state.users || []).filter(item => item.id !== id);
+      saveState();
+      renderAccesses();
     }
 
     function deleteProduct(id) {
@@ -1356,11 +3816,7 @@ function renderAll() {
       if (!p || !confirm(`Excluir "${p.name}"?`)) return;
       state.products = state.products.filter(item => item.id !== id);
       saveState();
-      
-renderAll();
-
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+      renderAll();
 
     }
 
@@ -1374,7 +3830,11 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       el("movementDialog").showModal();
     }
 
-    function addSaleItem() {
+    function addSaleItem(force = false) {
+      if (!force && !isCashRegisterOpenForSales()) {
+        showCashRequiredNotice();
+        return;
+      }
       const row = document.createElement("div");
       row.className = "sale-row";
       row.innerHTML = `
@@ -1403,6 +3863,73 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       renderSaleItems();
     }
 
+    function isCreditCardPayment() {
+      return el("paymentMethod")?.value === "Cartão de crédito";
+    }
+
+    function isDebitCardPayment() {
+      return el("paymentMethod")?.value === "Cartão de débito";
+    }
+
+    function isCashPayment() {
+      return el("paymentMethod")?.value === "Dinheiro";
+    }
+
+    const mercadoPagoCreditFees = {
+      avista: 4.98,
+      parcelado: 5.31
+    };
+
+    const mercadoPagoInstallmentInterestRates = {
+      2: 9.64,
+      3: 11.23,
+      4: 11.36,
+      5: 14.31,
+      6: 14.32,
+      7: 16.72,
+      8: 16.73,
+      9: 19.69,
+      10: 20.65,
+      11: 20.66,
+      12: 22.11,
+      13: 23.04,
+      14: 24.45,
+      15: 25.83,
+      16: 27.20,
+      17: 28.58,
+      18: 29.99
+    };
+
+    const mercadoPagoPointRateNote = "Crédito à vista: 4,98%. Parcelado: taxa por venda de 5,31% + juros conforme quantidade de parcelas, iniciando em 9,64% no 2x.";
+
+    function isCreditInstallmentPayment() {
+      return isCreditCardPayment() && el("creditType")?.value === "parcelado";
+    }
+
+    function getCreditSaleFeePercent() {
+      if (!isCreditCardPayment()) return 0;
+      return isCreditInstallmentPayment()
+        ? Number(mercadoPagoCreditFees.parcelado || 0)
+        : Number(mercadoPagoCreditFees.avista || 0);
+    }
+
+    function getCreditInstallmentInterestPercent() {
+      if (!isCreditInstallmentPayment()) return 0;
+      const installments = Math.min(18, Math.max(2, Number(el("creditInstallments")?.value || 2)));
+      return Number(mercadoPagoInstallmentInterestRates[installments] || 0);
+    }
+
+    function getCreditInterestPercent() {
+      if (!isCreditCardPayment()) return 0;
+      return getCreditSaleFeePercent() + getCreditInstallmentInterestPercent();
+    }
+
+    function getMaxDiscountPercent() {
+      if (isCreditCardPayment()) return 0;
+      if (isDebitCardPayment()) return 5;
+      return 10;
+    }
+
     function getSaleDraft() {
       const items = [...document.querySelectorAll(".sale-row")].map(row => {
         const product = state.products.find(p => p.id === row.querySelector(".sale-product").value);
@@ -1411,76 +3938,177 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
         return product ? { product, quantity, price } : null;
       }).filter(Boolean);
       const subtotal = items.reduce((sum, item) => sum + item.quantity * item.price, 0);
-      const discount = Number(el("discount").value || 0);
-      return { items, subtotal, discount, total: Math.max(0, subtotal - discount) };
+      let discountPercent = Number(el("discountPercent")?.value || 0);
+      const maxDiscount = getMaxDiscountPercent();
+      if (discountPercent < 0) discountPercent = 0;
+      if (discountPercent > maxDiscount) discountPercent = maxDiscount;
+      const discount = subtotal * (discountPercent / 100);
+      const totalBeforeInterest = Math.max(0, subtotal - discount);
+      const creditSaleFeePercent = getCreditSaleFeePercent();
+      const creditInstallmentInterestPercent = getCreditInstallmentInterestPercent();
+      const creditInterestPercent = getCreditInterestPercent();
+      let total = Math.round(totalBeforeInterest * 100) / 100;
+      let creditSaleFee = 0;
+      let creditInstallmentInterest = 0;
+      let creditInterest = 0;
+
+      if (isCreditCardPayment()) {
+        if (isCreditInstallmentPayment()) {
+          // Parcelado Mercado Pago:
+          // 1) aplica o juros do parcelamento sobre o valor da venda;
+          // 2) repassa a taxa da maquininha por dentro, dividindo por (1 - taxa).
+          // Ex.: R$ 84,00 em 2x => (84 * 1,0964) / (1 - 0,0531) = R$ 97,26.
+          const saleFeeFactor = Math.max(0, 1 - (creditSaleFeePercent / 100));
+          const totalWithInstallmentInterest = totalBeforeInterest * (1 + (creditInstallmentInterestPercent / 100));
+          total = saleFeeFactor > 0
+            ? Math.round((totalWithInstallmentInterest / saleFeeFactor) * 100) / 100
+            : Math.round(totalWithInstallmentInterest * 100) / 100;
+          creditSaleFee = Math.round((total * (creditSaleFeePercent / 100)) * 100) / 100;
+          creditInstallmentInterest = Math.round((totalWithInstallmentInterest - totalBeforeInterest) * 100) / 100;
+          creditInterest = Math.round((total - totalBeforeInterest) * 100) / 100;
+        } else {
+          // Crédito à vista: repasse da taxa por dentro.
+          // Ex.: R$ 84,00 com 4,98% => 84 / (1 - 0,0498) = R$ 88,40.
+          const saleFeeFactor = Math.max(0, 1 - (creditSaleFeePercent / 100));
+          total = saleFeeFactor > 0
+            ? Math.round((totalBeforeInterest / saleFeeFactor) * 100) / 100
+            : Math.round(totalBeforeInterest * 100) / 100;
+          creditSaleFee = Math.round((total * (creditSaleFeePercent / 100)) * 100) / 100;
+          creditInstallmentInterest = 0;
+          creditInterest = Math.round((total - totalBeforeInterest) * 100) / 100;
+        }
+      }
+
+      const creditInstallments = isCreditInstallmentPayment() ? Math.min(18, Math.max(2, Number(el("creditInstallments")?.value || 2))) : 1;
+      const creditInstallmentValue = creditInstallments > 0 ? Math.floor((total / creditInstallments) * 100) / 100 : total;
+      const cashReceived = isCashPayment() ? Number(el("cashReceived")?.value || 0) : 0;
+      const cashChange = isCashPayment() ? Math.max(0, cashReceived - total) : 0;
+      return { items, subtotal, discountPercent, discount, totalBeforeInterest, creditSaleFeePercent, creditSaleFee, creditInstallmentInterestPercent, creditInstallmentInterest, creditInterestPercent, creditInterest, creditInstallments, creditInstallmentValue, total, cashReceived, cashChange };
     }
 
     function calculateSaleTotal() {
+      const percentInput = el("discountPercent");
       const draft = getSaleDraft();
+      const creditCard = isCreditCardPayment();
+      const debitCard = isDebitCardPayment();
+      const cashPayment = isCashPayment();
+      const creditInstallment = isCreditInstallmentPayment();
+      const maxDiscount = getMaxDiscountPercent();
+      if (percentInput) {
+        percentInput.disabled = creditCard;
+        percentInput.max = String(maxDiscount);
+        percentInput.title = creditCard
+          ? "Desconto não permitido para cartão de crédito."
+          : debitCard
+            ? "Informe um desconto de 0% a 5% para cartão de débito."
+            : "Informe um desconto de 0% a 10%.";
+        if (Number(percentInput.value || 0) !== draft.discountPercent) {
+          percentInput.value = draft.discountPercent;
+        }
+      }
+      el("cashPaymentCard")?.classList.toggle("hidden", !cashPayment);
+      el("creditPaymentCard")?.classList.toggle("hidden", !creditCard);
+      el("creditInstallmentCard")?.classList.toggle("hidden", !creditInstallment);
+      el("creditFeeBreakdownCard")?.classList.toggle("hidden", !creditCard);
+      el("creditTotalCard")?.classList.toggle("hidden", !creditCard);
+      if (el("cashChange")) el("cashChange").value = money.format(draft.cashChange);
+      if (!cashPayment && el("cashReceived")) el("cashReceived").value = "";
+      if (el("discountValue")) el("discountValue").value = money.format(draft.discount);
+      if (el("creditInterestValue")) el("creditInterestValue").value = `${draft.creditInterestPercent.toFixed(2).replace(".", ",")}% · ${money.format(draft.creditInterest)}`;
+      if (el("creditSaleFeeValue")) el("creditSaleFeeValue").value = `${draft.creditSaleFeePercent.toFixed(2).replace(".", ",")}% · ${money.format(draft.creditSaleFee)}`;
+      if (el("creditInstallmentInterestValue")) el("creditInstallmentInterestValue").value = `${draft.creditInstallmentInterestPercent.toFixed(2).replace(".", ",")}% · ${money.format(draft.creditInstallmentInterest)}`;
+      if (el("creditInstallmentValue")) el("creditInstallmentValue").value = money.format(draft.creditInstallmentValue);
+      if (el("creditTotalWithInterest")) el("creditTotalWithInterest").value = money.format(draft.total);
       el("saleTotal").textContent = money.format(draft.total);
       const invalid = draft.items.find(item => item.quantity > item.product.quantity);
-      el("saleNotice").textContent = invalid ? `Estoque insuficiente para ${invalid.product.name}. Disponível: ${invalid.product.quantity}.` : "";
+      const cashInsufficient = cashPayment && draft.total > 0 && draft.cashReceived > 0 && draft.cashReceived < draft.total;
+      el("saleNotice").textContent = invalid
+        ? `Estoque insuficiente para ${invalid.product.name}. Disponível: ${invalid.product.quantity}.`
+        : cashInsufficient
+          ? `Valor recebido insuficiente. Faltam ${money.format(draft.total - draft.cashReceived)}.`
+          : creditCard
+            ? (creditInstallment
+                ? `Crédito parcelado Mercado Pago Point: taxa de ${draft.creditInterestPercent.toFixed(2).replace(".", ",")}% aplicada. Total ${money.format(draft.total)}. ${mercadoPagoPointRateNote}`
+                : `Crédito à vista Mercado Pago Point: taxa de ${draft.creditInterestPercent.toFixed(2).replace(".", ",")}% aplicada. Desconto não permitido. ${mercadoPagoPointRateNote}`)
+            : debitCard
+              ? "Cartão de débito selecionado: desconto máximo de 5%."
+              : "";
+      updateSalesCashLock();
     }
 
-    function addProductByBarcode(code) {
-      const saleBarcodeInput = el("saleBarcode");
-      const cleanCode = String(code || "").trim();
-      if (!cleanCode) return;
+    function clearSale() {
+      el("saleItems").innerHTML = "";
+      if (el("discountPercent")) el("discountPercent").value = 0;
+      if (el("discountValue")) el("discountValue").value = money.format(0);
+      if (el("customerName")) el("customerName").value = "";
+      if (el("customerPhone")) el("customerPhone").value = "";
+      if (el("cashReceived")) el("cashReceived").value = "";
+      if (el("cashChange")) el("cashChange").value = money.format(0);
+      if (el("creditType")) el("creditType").value = "avista";
+      if (el("creditBrand")) el("creditBrand").value = "Visa";
+      if (el("creditInstallments")) el("creditInstallments").value = "2";
+      if (el("creditInterestValue")) el("creditInterestValue").value = "0,00% · R$ 0,00";
+      if (el("creditSaleFeeValue")) el("creditSaleFeeValue").value = "0,00% · R$ 0,00";
+      if (el("creditInstallmentInterestValue")) el("creditInstallmentInterestValue").value = "0,00% · R$ 0,00";
+      if (el("creditInstallmentValue")) el("creditInstallmentValue").value = money.format(0);
+      if (el("creditTotalWithInterest")) el("creditTotalWithInterest").value = money.format(0);
+      el("cashPaymentCard")?.classList.toggle("hidden", el("paymentMethod")?.value !== "Dinheiro");
+      el("creditPaymentCard")?.classList.toggle("hidden", el("paymentMethod")?.value !== "Cartão de crédito");
+      el("creditInstallmentCard")?.classList.add("hidden");
+      el("creditFeeBreakdownCard")?.classList.toggle("hidden", el("paymentMethod")?.value !== "Cartão de crédito");
+      el("creditTotalCard")?.classList.toggle("hidden", el("paymentMethod")?.value !== "Cartão de crédito");
+      addSaleItem(true);
+      el("saleNotice").textContent = "";
+      updateSalesCashLock();
+    }
 
-      const product = state.products.find(p => String(p.barcode || "").trim() === cleanCode);
-      if (!product) {
-        alert("Produto não encontrado.");
-        if (saleBarcodeInput) saleBarcodeInput.value = "";
+    function addProductByBarcode(code, options = {}) {
+      if (!isCashRegisterOpenForSales()) {
+        showCashRequiredNotice();
+        if (el("saleBarcode")) el("saleBarcode").value = "";
         return;
       }
-
+      const cleanCode = normalizeBarcode(code);
+      if (!cleanCode) return;
+      const product = findProductByBarcode(cleanCode);
+      if (!product) {
+        if (!options.silent) {
+          alert("Produto não encontrado.");
+          if (el("saleBarcode")) el("saleBarcode").value = "";
+        }
+        return;
+      }
       addSaleItem();
       const rows = document.querySelectorAll(".sale-row");
       const row = rows[rows.length - 1];
       row.querySelector(".sale-product").value = product.id;
       row.querySelector(".sale-price").value = suggestedPrice(product).toFixed(2);
       calculateSaleTotal();
-      if (saleBarcodeInput) saleBarcodeInput.value = "";
-    }
-
-    let activeBarcodeReader = null;
-
-    async function stopBarcodeReader() {
-      if (!activeBarcodeReader) return;
-      try {
-        await activeBarcodeReader.instance.stop();
-      } catch (error) {
-        console.warn("Leitor já estava parado.", error);
-      }
-      activeBarcodeReader.reader.classList.add("hidden");
-      activeBarcodeReader.stopButton.classList.add("hidden");
-      activeBarcodeReader.startButton.classList.remove("hidden");
-      activeBarcodeReader = null;
+      if (el("saleBarcode")) el("saleBarcode").value = "";
     }
 
     async function startBarcodeReader({ readerId, startButtonId, stopButtonId, onRead }) {
       if (!window.Html5Qrcode) {
-        alert("Não foi possível carregar o leitor pela câmera. Verifique a internet ou use um leitor USB/digite o código.");
+        alert("Não foi possível carregar o leitor pela câmera. Use um leitor USB ou digite o código.");
         return;
       }
-
       await stopBarcodeReader();
       const reader = el(readerId);
       const startButton = el(startButtonId);
       const stopButton = el(stopButtonId);
       if (!reader || !startButton || !stopButton) return;
-
       reader.classList.remove("hidden");
       startButton.classList.add("hidden");
       stopButton.classList.remove("hidden");
-
       const scanner = new Html5Qrcode(readerId);
       activeBarcodeReader = { instance: scanner, reader, startButton, stopButton };
-
       try {
+        const cameras = await Html5Qrcode.getCameras().catch(() => []);
+        const backCamera = cameras.find(camera => /back|rear|environment|traseira/i.test(camera.label || ""));
+        const cameraConfig = backCamera?.id || cameras[0]?.id || { facingMode: "environment" };
         await scanner.start(
-          { facingMode: "environment" },
-          { fps: 10, qrbox: { width: 240, height: 160 } },
+          cameraConfig,
+          { fps: 10, qrbox: { width: 260, height: 180 } },
           async decodedText => {
             onRead(decodedText);
             await stopBarcodeReader();
@@ -1488,18 +4116,26 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
         );
       } catch (error) {
         await stopBarcodeReader();
-        alert("Não foi possível abrir a câmera. Permita o acesso à câmera ou use um leitor USB/digite o código.");
+        alert("Não foi possível iniciar a câmera. Verifique a permissão do navegador ou use o leitor manual/USB.");
       }
     }
 
-    function clearSale() {
-      el("saleItems").innerHTML = "";
-      el("discount").value = 0;
-      addSaleItem();
-      el("saleNotice").textContent = "";
+    async function stopBarcodeReader() {
+      if (!activeBarcodeReader) return;
+      const { instance, reader, startButton, stopButton } = activeBarcodeReader;
+      try { await instance.stop(); } catch {}
+      try { await instance.clear(); } catch {}
+      reader.classList.add("hidden");
+      startButton.classList.remove("hidden");
+      stopButton.classList.add("hidden");
+      activeBarcodeReader = null;
     }
 
     function finishSale() {
+      if (!isCashRegisterOpenForSales()) {
+        showCashRequiredNotice();
+        return;
+      }
       const draft = getSaleDraft();
       if (!draft.items.length) {
         el("saleNotice").textContent = "Adicione ao menos um produto.";
@@ -1510,6 +4146,11 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
         el("saleNotice").textContent = `Revise quantidade e preço de ${invalid.product.name}.`;
         return;
       }
+      if (isCashPayment() && draft.cashReceived < draft.total) {
+        el("saleNotice").textContent = `Informe o valor recebido em dinheiro. Faltam ${money.format(draft.total - draft.cashReceived)}.`;
+        el("cashReceived")?.focus();
+        return;
+      }
 
       const costTotal = draft.items.reduce((sum, item) => sum + item.quantity * item.product.cost, 0);
       draft.items.forEach(item => item.product.quantity -= item.quantity);
@@ -1518,10 +4159,27 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
         date: new Date().toISOString(),
         paymentMethod: el("paymentMethod").value,
         customerName: document.getElementById("customerName")?.value || "",
-        customerPhone: document.getElementById("customerPhone")?.value || "",
+        customerPhone: normalizePhone(document.getElementById("customerPhone")?.value || "").slice(0, 11),
+        sellerId: currentUser?.id || "",
+        sellerName: currentUser?.name || currentUser?.username || "",
+        discountPercent: draft.discountPercent,
         discount: draft.discount,
+        cashReceived: isCashPayment() ? draft.cashReceived : 0,
+        cashChange: isCashPayment() ? draft.cashChange : 0,
+        creditType: isCreditCardPayment() ? (el("creditType")?.value || "avista") : "",
+        creditBrand: isCreditCardPayment() ? (el("creditBrand")?.value || "") : "",
+        creditInstallments: isCreditCardPayment() ? draft.creditInstallments : 0,
+        creditSaleFeePercent: isCreditCardPayment() ? draft.creditSaleFeePercent : 0,
+        creditSaleFee: isCreditCardPayment() ? draft.creditSaleFee : 0,
+        creditInstallmentInterestPercent: isCreditCardPayment() ? draft.creditInstallmentInterestPercent : 0,
+        creditInstallmentInterest: isCreditCardPayment() ? draft.creditInstallmentInterest : 0,
+        creditInterestPercent: isCreditCardPayment() ? draft.creditInterestPercent : 0,
+        creditInterest: isCreditCardPayment() ? draft.creditInterest : 0,
+        totalBeforeInterest: draft.totalBeforeInterest,
+        totalPaid: draft.total,
+        totalReceived: isCreditCardPayment() ? draft.totalBeforeInterest : draft.total,
         total: draft.total,
-        profit: draft.total - costTotal,
+        profit: (isCreditCardPayment() ? draft.totalBeforeInterest : draft.total) - costTotal,
         items: draft.items.map(item => ({
           productId: item.product.id,
           name: item.product.name,
@@ -1535,17 +4193,60 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       
 renderAll();
 
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
-
       switchView("history");
     }
 
-    function switchView(view) {
-      ["sales","inventory","history","customerHistory","expenses","financial"].forEach(name => {
-        el(`${name}View`).classList.toggle("hidden", name !== view);
-        document.querySelector(`[data-view="${name}"]`).classList.toggle("active", name === view);
+    const areaByView = {
+      sales: "salesArea",
+      cashFlow: "salesArea",
+      history: "salesArea",
+      ranking: "salesArea",
+      stockEntry: "stockArea",
+      inventory: "stockArea",
+      pricing: "stockArea",
+      customerHistory: "customersArea",
+      expenses: "financialArea",
+      financial: "financialArea",
+      access: "accessArea"
+    };
+
+    const viewNames = ["sales","cashFlow","inventory","stockEntry","pricing","history","ranking","customerHistory","expenses","financial","access"];
+
+    function switchArea(area) {
+      const areaViews = Object.entries(areaByView).filter(([, areaName]) => areaName === area).map(([view]) => view);
+      if (currentUser && !areaViews.some(view => canAccess(view))) return;
+      document.querySelectorAll(".area-button").forEach(button => {
+        button.classList.toggle("active", button.dataset.area === area);
       });
+      document.querySelectorAll(".subarea-menu").forEach(menu => {
+        menu.classList.toggle("active", menu.dataset.subarea === area);
+      });
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+      viewNames.forEach(name => {
+        el(`${name}View`).classList.add("hidden");
+      });
+      el("subareaPlaceholder").classList.toggle("hidden", Boolean(area));
+    }
+
+    function switchView(view) {
+      if (currentUser && !canAccess(view)) return;
+      const area = areaByView[view];
+      if (area) {
+        document.querySelectorAll(".area-button").forEach(button => {
+          button.classList.toggle("active", button.dataset.area === area);
+        });
+        document.querySelectorAll(".subarea-menu").forEach(menu => {
+          menu.classList.toggle("active", menu.dataset.subarea === area);
+        });
+      }
+      el("subareaPlaceholder").classList.add("hidden");
+      viewNames.forEach(name => {
+        el(`${name}View`).classList.toggle("hidden", name !== view);
+        document.querySelector(`[data-view="${name}"]`)?.classList.toggle("active", name === view);
+      });
+      if (view === "sales" && !el("saleBarcode")?.disabled) {
+        setTimeout(() => el("saleBarcode")?.focus(), 80);
+      }
     }
 
     function escapeHtml(value) {
@@ -1554,15 +4255,20 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
 
     el("productForm").addEventListener("submit", event => {
       event.preventDefault();
+      const existingProduct = state.products.find(p => p.id === el("productId").value);
       const product = {
         id: el("productId").value || makeId(),
-        barcode: el("barcode").value.trim(),
+        barcode: normalizeBarcode(el("barcode").value),
+        sku: el("sku")?.value?.trim() || "",
+        brand: el("brand")?.value?.trim() || "",
+        location: el("location")?.value?.trim() || "",
         name: el("name").value.trim(),
         category: el("category").value.trim(),
         supplier: el("supplier").value.trim(),
         cost: Number(el("cost").value || 0),
         quantity: Number(el("quantity").value || 0),
-        margin: Number(el("margin").value || 0),
+        margin: Number(existingProduct?.margin || 0),
+        salePrice: Number(existingProduct?.salePrice || 0),
         minStock: Number(el("minStock").value || 0)
       };
       const index = state.products.findIndex(p => p.id === product.id);
@@ -1572,30 +4278,117 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       clearProductForm();
       
 renderAll();
+loadProductIntoPricing(product);
 
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
+    });
 
+    el("accessForm")?.addEventListener("submit", event => {
+      event.preventDefault();
+      state.users ||= [];
+      const id = el("accessUserId").value || makeId();
+      const username = el("accessUsername").value.trim();
+      const duplicate = state.users.find(user => user.id !== id && String(user.username || "").toLowerCase() === username.toLowerCase());
+      if (duplicate) {
+        alert("Já existe um acesso com este usuário.");
+        return;
+      }
+      const existing = state.users.find(user => user.id === id);
+      const typedPassword = el("accessPassword").value;
+      const role = el("accessRole").value;
+      const selectedPermissions = [...document.querySelectorAll("#permissionList input:checked")].map(input => input.value);
+      const user = {
+        id,
+        name: el("accessName").value.trim(),
+        username,
+        password: typedPassword || existing?.password || "acesso123",
+        role,
+        active: existing?.active ?? true,
+        permissions: permissionsForRole(role, selectedPermissions)
+      };
+      const index = state.users.findIndex(item => item.id === id);
+      if (index >= 0) state.users[index] = user;
+      else state.users.push(user);
+      if (currentUser?.id === user.id) currentUser = effectiveUser(user);
+      saveState();
+      clearAccessForm();
+      el("accessForm").classList.add("hidden");
+      applyProfileSettings();
+      renderAccesses();
     });
 
     el("goalForm").addEventListener("submit", event => {
       event.preventDefault();
-      state.goals = {
+      state.goalMonth = selectedMonthFrom("goalMonthNumber", "goalYear");
+      state.monthlyGoals ||= {};
+      state.monthlyGoals[state.goalMonth] = {
         salesGoal: Number(el("salesGoal").value || 0),
         salesPeople: Math.max(1, Number(el("salesPeople").value || 1))
       };
+      state.goals = state.monthlyGoals[state.goalMonth];
       saveState();
-      renderGoals();
+      renderAll();
     });
 
-    ["cost", "margin"].forEach(id => el(id).addEventListener("input", updatePriceHint));
+    ["goalMonthNumber", "goalYear"].forEach(id => el(id)?.addEventListener("change", () => {
+      state.goalMonth = selectedMonthFrom("goalMonthNumber", "goalYear");
+      saveState();
+      renderGoals();
+      renderSellerGoal();
+      renderSellerRanking();
+    }));
+    ["historyMonthNumber", "historyYear"].forEach(id => el(id)?.addEventListener("change", () => {
+      state.historyMonth = selectedMonthFrom("historyMonthNumber", "historyYear");
+      saveState();
+      renderHistory();
+    }));
+    ["expenseMonthNumber", "expenseYear"].forEach(id => el(id)?.addEventListener("change", () => {
+      state.expenseMonth = selectedMonthFrom("expenseMonthNumber", "expenseYear");
+      saveState();
+      renderExpenses();
+      renderFinancial();
+    }));
+    ["financialMonthNumber", "financialYear"].forEach(id => el(id)?.addEventListener("change", () => {
+      state.financialMonth = selectedMonthFrom("financialMonthNumber", "financialYear");
+      saveState();
+      renderFinancial();
+    }));
+
     el("clearProductBtn").addEventListener("click", clearProductForm);
     el("search").addEventListener("input", renderInventory);
     el("stockFilter").addEventListener("change", renderInventory);
-    el("addSaleItemBtn").addEventListener("click", addSaleItem);
+    el("newProductFromInventoryBtn")?.addEventListener("click", () => switchView("stockEntry"));
+    el("newUserBtn")?.addEventListener("click", () => {
+      clearAccessForm();
+      el("accessForm").classList.remove("hidden");
+      el("accessName").focus();
+    });
+    el("cancelAccessBtn")?.addEventListener("click", () => {
+      clearAccessForm();
+      el("accessForm").classList.add("hidden");
+    });
+    el("accessRole")?.addEventListener("change", () => {
+      const selectedPermissions = [...document.querySelectorAll("#permissionList input:checked")].map(input => input.value);
+      renderPermissionList(permissionsForRole(el("accessRole").value, selectedPermissions));
+    });
+    el("addSaleItemBtn").addEventListener("click", () => addSaleItem());
+    el("cashFlowDateFilter")?.addEventListener("change", () => {
+      renderCashFlow();
+    });
+    el("applyCashActionBtn")?.addEventListener("click", applyCashAction);
     el("finishSaleBtn").addEventListener("click", finishSale);
     el("clearSaleBtn").addEventListener("click", clearSale);
-    el("discount").addEventListener("input", calculateSaleTotal);
+    el("discountPercent")?.addEventListener("input", calculateSaleTotal);
+    el("discountPercent")?.addEventListener("blur", calculateSaleTotal);
+    el("cashReceived")?.addEventListener("input", calculateSaleTotal);
+    ["creditType", "creditBrand", "creditInstallments"].forEach(id => {
+      el(id)?.addEventListener("change", calculateSaleTotal);
+      el(id)?.addEventListener("input", calculateSaleTotal);
+    });
+    el("paymentMethod")?.addEventListener("change", () => {
+      calculateSaleTotal();
+      if (isCashPayment()) el("cashReceived")?.focus();
+      if (isCreditCardPayment()) el("creditType")?.focus();
+    });
     el("closeMovementBtn").addEventListener("click", () => el("movementDialog").close());
 
     el("movementForm").addEventListener("submit", event => {
@@ -1609,76 +4402,106 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       
 renderAll();
 
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
-
     });
 
     
-    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => switchView(tab.dataset.view)));
+    document.querySelectorAll(".area-button").forEach(button => {
+      button.addEventListener("click", () => switchArea(button.dataset.area));
+    });
+
+    ["pricingProductName", "pricingCategory", "pricingCost", "pricingFreight", "pricingCardFee", "pricingTaxes", "pricingOperational", "pricingMargin"].forEach(id => {
+      el(id)?.addEventListener("input", calculatePricing);
+    });
+    el("savePricingProductBtn")?.addEventListener("click", savePricingProduct);
+    el("savePricingAndBackBtn")?.addEventListener("click", savePricingAndBackToStock);
+    el("applyPricingConfigBtn")?.addEventListener("click", applyPricingConfigToForm);
+
+    document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => {
+      if (tab.disabled) return;
+      switchView(tab.dataset.view);
+    }));
 
     const saleBarcodeInput = document.getElementById("saleBarcode");
     if (saleBarcodeInput) {
-      saleBarcodeInput.addEventListener("change", () => {
-        addProductByBarcode(saleBarcodeInput.value);
-      });
+      let saleBarcodeTimer = null;
+      const submitSaleBarcode = () => {
+        const code = normalizeBarcode(saleBarcodeInput.value);
+        if (code) addProductByBarcode(code);
+      };
+      saleBarcodeInput.addEventListener("change", submitSaleBarcode);
       saleBarcodeInput.addEventListener("keydown", event => {
         if (event.key !== "Enter") return;
         event.preventDefault();
-        addProductByBarcode(saleBarcodeInput.value);
+        submitSaleBarcode();
+      });
+      saleBarcodeInput.addEventListener("input", () => {
+        clearTimeout(saleBarcodeTimer);
+        saleBarcodeTimer = setTimeout(() => {
+          const code = normalizeBarcode(saleBarcodeInput.value);
+          if (code.length >= 6) addProductByBarcode(code, { silent: true });
+        }, 800);
       });
     }
-
-    el("scanProductBarcode")?.addEventListener("click", () => {
-      startBarcodeReader({
-        readerId: "productBarcodeReader",
-        startButtonId: "scanProductBarcode",
-        stopButtonId: "stopProductBarcode",
-        onRead: code => {
-          el("barcode").value = String(code || "").trim();
-          el("barcode").focus();
-        }
+    const productBarcodeInput = document.getElementById("barcode");
+    if (productBarcodeInput) {
+      let productBarcodeTimer = null;
+      const submitProductBarcode = () => {
+        const code = normalizeBarcode(productBarcodeInput.value);
+        if (code) fillProductFormFromBarcode(code);
+      };
+      productBarcodeInput.addEventListener("change", submitProductBarcode);
+      productBarcodeInput.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        submitProductBarcode();
       });
-    });
-
+      productBarcodeInput.addEventListener("input", () => {
+        clearTimeout(productBarcodeTimer);
+        productBarcodeTimer = setTimeout(() => {
+          if (normalizeBarcode(productBarcodeInput.value).length >= 6) submitProductBarcode();
+        }, 800);
+      });
+    }
+    el("scanSaleBarcode")?.addEventListener("click", () => startBarcodeReader({
+      readerId: "saleBarcodeReader",
+      startButtonId: "scanSaleBarcode",
+      stopButtonId: "stopSaleBarcode",
+      onRead: code => {
+        if (el("saleBarcode")) el("saleBarcode").value = code;
+        addProductByBarcode(code);
+      }
+    }));
+    el("stopSaleBarcode")?.addEventListener("click", stopBarcodeReader);
+    el("scanProductBarcode")?.addEventListener("click", () => startBarcodeReader({
+      readerId: "productBarcodeReader",
+      startButtonId: "scanProductBarcode",
+      stopButtonId: "stopProductBarcode",
+      onRead: code => {
+        if (el("barcode")) el("barcode").value = code;
+        if (!fillProductFormFromBarcode(code)) el("name")?.focus();
+      }
+    }));
     el("stopProductBarcode")?.addEventListener("click", stopBarcodeReader);
 
-    el("scanSaleBarcode")?.addEventListener("click", () => {
-      startBarcodeReader({
-        readerId: "saleBarcodeReader",
-        startButtonId: "scanSaleBarcode",
-        stopButtonId: "stopSaleBarcode",
-        onRead: code => {
-          el("saleBarcode").value = String(code || "").trim();
-          addProductByBarcode(code);
-        }
-      });
-    });
 
-    el("stopSaleBarcode")?.addEventListener("click", stopBarcodeReader);
-
-
-    el("exportBtn").addEventListener("click", () => {
-      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `gestao-empresa-${new Date().toISOString().slice(0, 10)}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
-    });
+    el("exportBtn").textContent = "Exportar Excel";
+    el("exportBtn").addEventListener("click", exportFinancialReportToExcel);
+    el("exportFinancialBtn")?.addEventListener("click", exportFinancialReportToExcel);
 
     el("resetBtn").addEventListener("click", () => {
       if (!confirm("Limpar todos os produtos e vendas cadastrados?")) return;
-      state = { products: [], sales: [], goals: { salesGoal: 0, salesPeople: 1 } };
+      state = {
+        products: [],
+        sales: [],
+        expenses: [],
+        users: state.users?.length ? state.users : [{ id: makeId(), name: "Administrador", username: "admin", password: "acesso123", role: "Administrador", active: true, permissions: ["sales", "stockEntry", "inventory", "history", "customerHistory", "expenses", "financial", "access"] }],
+        goals: { salesGoal: 0, salesPeople: 1 }
+      };
       saveState();
       clearProductForm();
       clearSale();
       
 renderAll();
-
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
 
     });
 
@@ -1687,27 +4510,40 @@ document.getElementById('searchCustomerPhone')?.addEventListener('input', render
       addExpenseBtn.addEventListener("click",()=>{
         const desc=el("expenseDescription").value.trim();
         const val=Number(el("expenseValue").value||0);
+        const type=el("expenseType").value;
+        const id=el("expenseId").value || makeId();
         if(!desc||val<=0) return;
-        state.expenses.push({type:el("expenseType").value,description:desc,value:val});
+        const expense = { id, type, description: desc, value: val };
+        if (type === "Fixa") {
+          const index = (state.fixedExpenses || []).findIndex(item => item.id === id);
+          if (index >= 0) state.fixedExpenses[index] = expense;
+          else state.fixedExpenses.push(expense);
+        } else {
+          const list = variableExpensesForMonth(state.expenseMonth || currentMonthKey());
+          const index = list.findIndex(item => item.id === id);
+          if (index >= 0) list[index] = expense;
+          else list.push(expense);
+        }
         saveState();
-        el("expenseDescription").value="";
-        el("expenseValue").value="";
+        clearExpenseForm();
         
 renderAll();
 
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
-
-      });
+    });
     }
+    el("validateFixedExpensesBtn")?.addEventListener("click", validateFixedExpensesForSelectedMonth);
 
     
 renderAll();
+renderPermissionList(permissionsForRole("Vendedor"));
+initAuth();
 
 document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
 document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
 document.getElementById('customerSort')?.addEventListener('change', renderCustomerHistory);
-document.getElementById('exportCustomersBtn')?.addEventListener('click', exportCustomersToExcel);
+document.getElementById('customerName')?.addEventListener('change', autoFillCustomerFromName);
+document.getElementById('customerPhone')?.addEventListener('input', limitCustomerPhoneInput);
+document.getElementById('customerPhone')?.addEventListener('change', autoFillCustomerFromPhone);
 
   </script>
 </body>
