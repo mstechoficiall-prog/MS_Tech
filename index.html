@@ -906,6 +906,9 @@
     <div class="header-actions">
       <span class="user-chip" id="currentUserChip">Usuário</span>
       <button class="secondary" id="exportBtn" type="button" style="display:none;">Exportar dados</button>
+      <button class="secondary" id="exportBackupBtn" type="button">Exportar base</button>
+      <button class="secondary" id="importBackupBtn" type="button">Importar base</button>
+      <input id="backupFileInput" type="file" accept="application/json,.json" class="hidden">
       <button class="warning" id="resetBtn" type="button">Limpar base</button>
       <button class="secondary" id="logoutBtn" type="button">Sair</button>
     </div>
@@ -1784,6 +1787,47 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
+    function exportSystemBackup() {
+      const payload = {
+        app: "MS Tech",
+        storageKey: STORAGE_KEY,
+        exportedAt: new Date().toISOString(),
+        state
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `backup-ms-tech-${new Date().toISOString().slice(0, 10)}.json`;
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function importSystemBackupFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(String(reader.result || "{}"));
+          const importedState = parsed.state || parsed;
+          if (!importedState || !Array.isArray(importedState.users)) {
+            alert("Arquivo de base inválido.");
+            return;
+          }
+          if (!confirm("Importar esta base vai substituir os dados atuais deste navegador. Continuar?")) return;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(importedState));
+          state = loadState();
+          currentUser = null;
+          sessionStorage.removeItem(SESSION_KEY);
+          alert("Base importada com sucesso. Entre novamente com um usuário cadastrado.");
+          showLogin();
+        } catch (error) {
+          alert("Não foi possível importar a base. Verifique se o arquivo é um backup JSON do MS Tech.");
+        }
+      };
+      reader.readAsText(file, "utf-8");
+    }
+
     function normalizeUsername(value) {
       return String(value || "").trim().toLowerCase();
     }
@@ -1936,6 +1980,8 @@
       document.querySelector(".metrics")?.classList.toggle("hidden", seller || stock);
       document.querySelector(".goals")?.classList.toggle("hidden", seller || stock);
       el("exportBtn")?.classList.toggle("hidden", !admin);
+      el("exportBackupBtn")?.classList.toggle("hidden", !admin);
+      el("importBackupBtn")?.classList.toggle("hidden", !admin);
       el("resetBtn")?.classList.toggle("hidden", !admin);
       el("sellerGoalPanel")?.classList.toggle("hidden", !seller);
       el("passwordResetPanel")?.classList.toggle("hidden", !admin);
@@ -4487,64 +4533,14 @@ renderAll();
     el("exportBtn").textContent = "Exportar Excel";
     el("exportBtn").addEventListener("click", exportFinancialReportToExcel);
     el("exportFinancialBtn")?.addEventListener("click", exportFinancialReportToExcel);
+    el("exportBackupBtn")?.addEventListener("click", exportSystemBackup);
+    el("importBackupBtn")?.addEventListener("click", () => el("backupFileInput")?.click());
+    el("backupFileInput")?.addEventListener("change", event => {
+      importSystemBackupFile(event.target.files?.[0]);
+      event.target.value = "";
+    });
 
     el("resetBtn").addEventListener("click", () => {
       if (!confirm("Limpar todos os produtos e vendas cadastrados?")) return;
       state = {
-        products: [],
-        sales: [],
-        expenses: [],
-        users: state.users?.length ? state.users : [{ id: makeId(), name: "Administrador", username: "admin", password: "acesso123", role: "Administrador", active: true, permissions: ["sales", "stockEntry", "inventory", "history", "customerHistory", "expenses", "financial", "access"] }],
-        goals: { salesGoal: 0, salesPeople: 1 }
-      };
-      saveState();
-      clearProductForm();
-      clearSale();
-      
-renderAll();
-
-    });
-
-    const addExpenseBtn=document.getElementById("addExpenseBtn");
-    if(addExpenseBtn){
-      addExpenseBtn.addEventListener("click",()=>{
-        const desc=el("expenseDescription").value.trim();
-        const val=Number(el("expenseValue").value||0);
-        const type=el("expenseType").value;
-        const id=el("expenseId").value || makeId();
-        if(!desc||val<=0) return;
-        const expense = { id, type, description: desc, value: val };
-        if (type === "Fixa") {
-          const index = (state.fixedExpenses || []).findIndex(item => item.id === id);
-          if (index >= 0) state.fixedExpenses[index] = expense;
-          else state.fixedExpenses.push(expense);
-        } else {
-          const list = variableExpensesForMonth(state.expenseMonth || currentMonthKey());
-          const index = list.findIndex(item => item.id === id);
-          if (index >= 0) list[index] = expense;
-          else list.push(expense);
-        }
-        saveState();
-        clearExpenseForm();
-        
-renderAll();
-
-    });
-    }
-    el("validateFixedExpensesBtn")?.addEventListener("click", validateFixedExpensesForSelectedMonth);
-
     
-renderAll();
-renderPermissionList(permissionsForRole("Vendedor"));
-initAuth();
-
-document.getElementById('searchCustomerName')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('searchCustomerPhone')?.addEventListener('input', renderCustomerHistory);
-document.getElementById('customerSort')?.addEventListener('change', renderCustomerHistory);
-document.getElementById('customerName')?.addEventListener('change', autoFillCustomerFromName);
-document.getElementById('customerPhone')?.addEventListener('input', limitCustomerPhoneInput);
-document.getElementById('customerPhone')?.addEventListener('change', autoFillCustomerFromPhone);
-
-  </script>
-</body>
-</html>
