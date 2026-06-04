@@ -1075,6 +1075,274 @@
       width: 100%;
     }
 
+    .sale-terminal {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 210px 280px minmax(360px, 1fr);
+      grid-template-areas:
+        "title title title"
+        "brand entry list"
+        "brand unit list"
+        "brand item list"
+        "customer customer list"
+        "discount payment list"
+        "credit credit list"
+        "cash cash total"
+        "notice notice notice"
+        "actions actions actions";
+      gap: 8px;
+      padding: 8px;
+      border: 1px solid rgba(13, 79, 120, .28);
+      border-radius: 10px;
+      background: #2d6f9d;
+      box-shadow: 0 16px 34px rgba(9, 42, 62, .12);
+    }
+
+    .sale-terminal-title,
+    .sale-list-head,
+    .sale-terminal-value span,
+    .sale-total span:first-child {
+      background: #0d4f78;
+      color: #ffffff;
+      font-size: .72rem;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .sale-terminal-title {
+      grid-area: title;
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px;
+      background: #ffffff;
+      color: #0d4f78;
+      font-size: 1.45rem;
+    }
+
+    .sale-terminal-brand {
+      grid-area: brand;
+      display: grid;
+      place-items: center;
+      min-height: 230px;
+      padding: 12px;
+      border-radius: 4px;
+      background: #ffffff;
+    }
+
+    .sale-terminal-brand img {
+      width: min(160px, 100%);
+      aspect-ratio: 1 / 1;
+      object-fit: contain;
+    }
+
+    #salesView .sale-product-card {
+      grid-area: entry;
+      padding: 8px;
+      border-radius: 4px;
+      background: #ffffff;
+      border: 0;
+      box-shadow: none;
+    }
+
+    #salesView .sale-product-card label {
+      color: #0d4f78;
+    }
+
+    #salesView .sale-product-card::before,
+    #salesView .grid-2:has(#customerName)::before,
+    #salesView .grid-2:has(#discountPercent)::before,
+    #salesView .grid-2:has(#paymentMethod)::before,
+    #creditPaymentCard::before,
+    #cashPaymentCard::before,
+    #salesView .panel-body > .actions:has(#finishSaleBtn)::before {
+      content: none;
+    }
+
+    .sale-terminal-value {
+      display: grid;
+      grid-template-rows: 24px 1fr;
+      min-height: 72px;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #ffffff;
+    }
+
+    .sale-terminal-unit { grid-area: unit; }
+    .sale-terminal-item { grid-area: item; }
+
+    .sale-terminal-value span,
+    .sale-total span:first-child {
+      display: flex;
+      align-items: center;
+      padding: 5px 8px;
+    }
+
+    .sale-terminal-value strong {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 8px 10px;
+      color: #0d4f78;
+      font-size: 1.25rem;
+    }
+
+    #saleItems {
+      grid-area: list;
+      min-height: 330px;
+      align-content: start;
+      gap: 4px;
+      padding: 32px 6px 54px;
+      border: 0;
+      border-radius: 4px;
+      background: #ffffff;
+      box-shadow: none;
+      overflow: auto;
+      position: relative;
+    }
+
+    #saleItems::before {
+      content: "Lista de produtos";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 4px 4px 0 0;
+      background: #0d4f78;
+      color: #ffffff;
+      font-size: .72rem;
+      font-weight: 850;
+      text-transform: uppercase;
+    }
+
+    #saleItems:empty::after {
+      content: "Nenhum item adicionado.";
+      display: grid;
+      place-items: center;
+      min-height: 250px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    #addSaleItemBtn {
+      grid-area: list;
+      align-self: end;
+      justify-self: stretch;
+      margin: 0 6px 6px;
+      min-height: 40px;
+      border-radius: 4px;
+      border-style: solid;
+      color: #0d4f78;
+      z-index: 1;
+    }
+
+    .sale-row {
+      grid-template-columns: minmax(170px, 1fr) 64px 92px 92px 38px;
+      gap: 5px;
+      padding: 6px;
+      border: 1px solid #d8e7ef;
+      border-radius: 4px;
+      background: #f8fcfe;
+    }
+
+    .sale-row label {
+      color: #0d4f78;
+      font-size: .64rem;
+      font-weight: 850;
+    }
+
+    .sale-row input,
+    .sale-row select {
+      min-height: 34px;
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: .82rem;
+    }
+
+    .sale-row button {
+      height: 34px;
+      min-height: 34px;
+      width: 34px;
+      border-radius: 4px;
+    }
+
+    #salesView .grid-2:has(#customerName) {
+      grid-area: customer;
+    }
+
+    #salesView .grid-2:has(#discountPercent) {
+      grid-area: discount;
+    }
+
+    #salesView .grid-2:has(#paymentMethod) {
+      grid-area: payment;
+    }
+
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard {
+      grid-area: credit;
+    }
+
+    #cashPaymentCard {
+      grid-area: cash;
+    }
+
+    #salesView .grid-2:has(#customerName),
+    #salesView .grid-2:has(#discountPercent),
+    #salesView .grid-2:has(#paymentMethod),
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard,
+    #cashPaymentCard {
+      padding: 8px;
+      border: 0;
+      border-radius: 4px;
+      background: #0d4f78;
+      box-shadow: none;
+    }
+
+    #salesView .sale-total {
+      grid-area: total;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      padding: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      background: #ffffff;
+      color: #0d4f78;
+    }
+
+    #salesView .sale-total strong,
+    #salesView .sale-total #saleTotal {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      min-height: 64px;
+      padding: 8px 14px;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+    }
+
+    #saleNotice {
+      grid-area: notice;
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
+      grid-area: actions;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 0 !important;
+    }
+
     .notice {
       margin-top: 10px;
       color: var(--danger);
@@ -1265,6 +1533,33 @@
       .pricing-layout, .pricing-results, .pricing-dashboard { grid-template-columns: 1fr; }
       #salesView .panel-body {
         grid-template-columns: 1fr;
+      }
+      .sale-terminal {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "title"
+          "brand"
+          "entry"
+          "unit"
+          "item"
+          "list"
+          "customer"
+          "discount"
+          "payment"
+          "credit"
+          "cash"
+          "total"
+          "notice"
+          "actions";
+      }
+      .sale-terminal-brand {
+        min-height: 160px;
+      }
+      #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
+        grid-template-columns: 1fr;
+      }
+      .sale-row {
+        grid-template-columns: 1fr 1fr;
       }
       #salesView .sale-barcode-row {
         grid-template-columns: 1fr;
@@ -1737,7 +2032,11 @@
               <div class="progress" aria-label="Progresso da minha meta"><div class="progress-bar" id="sellerGoalProgress"></div></div>
               <p class="hint" id="sellerGoalHint">Sua meta será definida pelo administrador.</p>
             </section>
-            <h2 style="padding:0 0 12px;border:0;background:transparent;">Registrar venda</h2>
+            <div class="sale-terminal">
+              <div class="sale-terminal-title">Caixa aberto</div>
+              <div class="sale-terminal-brand">
+                <img src="assets/logotipo-ms.png" alt="MS Tech">
+              </div>
 
             <div class="sale-product-card">
               <div class="sale-barcode-row">
@@ -1750,6 +2049,14 @@
                 </div>
               </div>
               <div id="saleBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:0;"></div>
+            </div>
+            <div class="sale-terminal-value sale-terminal-unit">
+              <span>Valor unitário</span>
+              <strong id="saleUnitValue">R$ 0,00</strong>
+            </div>
+            <div class="sale-terminal-value sale-terminal-item">
+              <span>Total do item</span>
+              <strong id="saleItemTotal">R$ 0,00</strong>
             </div>
             <div class="grid-2" style="margin-bottom:12px;">
               <label>Nome do Cliente
@@ -1853,6 +2160,7 @@
             <div class="actions" style="margin-top:12px;">
               <button type="button" id="finishSaleBtn">Finalizar venda</button>
               <button type="button" class="secondary" id="clearSaleBtn">Cancelar</button>
+            </div>
             </div>
           </div>
         </section>
@@ -4780,6 +5088,9 @@ function renderAll() {
         <label>Preço
           <input class="sale-price" type="number" min="0" step="0.01">
         </label>
+        <label>Total
+          <input class="sale-line-total" type="text" value="R$ 0,00" readonly>
+        </label>
         <button type="button" class="secondary icon" title="Remover item">×</button>
       `;
       row.querySelector("button").addEventListener("click", () => {
@@ -4927,6 +5238,12 @@ function renderAll() {
       const cashPayment = isCashPayment();
       const creditInstallment = isCreditInstallmentPayment();
       const maxDiscount = getMaxDiscountPercent();
+      document.querySelectorAll(".sale-row").forEach(row => {
+        const quantity = Number(row.querySelector(".sale-quantity")?.value || 0);
+        const price = Number(row.querySelector(".sale-price")?.value || 0);
+        const lineTotal = row.querySelector(".sale-line-total");
+        if (lineTotal) lineTotal.value = money.format(quantity * price);
+      });
       if (percentInput) {
         percentInput.disabled = creditCard;
         percentInput.max = String(maxDiscount);
@@ -4947,6 +5264,9 @@ function renderAll() {
       if (el("cashChange")) el("cashChange").value = money.format(draft.cashChange);
       if (!cashPayment && el("cashReceived")) el("cashReceived").value = "";
       if (el("discountValue")) el("discountValue").value = money.format(draft.discount);
+      const lastItem = draft.items[draft.items.length - 1];
+      if (el("saleUnitValue")) el("saleUnitValue").textContent = money.format(lastItem?.price || 0);
+      if (el("saleItemTotal")) el("saleItemTotal").textContent = money.format(lastItem ? lastItem.quantity * lastItem.price : 0);
       if (el("creditInterestValue")) el("creditInterestValue").value = `${draft.creditInterestPercent.toFixed(2).replace(".", ",")}% · ${money.format(draft.creditInterest)}`;
       if (el("creditSaleFeeValue")) el("creditSaleFeeValue").value = `${draft.creditSaleFeePercent.toFixed(2).replace(".", ",")}% · ${money.format(draft.creditSaleFee)}`;
       if (el("creditInstallmentInterestValue")) el("creditInstallmentInterestValue").value = `${draft.creditInstallmentInterestPercent.toFixed(2).replace(".", ",")}% · ${money.format(draft.creditInstallmentInterest)}`;
