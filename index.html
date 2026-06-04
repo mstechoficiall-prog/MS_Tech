@@ -2034,6 +2034,14 @@
           <div class="panel-body">
             <div class="seller-ranking" id="sellerRankingPanel">
               <h2 style="padding:0 0 12px;border:0;background:transparent;">Ranking de vendedores</h2>
+              <div class="grid-2 compact-date-fields">
+                <label>Mês
+                  <select id="rankingMonthNumber"></select>
+                </label>
+                <label>Ano
+                  <select id="rankingYear"></select>
+                </label>
+              </div>
               <div class="goal-summary" id="sellerRankingSummary"></div>
               <div class="table-wrap">
                 <table>
@@ -2225,6 +2233,7 @@
       cashFlows: {},
       expenseMonth: currentMonthKey(),
       historyMonth: currentMonthKey(),
+      rankingMonth: currentMonthKey(),
       financialMonth: currentMonthKey(),
       users: [
         { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
@@ -2277,6 +2286,7 @@
       loaded.cashFlows ||= {};
       loaded.expenseMonth ||= currentMonthKey();
       loaded.historyMonth ||= currentMonthKey();
+      loaded.rankingMonth ||= loaded.goalMonth || currentMonthKey();
       loaded.financialMonth ||= currentMonthKey();
       loaded.goalMonth ||= currentMonthKey();
       loaded.monthlyGoals ||= {};
@@ -2362,6 +2372,7 @@
       loaded.cashFlows ||= {};
       loaded.expenseMonth ||= currentMonthKey();
       loaded.historyMonth ||= currentMonthKey();
+      loaded.rankingMonth ||= loaded.goalMonth || currentMonthKey();
       loaded.financialMonth ||= currentMonthKey();
       loaded.goalMonth ||= currentMonthKey();
       loaded.monthlyGoals ||= {};
@@ -2437,6 +2448,7 @@
         goalMonth: state.goalMonth || currentMonthKey(),
         expenseMonth: state.expenseMonth || currentMonthKey(),
         historyMonth: state.historyMonth || currentMonthKey(),
+        rankingMonth: state.rankingMonth || state.goalMonth || currentMonthKey(),
         financialMonth: state.financialMonth || currentMonthKey(),
         passwordOverrides: state.passwordOverrides || {},
         fixedExpenseMonths: state.fixedExpenseMonths || {}
@@ -2493,6 +2505,7 @@
         monthlyGoals,
         expenseMonth: appMeta.expenseMonth || currentMonthKey(),
         historyMonth: appMeta.historyMonth || currentMonthKey(),
+        rankingMonth: appMeta.rankingMonth || appMeta.goalMonth || currentMonthKey(),
         financialMonth: appMeta.financialMonth || currentMonthKey(),
         passwordOverrides: appMeta.passwordOverrides || {},
         pricingSettings,
@@ -3049,6 +3062,10 @@
       renderDateSelectors("historyMonthNumber", "historyYear", selectedMonth);
     }
 
+    function renderRankingMonthOptions(selectedMonth = state.rankingMonth || state.goalMonth || currentMonthKey()) {
+      renderDateSelectors("rankingMonthNumber", "rankingYear", selectedMonth);
+    }
+
     function renderExpenseMonthOptions(selectedMonth = state.expenseMonth || currentMonthKey()) {
       renderDateSelectors("expenseMonthNumber", "expenseYear", selectedMonth);
     }
@@ -3493,7 +3510,7 @@
       if (view === "history") return state.historyMonth || currentMonthKey();
       if (view === "expenses") return state.expenseMonth || currentMonthKey();
       if (view === "financial") return state.financialMonth || currentMonthKey();
-      if (view === "ranking") return state.goalMonth || currentMonthKey();
+      if (view === "ranking") return state.rankingMonth || state.goalMonth || currentMonthKey();
       return state.financialMonth || state.historyMonth || currentMonthKey();
     }
 
@@ -3808,7 +3825,7 @@
     }
 
     function buildSellerRanking() {
-      const monthKey = state.goalMonth || currentMonthKey();
+      const monthKey = state.rankingMonth || state.goalMonth || currentMonthKey();
       return (state.users || [])
         .filter(user => user.active !== false && user.role === "Vendedor")
         .map(user => {
@@ -3824,13 +3841,16 @@
 
     function renderSellerRanking() {
       if (!el("sellerRankingBody")) return;
+      state.rankingMonth ||= state.goalMonth || currentMonthKey();
+      renderRankingMonthOptions(state.rankingMonth);
+      const monthKey = state.rankingMonth;
       const ranking = buildSellerRanking();
       const hitGoals = ranking.filter(item => item.hitGoal).length;
       const totalRevenue = ranking.reduce((sum, item) => sum + item.revenue, 0);
       const totalGoal = ranking.reduce((sum, item) => sum + item.goal, 0);
       const totalRemaining = Math.max(0, totalGoal - totalRevenue);
       el("sellerRankingSummary").innerHTML = `
-        <article class="goal-card"><span>Meta individual</span><strong>${money.format(automaticSellerGoal(state.goalMonth || currentMonthKey()))}</strong></article>
+        <article class="goal-card"><span>Meta individual</span><strong>${money.format(automaticSellerGoal(monthKey))}</strong></article>
         <article class="goal-card"><span>Vendedores</span><strong>${ranking.length}</strong></article>
         <article class="goal-card"><span>Metas batidas</span><strong>${hitGoals}</strong></article>
         <article class="goal-card"><span>Falta geral</span><strong>${money.format(totalRemaining)}</strong></article>
@@ -5246,6 +5266,11 @@ loadProductIntoPricing(product);
       saveState();
       renderHistory();
     }));
+    ["rankingMonthNumber", "rankingYear"].forEach(id => el(id)?.addEventListener("change", () => {
+      state.rankingMonth = selectedMonthFrom("rankingMonthNumber", "rankingYear");
+      saveState();
+      renderSellerRanking();
+    }));
     ["expenseMonthNumber", "expenseYear"].forEach(id => el(id)?.addEventListener("change", () => {
       state.expenseMonth = selectedMonthFrom("expenseMonthNumber", "expenseYear");
       saveState();
@@ -5421,6 +5446,7 @@ renderAll();
         monthlyGoals: {},
         expenseMonth: currentMonthKey(),
         historyMonth: currentMonthKey(),
+        rankingMonth: currentMonthKey(),
         financialMonth: currentMonthKey(),
         pricingSettings: { cardFee: 4.98, taxes: 6, operational: 15, margin: 25 },
         pricingProducts: [],
