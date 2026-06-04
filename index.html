@@ -1343,6 +1343,35 @@
       margin-top: 0 !important;
     }
 
+    .sale-terminal.status-open {
+      background: #2d6f9d;
+    }
+
+    .sale-terminal.status-paused {
+      background: #8a5b14;
+    }
+
+    .sale-terminal.status-closed,
+    .sale-terminal.status-not-opened {
+      background: #5f7888;
+    }
+
+    .cash-status-card.status-open {
+      background: #e7fbfd;
+      border-color: #a5f3fc;
+    }
+
+    .cash-status-card.status-paused {
+      background: #fff1d4;
+      border-color: #fde68a;
+    }
+
+    .cash-status-card.status-closed,
+    .cash-status-card.status-not-opened {
+      background: #fde9e9;
+      border-color: #fecaca;
+    }
+
     .notice {
       margin-top: 10px;
       color: var(--danger);
@@ -2033,7 +2062,7 @@
               <p class="hint" id="sellerGoalHint">Sua meta será definida pelo administrador.</p>
             </section>
             <div class="sale-terminal">
-              <div class="sale-terminal-title">Caixa aberto</div>
+              <div class="sale-terminal-title" id="saleCashStatusTitle">Caixa não aberto</div>
               <div class="sale-terminal-brand">
                 <img src="assets/logotipo-ms.png" alt="MS Tech">
               </div>
@@ -2180,7 +2209,7 @@
               <h2>Caixa</h2>
               <div class="panel-body">
                 <div class="goal-summary" style="margin-bottom:14px;">
-                  <article class="goal-card"><span>Status</span><strong id="cashStatus">Fechado</strong></article>
+                  <article class="goal-card cash-status-card" id="cashStatusCard"><span>Status</span><strong id="cashStatus">Fechado</strong></article>
                   <article class="goal-card"><span>Saldo inicial</span><strong id="cashInitialSummary">R$ 0,00</strong></article>
                   <article class="goal-card"><span>Saldo esperado</span><strong id="cashExpectedSummary">R$ 0,00</strong></article>
                   <article class="goal-card"><span>Diferença</span><strong id="cashDifferenceSummary">R$ 0,00</strong></article>
@@ -4331,6 +4360,32 @@
       return Boolean(flow.opened && !flow.closed && !flow.paused);
     }
 
+    function cashStatusInfo(flow = cashFlowForToday()) {
+      if (flow.closed) return { key: "closed", label: "Fechado", saleLabel: "Caixa fechado" };
+      if (flow.paused) return { key: "paused", label: "Pausado", saleLabel: "Caixa pausado" };
+      if (flow.opened) return { key: "open", label: "Aberto", saleLabel: "Caixa aberto" };
+      return { key: "not-opened", label: "Não aberto", saleLabel: "Caixa não aberto" };
+    }
+
+    function applyCashStatusVisuals(flow = cashFlowForToday(), options = {}) {
+      const { sale = true, cash = true } = options;
+      const status = cashStatusInfo(flow);
+      const title = el("saleCashStatusTitle");
+      if (sale && title) title.textContent = status.saleLabel;
+      const terminal = document.querySelector(".sale-terminal");
+      if (sale && terminal) {
+        terminal.classList.remove("status-open", "status-paused", "status-closed", "status-not-opened");
+        terminal.classList.add(`status-${status.key}`);
+      }
+      const statusCard = el("cashStatusCard");
+      if (cash && statusCard) {
+        statusCard.classList.remove("status-open", "status-paused", "status-closed", "status-not-opened");
+        statusCard.classList.add(`status-${status.key}`);
+      }
+      const statusEl = el("cashStatus");
+      if (cash && statusEl) statusEl.textContent = status.label;
+    }
+
     function showCashRequiredNotice() {
       const flow = cashFlowForToday();
       const message = flow.closed
@@ -4351,6 +4406,7 @@
     function updateSalesCashLock() {
       const open = isCashRegisterOpenForSales();
       const flow = cashFlowForToday();
+      applyCashStatusVisuals(flow, { sale: true, cash: false });
       const blockedTitle = flow.paused
         ? "Caixa pausado. Retome o caixa para registrar vendas."
         : flow.closed
@@ -4497,7 +4553,7 @@
       const expected = cashExpectedBalance(flow, selectedDate);
       const closing = Number(flow.closing || 0);
       const difference = flow.closed ? closing - expected : 0;
-      statusEl.textContent = flow.closed ? "Fechado" : flow.paused ? "Pausado" : flow.opened ? "Aberto" : "Fechado";
+      applyCashStatusVisuals(flow, { sale: false, cash: true });
       el("cashInitialSummary").textContent = money.format(Number(flow.initial || 0));
       el("cashExpectedSummary").textContent = money.format(expected);
       el("cashDifferenceSummary").textContent = flow.closed ? money.format(difference) : money.format(0);
