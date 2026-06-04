@@ -90,9 +90,10 @@
 
     main {
       grid-column: 2;
-      width: min(1360px, 100%);
-      margin: 0 auto;
-      padding: 30px clamp(18px, 3vw, 36px) 42px;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 30px clamp(14px, 2vw, 28px) 42px;
     }
 
     .user-status-row {
@@ -213,10 +214,12 @@
       grid-template-columns: 1fr;
       gap: 16px;
       align-items: start;
+      width: 100%;
     }
 
     .panel {
       overflow: hidden;
+      width: 100%;
     }
 
     .workspace > .panel {
@@ -855,7 +858,7 @@
 
     #salesView .panel-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.5fr) minmax(340px, .78fr);
+      grid-template-columns: minmax(0, 1.65fr) minmax(380px, .85fr);
       gap: 18px;
       align-items: start;
       background:
