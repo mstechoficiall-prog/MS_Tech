@@ -2413,6 +2413,10 @@
       return { ...user, permissions: permissionsForRole(user.role, user.permissions || []) };
     }
 
+    function needsFirstAccessPasswordChange(user) {
+      return Boolean(user?.mustChangePassword === true && effectivePasswordForUser(user) === FIRST_ACCESS_PASSWORD);
+    }
+
     function canAccess(view) {
       return Boolean(currentUser && (currentUser.role === "Administrador" || (currentUser.permissions || []).includes(view)));
     }
@@ -2524,12 +2528,17 @@
       renderAll();
       applyProfileSettings();
       switchView(firstAccessibleView());
-      if (currentUser.mustChangePassword || currentUser.password === FIRST_ACCESS_PASSWORD) {
+      if (needsFirstAccessPasswordChange(currentUser)) {
         const liveUser = state.users.find(item => item.id === currentUser.id);
         if (liveUser) liveUser.mustChangePassword = true;
         currentUser.mustChangePassword = true;
         saveState();
         setTimeout(openChangePasswordModal, 80);
+      } else if (currentUser.mustChangePassword === true) {
+        const liveUser = state.users.find(item => item.id === currentUser.id);
+        if (liveUser) liveUser.mustChangePassword = false;
+        currentUser.mustChangePassword = false;
+        saveState();
       }
     }
 
