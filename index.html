@@ -863,12 +863,21 @@
     .access-profile-card strong { display: block; margin-bottom: 6px; }
     .access-profile-card p { margin: 0; color: var(--muted); font-size: .86rem; line-height: 1.35; }
 
+    .access-role-options,
     .permission-list {
       display: grid;
       gap: 8px;
       margin: 8px 0 14px;
     }
 
+    .access-role-options > span {
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 650;
+      text-transform: uppercase;
+    }
+
+    .access-role-options label,
     .permission-list label {
       display: flex;
       align-items: center;
@@ -878,6 +887,7 @@
       text-transform: none;
     }
 
+    .access-role-options input,
     .permission-list input {
       width: 18px;
       min-height: 18px;
@@ -2755,13 +2765,12 @@
                     <button class="password-toggle" type="button" data-password-toggle="accessPassword" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
                   </span>
                 </label>
-                <label>Perfil
-                  <select id="accessRole">
-                    <option value="Administrador">Administrador</option>
-                    <option value="Vendedor">Vendedor</option>
-                    <option value="Estoque">Estoque</option>
-                  </select>
-                </label>
+                <div class="access-role-options" id="accessRoleOptions" aria-label="Perfis">
+                  <span>Perfil</span>
+                  <label><input type="checkbox" name="accessRole" value="Administrador"> Administrador</label>
+                  <label><input type="checkbox" name="accessRole" value="Vendedor"> Vendedor</label>
+                  <label><input type="checkbox" name="accessRole" value="Estoque"> Estoque</label>
+                </div>
                 <div class="permission-list" id="permissionList"></div>
                 <div class="actions">
                   <button type="submit" id="saveAccessBtn">Salvar</button>
@@ -2842,6 +2851,25 @@
     let remoteSavePending = false;
     let remoteSavePromise = null;
     let remoteStartupPromise = null;
+    const roleOptions = ["Administrador", "Vendedor", "Estoque"];
+
+    function normalizedRoles(userOrRoles = []) {
+      if (!userOrRoles) return [];
+      const raw = Array.isArray(userOrRoles)
+        ? userOrRoles
+        : Array.isArray(userOrRoles.roles)
+          ? userOrRoles.roles
+          : [userOrRoles.role];
+      const roles = raw
+        .map(role => role === "Vendas" ? "Vendedor" : role)
+        .filter(role => roleOptions.includes(role));
+      return [...new Set(roles.length ? roles : ["Vendedor"])];
+    }
+
+    function primaryRole(roles = []) {
+      const selected = normalizedRoles(roles);
+      return roleOptions.find(role => selected.includes(role)) || "Vendedor";
+    }
 
     const seed = {
       products: [
@@ -2860,7 +2888,7 @@
       rankingMonth: currentMonthKey(),
       financialMonth: currentMonthKey(),
       users: [
-        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
+        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
       ],
       goals: { salesGoal: 25000, salesPeople: 3 },
       goalMonth: currentMonthKey(),
@@ -2940,22 +2968,24 @@
           username: access.login || access.name || "usuario",
           password: "acesso123",
           role: access.role === "Vendas" ? "Vendedor" : (access.role || "Vendedor"),
+          roles: [access.role === "Vendas" ? "Vendedor" : (access.role || "Vendedor")],
           active: access.status !== "Bloqueado",
           permissions: []
         }));
       }
       if (!loaded.users.length) {
-        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
       }
       loaded.users = loaded.users.map(user => {
-        const role = ["Administrador", "Vendedor", "Estoque"].includes(user.role) ? user.role : "Vendedor";
+        const roles = normalizedRoles(user);
+        const role = primaryRole(roles);
         const defaults = role === "Administrador"
           ? ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"]
-          : role === "Estoque"
-            ? ["stockEntry", "inventory"]
-            : ["sales", "cashFlow", "history", "customerHistory"];
+          : [...new Set(roles.flatMap(item => item === "Estoque"
+            ? ["stockEntry", "inventory", "pricing"]
+            : ["sales", "cashFlow", "history", "customerHistory"]))];
         const username = String(user.username || "").toLowerCase() === "admin@ms-tech.local" ? "admin" : user.username;
-        return { active: true, permissions: defaults, password: FIRST_ACCESS_PASSWORD, ...user, username, role, permissions: user.permissions?.length ? user.permissions : defaults };
+        return { active: true, permissions: defaults, password: FIRST_ACCESS_PASSWORD, ...user, username, role, roles, permissions: user.permissions?.length ? user.permissions : defaults };
       });
       loaded.goals ||= { salesGoal: 0, salesPeople: 1 };
       loaded.monthlyGoals[loaded.goalMonth] ||= loaded.goals;
@@ -3013,7 +3043,7 @@
       loaded.monthlyGoals ||= {};
       loaded.users ||= [];
       if (!loaded.users.length) {
-        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
       }
       loaded.goals ||= loaded.monthlyGoals[loaded.goalMonth] || { salesGoal: 0, salesPeople: 1 };
       loaded.monthlyGoals[loaded.goalMonth] ||= loaded.goals;
@@ -3227,7 +3257,7 @@
           const liveUser = currentUser ? state.users.find(user => user.id === currentUser.id && user.active !== false) : null;
           if (liveUser) {
             currentUser = effectiveUser(liveUser);
-            el("currentUserChip").textContent = `${currentUser.name || currentUser.username} · ${currentUser.role}`;
+            el("currentUserChip").textContent = `${currentUser.name || currentUser.username} · ${rolesLabel(currentUser)}`;
             renderAll();
             applyProfileSettings();
             switchView(currentViewName() || firstAccessibleView());
@@ -3316,6 +3346,9 @@
         if (!key || seen.has(key)) return false;
         seen.add(key);
         user.username = key === "admin@ms-tech.local" ? "admin" : user.username;
+        user.roles = normalizedRoles(user);
+        user.role = primaryRole(user.roles);
+        user.permissions = permissionsForRoles(user.roles, user.permissions || []);
         return true;
       });
     }
@@ -3366,19 +3399,19 @@
     }
 
     function isAdminUser() {
-      return currentUser?.role === "Administrador";
+      return hasRole(currentUser, "Administrador");
     }
 
     function isSellerMode() {
-      return currentUser?.role === "Vendedor";
+      return hasRole(currentUser, "Vendedor");
     }
 
     function isStockUser() {
-      return currentUser?.role === "Estoque";
+      return hasRole(currentUser, "Estoque");
     }
 
     function getLoggedUserRole() {
-      return currentUser?.role || "";
+      return currentUser ? rolesLabel(currentUser) : "";
     }
 
     function currentViewName() {
@@ -3417,7 +3450,8 @@
     }
 
     function effectiveUser(user) {
-      return { ...user, permissions: permissionsForRole(user.role, user.permissions || []) };
+      const roles = normalizedRoles(user);
+      return { ...user, roles, role: primaryRole(roles), permissions: permissionsForRoles(roles, user.permissions || []) };
     }
 
     function needsFirstAccessPasswordChange(user) {
@@ -3425,7 +3459,7 @@
     }
 
     function canAccess(view) {
-      return Boolean(currentUser && (currentUser.role === "Administrador" || (currentUser.permissions || []).includes(view)));
+      return Boolean(currentUser && (hasRole(currentUser, "Administrador") || (currentUser.permissions || []).includes(view)));
     }
 
     function firstAccessibleView() {
@@ -3446,9 +3480,9 @@
       document.querySelectorAll(".subarea-menu").forEach(menu => {
         menu.classList.toggle("hidden", !visibleAreas.has(menu.dataset.subarea));
       });
-      const admin = currentUser.role === "Administrador";
-      const seller = currentUser.role === "Vendedor";
-      const stock = currentUser.role === "Estoque";
+      const admin = hasRole(currentUser, "Administrador");
+      const seller = !admin && hasRole(currentUser, "Vendedor");
+      const stock = !admin && hasRole(currentUser, "Estoque");
       document.body.classList.toggle("seller-mode", seller);
       document.body.classList.toggle("stock-mode", stock);
       document.querySelector(".metrics")?.classList.toggle("hidden", seller || stock);
@@ -3529,7 +3563,7 @@
     function showApp(user) {
       currentUser = effectiveUser(user);
       sessionStorage.setItem(SESSION_KEY, user.id);
-      el("currentUserChip").textContent = `${currentUser.name || currentUser.username} · ${currentUser.role}`;
+      el("currentUserChip").textContent = `${currentUser.name || currentUser.username} · ${rolesLabel(currentUser)}`;
       el("loginScreen").classList.add("hidden");
       el("appShell").classList.remove("hidden");
       el("loginError").textContent = "";
@@ -3714,7 +3748,7 @@
     }
 
     function activeSellerCount() {
-      return Math.max(1, (state.users || []).filter(user => user.active !== false && user.role === "Vendedor").length);
+      return Math.max(1, (state.users || []).filter(user => user.active !== false && hasRole(user, "Vendedor")).length);
     }
 
     function syncSalesPeopleWithSellers(monthKey = state.goalMonth || currentMonthKey()) {
@@ -4284,7 +4318,7 @@
         excelTable("Acessos cadastrados", ["Nome", "Usuario", "Perfil", "Status"], (state.users || []).map(user => [
           user.name || "",
           user.username || "",
-          user.role || "",
+          rolesLabel(user),
           user.active !== false ? "Ativo" : "Bloqueado"
         ])),
         "</body></html>"
@@ -4414,7 +4448,7 @@
       const currentMonth = state.goalMonth || currentMonthKey();
       const monthConfig = state.monthlyGoals?.[currentMonth] || state.goals || { salesGoal: 0 };
       const totalGoal = Number(monthConfig.salesGoal || 0);
-      const activeSellers = (state.users || []).filter(user => user.active !== false && user.role === "Vendedor");
+      const activeSellers = (state.users || []).filter(user => user.active !== false && hasRole(user, "Vendedor"));
       if (!activeSellers.length || !totalGoal) return;
       const individualGoal = totalGoal / activeSellers.length;
       activeSellers.forEach(user => {
@@ -4427,7 +4461,7 @@
       if (!user) return 0;
       if (user.sellerGoals?.[monthKey]) return Number(user.sellerGoals[monthKey] || 0);
       const monthConfig = state.monthlyGoals?.[monthKey] || state.goals || { salesGoal: 0 };
-      const sellers = (state.users || []).filter(item => item.active !== false && item.role === "Vendedor");
+      const sellers = (state.users || []).filter(item => item.active !== false && hasRole(item, "Vendedor"));
       return sellers.length ? Number(monthConfig.salesGoal || 0) / sellers.length : 0;
     }
 
@@ -4439,7 +4473,7 @@
 
     function renderSellerGoal() {
       if (!el("sellerGoalPanel")) return;
-      const seller = currentUser?.role === "Vendedor";
+      const seller = !hasRole(currentUser, "Administrador") && hasRole(currentUser, "Vendedor");
       el("sellerGoalPanel").classList.toggle("hidden", !seller);
       if (!seller) return;
       const sellerSales = salesForCurrentSeller();
@@ -4462,7 +4496,7 @@
     function buildSellerRanking() {
       const monthKey = state.rankingMonth || state.goalMonth || currentMonthKey();
       return (state.users || [])
-        .filter(user => user.active !== false && user.role === "Vendedor")
+        .filter(user => user.active !== false && hasRole(user, "Vendedor"))
         .map(user => {
           const sales = (state.sales || []).filter(sale => {
             if (saleMonthKey(sale) !== monthKey) return false;
@@ -4510,6 +4544,14 @@
       el("sellerRankingEmpty")?.classList.toggle("hidden", Boolean(ranking.length));
     }
 
+    function rolesLabel(userOrRoles = []) {
+      return normalizedRoles(userOrRoles).join(", ");
+    }
+
+    function hasRole(user, role) {
+      return normalizedRoles(user).includes(role);
+    }
+
     const permissionOptions = [
       ["sales", "Registrar venda"],
       ["cashFlow", "Fluxo de caixa"],
@@ -4532,10 +4574,31 @@
       return selected.length ? selected : ["sales"];
     }
 
+    function permissionsForRoles(roles = [], selected = []) {
+      const selectedRoles = normalizedRoles(roles);
+      if (selectedRoles.includes("Administrador")) return permissionOptions.map(([value]) => value);
+      const defaults = new Set();
+      selectedRoles.forEach(role => permissionsForRole(role).forEach(permission => defaults.add(permission)));
+      selected.forEach(permission => defaults.add(permission));
+      return [...defaults];
+    }
+
+    function selectedAccessRoles() {
+      const roles = [...document.querySelectorAll('input[name="accessRole"]:checked')].map(input => input.value);
+      return normalizedRoles(roles);
+    }
+
+    function setAccessRoles(roles = []) {
+      const selected = new Set(normalizedRoles(roles));
+      document.querySelectorAll('input[name="accessRole"]').forEach(input => {
+        input.checked = selected.has(input.value);
+      });
+    }
+
     function renderPermissionList(selected = []) {
       const list = el("permissionList");
       if (!list) return;
-      const checked = new Set(permissionsForRole(el("accessRole")?.value || "Vendedor", selected));
+      const checked = new Set(permissionsForRoles(selectedAccessRoles(), selected));
       list.innerHTML = permissionOptions.map(([value, label]) => `
         <label><input type="checkbox" value="${value}" ${checked.has(value) ? "checked" : ""}> ${label}</label>
       `).join("");
@@ -4588,7 +4651,7 @@
       const users = state.users || [];
       const active = users.filter(user => user.active !== false).length;
       const blocked = users.filter(user => user.active === false).length;
-      const admins = users.filter(user => user.role === "Administrador").length;
+      const admins = users.filter(user => hasRole(user, "Administrador")).length;
       const resets = users.filter(user => user.passwordResetRequested).length;
       box.innerHTML = `
         <article class="access-card"><span>Usuários ativos</span><strong>${active}</strong><small>Podem acessar o sistema.</small></article>
@@ -4607,7 +4670,7 @@
         <tr>
           <td>${escapeHtml(user.name)}</td>
           <td>${escapeHtml(user.username)}</td>
-          <td>${escapeHtml(user.role)}</td>
+          <td>${escapeHtml(rolesLabel(user))}</td>
           <td><span class="pill ${user.active !== false ? "ok" : "danger"}">${user.active !== false ? "Ativo" : "Bloqueado"}</span></td>
           <td>
             <div class="actions">
@@ -5354,7 +5417,8 @@ function renderAll() {
       el("accessPassword").value = "";
       el("saveAccessBtn").textContent = "Salvar";
       if (el("accessFormTitle")) el("accessFormTitle").textContent = "Novo acesso";
-      renderPermissionList(permissionsForRole(el("accessRole")?.value || "Vendedor"));
+      setAccessRoles(["Vendedor"]);
+      renderPermissionList(permissionsForRoles(["Vendedor"]));
     }
 
     function editAccess(id) {
@@ -5364,8 +5428,8 @@ function renderAll() {
       el("accessName").value = user.name || "";
       el("accessUsername").value = user.username || "";
       el("accessPassword").value = "";
-      el("accessRole").value = user.role || "Vendedor";
-      renderPermissionList(permissionsForRole(user.role, user.permissions || []));
+      setAccessRoles(user);
+      renderPermissionList(user.permissions || []);
       el("saveAccessBtn").textContent = "Atualizar";
       if (el("accessFormTitle")) el("accessFormTitle").textContent = "Editar acesso";
       el("accessForm").classList.remove("hidden");
@@ -5895,7 +5959,8 @@ loadProductIntoPricing(product);
       }
       const existing = state.users.find(user => user.id === id);
       const typedPassword = el("accessPassword").value;
-      const role = el("accessRole").value;
+      const roles = selectedAccessRoles();
+      const role = primaryRole(roles);
       const selectedPermissions = [...document.querySelectorAll("#permissionList input:checked")].map(input => input.value);
       if (existing && normalizeUsername(existing.username) !== normalizeUsername(username)) {
         clearPasswordOverride(existing.username);
@@ -5906,10 +5971,11 @@ loadProductIntoPricing(product);
         username: normalizeUsername(username),
         password: typedPassword || effectivePasswordForUser(existing) || "acesso123",
         role,
+        roles,
         active: existing?.active ?? true,
         mustChangePassword: typedPassword ? false : (existing?.mustChangePassword ?? true),
         passwordResetRequested: existing?.passwordResetRequested || false,
-        permissions: permissionsForRole(role, selectedPermissions)
+        permissions: permissionsForRoles(roles, selectedPermissions)
       };
       clearPasswordOverride(user.username);
       const index = state.users.findIndex(item => item.id === id);
@@ -5980,10 +6046,9 @@ loadProductIntoPricing(product);
       clearAccessForm();
       el("accessForm").classList.add("hidden");
     });
-    el("accessRole")?.addEventListener("change", () => {
-      const selectedPermissions = [...document.querySelectorAll("#permissionList input:checked")].map(input => input.value);
-      renderPermissionList(permissionsForRole(el("accessRole").value, selectedPermissions));
-    });
+    document.querySelectorAll('input[name="accessRole"]').forEach(input => input.addEventListener("change", () => {
+      renderPermissionList(permissionsForRoles(selectedAccessRoles()));
+    }));
     el("addSaleItemBtn").addEventListener("click", () => addSaleItem());
     el("cashFlowDateFilter")?.addEventListener("change", () => {
       renderCashFlow();
