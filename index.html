@@ -2603,7 +2603,7 @@
           const liveUser = currentUser ? state.users.find(user => user.id === currentUser.id && user.active !== false) : null;
           if (liveUser) {
             currentUser = effectiveUser(liveUser);
-            el("currentUserChip").textContent = `${currentUser.name || currentUser.username} Â· ${currentUser.role}`;
+            el("currentUserChip").textContent = `${currentUser.name || currentUser.username} · ${currentUser.role}`;
             renderAll();
             applyProfileSettings();
             switchView(currentViewName() || firstAccessibleView());
