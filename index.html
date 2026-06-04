@@ -775,10 +775,14 @@
 
     .sale-row {
       display: grid;
-      grid-template-columns: minmax(180px, 1fr) 110px 120px 42px;
-      gap: 8px;
+      grid-template-columns: minmax(220px, 1fr) 92px 120px 42px;
+      gap: 10px;
       align-items: end;
       margin-bottom: 10px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: #ffffff;
     }
 
     .sale-row label {
@@ -794,14 +798,145 @@
     }
 
     .sale-total {
-      border-top: 1px solid var(--line);
       margin-top: 12px;
-      padding-top: 14px;
+      padding: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 1.1rem;
       font-weight: 800;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #0d4f78, #079fe3);
+      color: #ffffff;
+    }
+
+    #salesView .panel-body {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(330px, .85fr);
+      gap: 14px;
+      align-items: start;
+      background: #f8fcfe;
+    }
+
+    #salesView .seller-goal,
+    #salesView .panel-body > h2 {
+      grid-column: 1 / -1;
+    }
+
+    #salesView .panel-body > h2 {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      font-size: 1.35rem;
+      color: var(--ink);
+    }
+
+    #salesView .panel-body > h2::after {
+      content: "Registre cliente, produtos e pagamento em um fluxo limpo.";
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .92rem;
+      font-weight: 500;
+    }
+
+    #salesView .panel-body > label,
+    #salesView .panel-body > .actions:has(#scanSaleBarcode),
+    #saleBarcodeReader,
+    #salesView .grid-2:has(#customerName),
+    #saleItems,
+    #addSaleItemBtn {
+      grid-column: 1;
+    }
+
+    #salesView .grid-2:has(#discountPercent),
+    #salesView .grid-2:has(#paymentMethod),
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard,
+    #cashPaymentCard,
+    #salesView .sale-total,
+    #saleNotice,
+    #salesView .panel-body > .actions:has(#finishSaleBtn) {
+      grid-column: 2;
+    }
+
+    #salesView .panel-body > label,
+    #salesView .grid-2:has(#customerName),
+    #saleItems,
+    #salesView .grid-2:has(#discountPercent),
+    #salesView .grid-2:has(#paymentMethod),
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard,
+    #cashPaymentCard,
+    #saleNotice,
+    #salesView .panel-body > .actions:has(#finishSaleBtn) {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #ffffff;
+      box-shadow: 0 10px 24px rgba(9, 42, 62, .06);
+    }
+
+    #salesView .grid-2:has(#discountPercent) {
+      margin-top: 0 !important;
+    }
+
+    #salesView .grid-2:has(#paymentMethod),
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard,
+    #cashPaymentCard {
+      margin-top: 0 !important;
+    }
+
+    #salesView .panel-body > .actions:has(#scanSaleBarcode) {
+      margin: -8px 0 0 !important;
+      padding: 0;
+    }
+
+    #saleBarcodeReader.sale-reader,
+    #saleBarcodeReader {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin-bottom: 0 !important;
+    }
+
+    #saleItems {
+      min-height: 92px;
+      display: grid;
+      gap: 10px;
+    }
+
+    #saleItems:empty::before {
+      content: "Nenhum item adicionado.";
+      color: var(--muted);
+      display: grid;
+      place-items: center;
+      min-height: 68px;
+      border: 1px dashed var(--line);
+      border-radius: 12px;
+      background: #f8fcfe;
+    }
+
+    #addSaleItemBtn {
+      width: fit-content;
+    }
+
+    #salesView .panel-body > .actions:has(#finishSaleBtn) {
+      margin-top: 0 !important;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    #finishSaleBtn,
+    #clearSaleBtn {
+      width: 100%;
     }
 
     .notice {
@@ -993,6 +1128,27 @@
     .pricing-status.danger { color: #991b1b; background: #fee2e2; border: 1px solid #fca5a5; }
     @media (max-width: 900px) {
       .pricing-layout, .pricing-results, .pricing-dashboard { grid-template-columns: 1fr; }
+      #salesView .panel-body {
+        grid-template-columns: 1fr;
+      }
+      #salesView .panel-body > label,
+      #salesView .panel-body > .actions:has(#scanSaleBarcode),
+      #saleBarcodeReader,
+      #salesView .grid-2:has(#customerName),
+      #saleItems,
+      #addSaleItemBtn,
+      #salesView .grid-2:has(#discountPercent),
+      #salesView .grid-2:has(#paymentMethod),
+      #creditPaymentCard,
+      #creditInstallmentCard,
+      #creditFeeBreakdownCard,
+      #creditTotalCard,
+      #cashPaymentCard,
+      #salesView .sale-total,
+      #saleNotice,
+      #salesView .panel-body > .actions:has(#finishSaleBtn) {
+        grid-column: 1;
+      }
     }
 
     @media (max-width: 1050px) {
