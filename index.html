@@ -925,6 +925,33 @@
       box-shadow: 0 10px 24px rgba(9, 42, 62, .045);
     }
 
+    #salesView .sale-product-card,
+    #salesView .grid-2:has(#customerName),
+    #saleItems,
+    #salesView .grid-2:has(#discountPercent),
+    #salesView .grid-2:has(#paymentMethod),
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard,
+    #cashPaymentCard {
+      background: var(--brand);
+      border-color: rgba(7, 159, 227, .8);
+      box-shadow: 0 10px 24px rgba(7, 159, 227, .14);
+    }
+
+    #salesView .sale-product-card label,
+    #salesView .grid-2:has(#customerName) label,
+    #salesView .grid-2:has(#discountPercent) label,
+    #salesView .grid-2:has(#paymentMethod) label,
+    #creditPaymentCard label,
+    #creditInstallmentCard label,
+    #creditFeeBreakdownCard label,
+    #creditTotalCard label,
+    #cashPaymentCard label {
+      color: rgba(255, 255, 255, .9);
+    }
+
     #salesView .sale-product-card::before,
     #salesView .grid-2:has(#customerName)::before,
     #saleItems::before,
@@ -941,6 +968,16 @@
       font-weight: 850;
       letter-spacing: .04em;
       text-transform: uppercase;
+    }
+
+    #salesView .sale-product-card::before,
+    #salesView .grid-2:has(#customerName)::before,
+    #saleItems::before,
+    #salesView .grid-2:has(#discountPercent)::before,
+    #salesView .grid-2:has(#paymentMethod)::before,
+    #creditPaymentCard::before,
+    #cashPaymentCard::before {
+      color: #ffffff;
     }
 
     #salesView .sale-product-card::before { content: "1. Produto"; }
