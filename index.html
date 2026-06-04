@@ -816,13 +816,13 @@
 
     .sale-row {
       display: grid;
-      grid-template-columns: minmax(220px, 1fr) 92px 120px 42px;
-      gap: 10px;
+      grid-template-columns: minmax(220px, 1fr) 88px 116px 38px;
+      gap: 8px;
       align-items: end;
-      margin-bottom: 10px;
-      padding: 12px;
-      border: 1px solid var(--line);
-      border-radius: 12px;
+      margin-bottom: 0;
+      padding: 10px;
+      border: 1px solid rgba(216, 231, 239, .9);
+      border-radius: 10px;
       background: #fbfdfe;
     }
 
@@ -831,32 +831,36 @@
     }
 
     .sale-row button {
-      width: 42px;
-      height: 44px;
+      width: 38px;
+      height: 42px;
       min-height: 42px;
       padding: 0;
       align-self: end;
     }
 
     .sale-total {
-      margin-top: 12px;
-      padding: 16px;
+      margin-top: 0;
+      padding: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 1.1rem;
+      font-size: 1.16rem;
       font-weight: 800;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #0d4f78, #079fe3);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 86% 20%, rgba(104, 216, 255, .34), transparent 34%),
+        linear-gradient(135deg, #0b2638, #0d4f78 62%, #079fe3);
       color: #ffffff;
     }
 
     #salesView .panel-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(330px, .85fr);
-      gap: 14px;
+      grid-template-columns: minmax(0, 1.5fr) minmax(340px, .78fr);
+      gap: 18px;
       align-items: start;
-      background: #f8fcfe;
+      background:
+        linear-gradient(90deg, rgba(255, 255, 255, .72), rgba(255, 255, 255, .22)),
+        #f4f9fc;
     }
 
     #salesView .seller-goal,
@@ -874,7 +878,7 @@
     }
 
     #salesView .panel-body > h2::after {
-      content: "Registre cliente, produtos e pagamento em um fluxo limpo.";
+      content: "Atendimento na esquerda, fechamento da venda na direita.";
       display: block;
       margin-top: 4px;
       color: var(--muted);
@@ -914,13 +918,46 @@
     #creditFeeBreakdownCard,
     #creditTotalCard,
     #cashPaymentCard,
-    #saleNotice,
     #salesView .panel-body > .actions:has(#finishSaleBtn) {
-      padding: 16px;
-      border: 1px solid var(--line);
-      border-radius: 14px;
+      position: relative;
+      padding: 42px 16px 16px;
+      border: 1px solid rgba(216, 231, 239, .92);
+      border-radius: 12px;
       background: #ffffff;
-      box-shadow: 0 10px 24px rgba(9, 42, 62, .06);
+      box-shadow: 0 10px 24px rgba(9, 42, 62, .045);
+    }
+
+    #salesView .panel-body > label::before,
+    #salesView .grid-2:has(#customerName)::before,
+    #saleItems::before,
+    #salesView .grid-2:has(#discountPercent)::before,
+    #salesView .grid-2:has(#paymentMethod)::before,
+    #creditPaymentCard::before,
+    #cashPaymentCard::before,
+    #salesView .panel-body > .actions:has(#finishSaleBtn)::before {
+      position: absolute;
+      top: 14px;
+      left: 16px;
+      color: var(--brand-2);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    #salesView .panel-body > label::before { content: "1. Produto"; }
+    #salesView .grid-2:has(#customerName)::before { content: "2. Cliente"; }
+    #saleItems::before { content: "3. Itens da venda"; }
+    #salesView .grid-2:has(#discountPercent)::before { content: "4. Desconto"; }
+    #salesView .grid-2:has(#paymentMethod)::before,
+    #creditPaymentCard::before,
+    #cashPaymentCard::before { content: "5. Pagamento"; }
+    #salesView .panel-body > .actions:has(#finishSaleBtn)::before { content: "6. Finalização"; }
+
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard {
+      padding-top: 16px !important;
     }
 
     #salesView .grid-2:has(#discountPercent) {
@@ -937,8 +974,9 @@
     }
 
     #salesView .panel-body > .actions:has(#scanSaleBarcode) {
-      margin: -8px 0 0 !important;
+      margin: -10px 0 0 !important;
       padding: 0;
+      justify-content: flex-end;
     }
 
     #saleBarcodeReader.sale-reader,
@@ -966,13 +1004,22 @@
     }
 
     #addSaleItemBtn {
-      width: fit-content;
+      width: 100%;
+      min-height: 46px;
+      border-style: dashed;
+      color: var(--brand-2);
     }
 
     #salesView .panel-body > .actions:has(#finishSaleBtn) {
       margin-top: 0 !important;
       display: grid;
       grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    #saleNotice {
+      margin: 0;
+      padding: 0 2px;
     }
 
     #finishSaleBtn,
