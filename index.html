@@ -1328,6 +1328,31 @@
       box-shadow: none;
     }
 
+    #salesView .grid-2:has(#discountPercent),
+    #salesView .grid-2:has(#paymentMethod) {
+      align-items: end;
+      gap: 8px;
+      min-height: 124px;
+    }
+
+    #salesView .grid-2:has(#discountPercent) label,
+    #salesView .grid-2:has(#paymentMethod) label {
+      margin-bottom: 0;
+      font-size: .68rem;
+      line-height: 1.25;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+
+    #salesView .grid-2:has(#discountPercent) input,
+    #salesView .grid-2:has(#paymentMethod) select {
+      min-height: 46px;
+      max-width: 100%;
+      padding: 8px 10px;
+      font-size: .82rem;
+      font-weight: 750;
+    }
+
     #salesView .sale-total {
       grid-area: total;
       display: grid;
