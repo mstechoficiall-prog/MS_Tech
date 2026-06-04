@@ -971,10 +971,18 @@
       margin-top: 0 !important;
     }
 
+    #salesView .sale-barcode-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+    }
+
     #salesView .sale-product-card .actions:has(#scanSaleBarcode) {
-      margin: 2px 0 0 !important;
+      margin: 0 !important;
       padding: 0;
       justify-content: flex-end;
+      flex-wrap: nowrap;
     }
 
     #salesView .sale-product-card label {
@@ -985,6 +993,7 @@
     #saleBarcodeReader {
       width: 100% !important;
       max-width: 100% !important;
+      margin-top: 10px !important;
       margin-bottom: 0 !important;
     }
 
@@ -1219,6 +1228,16 @@
       .pricing-layout, .pricing-results, .pricing-dashboard { grid-template-columns: 1fr; }
       #salesView .panel-body {
         grid-template-columns: 1fr;
+      }
+      #salesView .sale-barcode-row {
+        grid-template-columns: 1fr;
+      }
+      #salesView .sale-product-card .actions:has(#scanSaleBarcode) {
+        justify-content: stretch;
+      }
+      #scanSaleBarcode,
+      #stopSaleBarcode {
+        width: 100%;
       }
       #salesView .sale-product-card,
       #salesView .grid-2:has(#customerName),
@@ -1684,12 +1703,14 @@
             <h2 style="padding:0 0 12px;border:0;background:transparent;">Registrar venda</h2>
 
             <div class="sale-product-card">
-              <label>Leitor de código de barras
-                <input id="saleBarcode" list="barcodeHistory" placeholder="Passe o leitor aqui">
-              </label>
-              <div class="actions" style="margin:2px 0 0;">
-                <button type="button" class="secondary" id="scanSaleBarcode">Ler pela câmera</button>
-                <button type="button" class="secondary hidden" id="stopSaleBarcode">Parar leitura</button>
+              <div class="sale-barcode-row">
+                <label>Leitor de código de barras
+                  <input id="saleBarcode" list="barcodeHistory" placeholder="Passe o leitor aqui">
+                </label>
+                <div class="actions">
+                  <button type="button" class="secondary" id="scanSaleBarcode">Ler pela câmera</button>
+                  <button type="button" class="secondary hidden" id="stopSaleBarcode">Parar leitura</button>
+                </div>
               </div>
               <div id="saleBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:0;"></div>
             </div>
