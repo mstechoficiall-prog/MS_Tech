@@ -858,7 +858,7 @@
 
     #salesView .panel-body {
       display: grid;
-      grid-template-columns: minmax(0, 1.65fr) minmax(380px, .85fr);
+      grid-template-columns: minmax(0, 1fr);
       gap: 18px;
       align-items: start;
       background:
@@ -881,7 +881,7 @@
     }
 
     #salesView .panel-body > h2::after {
-      content: "Atendimento na esquerda, fechamento da venda na direita.";
+      content: "Fluxo em tela cheia para registrar cliente, itens, pagamento e finalização.";
       display: block;
       margin-top: 4px;
       color: var(--muted);
@@ -894,10 +894,7 @@
     #saleBarcodeReader,
     #salesView .grid-2:has(#customerName),
     #saleItems,
-    #addSaleItemBtn {
-      grid-column: 1;
-    }
-
+    #addSaleItemBtn,
     #salesView .grid-2:has(#discountPercent),
     #salesView .grid-2:has(#paymentMethod),
     #creditPaymentCard,
@@ -908,7 +905,7 @@
     #salesView .sale-total,
     #saleNotice,
     #salesView .panel-body > .actions:has(#finishSaleBtn) {
-      grid-column: 2;
+      grid-column: 1;
     }
 
     #salesView .panel-body > label,
