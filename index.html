@@ -678,6 +678,25 @@
       gap: 12px;
     }
 
+    .product-entry-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .product-entry-head h2 {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+
+    .product-entry-actions {
+      justify-content: flex-end;
+      flex-wrap: nowrap;
+    }
+
     .product-entry-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1902,6 +1921,9 @@
     @media (max-width: 640px) {
       .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid, .product-entry-grid { grid-template-columns: 1fr; }
       .product-entry-grid .barcode-field { grid-column: auto; }
+      .product-entry-head { align-items: stretch; flex-direction: column; }
+      .product-entry-actions { justify-content: stretch; }
+      .product-entry-actions button { flex: 1 1 0; }
       #historyPaymentSummary { grid-template-columns: 1fr; }
       .access-grid { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
@@ -2079,8 +2101,14 @@
 
         <section id="stockEntryView" class="hidden">
           <div class="panel-body">
-            <h2 style="padding:0 0 12px;border:0;background:transparent;">Entrada de produto</h2>
             <form id="productForm" class="product-entry-form">
+              <div class="product-entry-head">
+                <h2>Entrada de produto</h2>
+                <div class="actions product-entry-actions">
+                  <button type="submit" id="saveProductBtn">Salvar produto</button>
+                  <button type="button" class="secondary" id="clearProductBtn">Novo</button>
+                </div>
+              </div>
               <input type="hidden" id="productId">
 
               <div class="product-entry-grid">
@@ -2128,10 +2156,6 @@
                 </label>
               </div>
               <div id="productBarcodeReader" class="hidden"></div>
-              <div class="actions">
-                <button type="submit" id="saveProductBtn">Salvar produto</button>
-                <button type="button" class="secondary" id="clearProductBtn">Novo</button>
-              </div>
             </form>
           </div>
         </section>
