@@ -1135,6 +1135,9 @@
       width: min(160px, 100%);
       aspect-ratio: 1 / 1;
       object-fit: contain;
+      padding: 12px;
+      border-radius: 4px;
+      background: #020b12;
     }
 
     #salesView .sale-product-card {
@@ -1230,6 +1233,8 @@
       grid-area: list;
       align-self: end;
       justify-self: stretch;
+      width: auto;
+      max-width: calc(100% - 12px);
       margin: 0 6px 6px;
       min-height: 40px;
       border-radius: 4px;
@@ -4424,8 +4429,11 @@
       }
       el("saleBarcode")?.toggleAttribute("disabled", !open);
       el("scanSaleBarcode")?.toggleAttribute("disabled", !open);
+      const notice = el("saleNotice");
+      if (open && notice && /^Caixa /.test(notice.textContent || "")) {
+        notice.textContent = "";
+      }
       if (!open && !el("salesView")?.classList.contains("hidden")) {
-        const notice = el("saleNotice");
         if (notice) notice.textContent = flow.closed
           ? "Caixa fechado. Abra um novo caixa para registrar vendas."
           : flow.paused
