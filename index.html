@@ -2362,10 +2362,6 @@
             <form id="productForm" class="product-entry-form">
               <div class="product-entry-head">
                 <h2>Entrada de produto</h2>
-                <div class="actions product-entry-actions">
-                  <button type="button" class="secondary" id="clearProductBtn">Limpar</button>
-                  <button type="submit" id="saveProductBtn">Salvar produto</button>
-                </div>
               </div>
               <input type="hidden" id="productId">
 
@@ -2412,6 +2408,10 @@
                 <label>Estoque mínimo
                   <input id="minStock" type="number" min="0" step="1" value="5">
                 </label>
+              </div>
+              <div class="actions product-entry-actions">
+                <button type="button" class="secondary" id="clearProductBtn">Limpar</button>
+                <button type="submit" id="saveProductBtn">Salvar produto</button>
               </div>
               <div id="productBarcodeReader" class="hidden"></div>
             </form>
