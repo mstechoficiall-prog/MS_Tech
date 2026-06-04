@@ -1341,31 +1341,68 @@
     }
 
     #salesView .grid-2:has(#discountPercent),
-    #salesView .grid-2:has(#paymentMethod) {
+    #salesView .grid-2:has(#paymentMethod),
+    #cashPaymentCard {
       align-items: start;
       gap: 8px;
       min-height: 124px;
     }
 
+    #salesView .grid-2:has(#customerName) label,
     #salesView .grid-2:has(#discountPercent) label,
-    #salesView .grid-2:has(#paymentMethod) label {
+    #salesView .grid-2:has(#paymentMethod) label,
+    #creditPaymentCard label,
+    #creditInstallmentCard label,
+    #creditFeeBreakdownCard label,
+    #creditTotalCard label,
+    #cashPaymentCard label {
+      display: grid;
+      grid-template-rows: 46px minmax(46px, 1fr);
+      gap: 0;
       margin-bottom: 0;
+      overflow: hidden;
+      border-radius: 4px;
+      background: #ffffff;
+      color: #0d4f78;
       font-size: .68rem;
       line-height: 1.25;
       word-break: normal;
       overflow-wrap: anywhere;
     }
 
-    #salesView .grid-2:has(#discountPercent) label {
-      grid-template-rows: 3.75em 46px;
-      align-content: start;
+    #salesView .grid-2:has(#customerName) label > span,
+    #salesView .grid-2:has(#discountPercent) label > span,
+    #salesView .grid-2:has(#paymentMethod) label > span,
+    #creditPaymentCard label > span,
+    #creditInstallmentCard label > span,
+    #creditFeeBreakdownCard label > span,
+    #creditTotalCard label > span,
+    #cashPaymentCard label > span {
+      display: flex;
+      align-items: center;
+      padding: 5px 8px;
+      background: #0d4f78;
+      color: #ffffff;
+      font-weight: 850;
+      text-transform: uppercase;
     }
 
+    #salesView .grid-2:has(#customerName) input,
     #salesView .grid-2:has(#discountPercent) input,
-    #salesView .grid-2:has(#paymentMethod) select {
+    #salesView .grid-2:has(#paymentMethod) select,
+    #creditPaymentCard select,
+    #creditInstallmentCard select,
+    #creditInstallmentCard input,
+    #creditFeeBreakdownCard input,
+    #creditTotalCard input,
+    #cashPaymentCard input {
       min-height: 46px;
       max-width: 100%;
+      border: 0;
+      border-radius: 0;
       padding: 8px 10px;
+      background: #ffffff;
+      color: var(--ink);
       font-size: .82rem;
       font-weight: 750;
     }
@@ -2189,10 +2226,10 @@
               <strong id="saleItemTotal">R$ 0,00</strong>
             </div>
             <div class="grid-2" style="margin-bottom:12px;">
-              <label>Nome do Cliente
+              <label><span>Nome do Cliente</span>
                 <input id="customerName" list="customerNameHistory" placeholder="Nome do cliente">
               </label>
-              <label>Celular
+              <label><span>Celular</span>
                 <input id="customerPhone" list="customerPhoneHistory" inputmode="numeric" maxlength="11" placeholder="11999999999">
               </label>
             </div>
@@ -2200,15 +2237,15 @@
 
             <button type="button" class="secondary" id="addSaleItemBtn">Adicionar item</button>
             <div class="grid-2" style="margin-top:14px;">
-              <label>Desconto (%)
+              <label><span>Desconto (%)</span>
                 <input id="discountPercent" type="number" min="0" max="10" step="0.01" value="0" placeholder="0 a 10">
               </label>
-              <label>Valor do desconto aplicado
+              <label><span>Valor do desconto aplicado</span>
                 <input id="discountValue" type="text" value="R$ 0,00" readonly>
               </label>
             </div>
             <div class="grid-2" style="margin-top:2px;">
-              <label>Forma de pagamento
+              <label><span>Forma de pagamento</span>
                 <select id="paymentMethod">
                   <option>Dinheiro</option>
                   <option>Pix</option>
@@ -2219,13 +2256,13 @@
               </label>
             </div>
             <div class="grid-2 hidden" id="creditPaymentCard" style="margin-top:2px;">
-              <label>Tipo do crédito
+              <label><span>Tipo do crédito</span>
                 <select id="creditType">
                   <option value="avista">À vista</option>
                   <option value="parcelado">Parcelado</option>
                 </select>
               </label>
-              <label>Bandeira do cartão
+              <label><span>Bandeira do cartão</span>
                 <select id="creditBrand">
                   <option value="Visa">Visa</option>
                   <option value="MasterCard">MasterCard</option>
@@ -2236,7 +2273,7 @@
               </label>
             </div>
             <div class="grid-2 hidden" id="creditInstallmentCard" style="margin-top:2px;">
-              <label>Quantidade de parcelas
+              <label><span>Quantidade de parcelas</span>
                 <select id="creditInstallments">
                   <option value="2">2x</option>
                   <option value="3">3x</option>
@@ -2257,31 +2294,31 @@
                   <option value="18">18x</option>
                 </select>
               </label>
-              <label>Taxa total Mercado Pago
+              <label><span>Taxa total Mercado Pago</span>
                 <input id="creditInterestValue" type="text" value="0,00% · R$ 0,00" readonly>
               </label>
             </div>
             <div class="grid-2 hidden" id="creditFeeBreakdownCard" style="margin-top:2px;">
-              <label>Taxa por venda
+              <label><span>Taxa por venda</span>
                 <input id="creditSaleFeeValue" type="text" value="0,00% · R$ 0,00" readonly>
               </label>
-              <label>Juros do parcelamento
+              <label><span>Juros do parcelamento</span>
                 <input id="creditInstallmentInterestValue" type="text" value="0,00% · R$ 0,00" readonly>
               </label>
             </div>
             <div class="grid-2 hidden" id="creditTotalCard" style="margin-top:2px;">
-              <label>Valor da parcela
+              <label><span>Valor da parcela</span>
                 <input id="creditInstallmentValue" type="text" value="R$ 0,00" readonly>
               </label>
-              <label>Total com juros
+              <label><span>Total com juros</span>
                 <input id="creditTotalWithInterest" type="text" value="R$ 0,00" readonly>
               </label>
             </div>
             <div class="grid-2" id="cashPaymentCard" style="margin-top:2px;">
-              <label>Valor recebido em dinheiro
+              <label><span>Valor recebido em dinheiro</span>
                 <input id="cashReceived" type="number" min="0" step="0.01" placeholder="Informe o valor entregue pelo cliente">
               </label>
-              <label>Troco
+              <label><span>Troco</span>
                 <input id="cashChange" type="text" value="R$ 0,00" readonly>
               </label>
             </div>
