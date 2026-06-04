@@ -225,6 +225,38 @@
       cursor: not-allowed;
     }
 
+    .password-field {
+      position: relative;
+      display: block;
+    }
+
+    .password-field input {
+      padding-right: 48px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 6px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 36px;
+      min-height: 32px;
+      height: 32px;
+      padding: 0;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      box-shadow: none;
+      line-height: 1;
+    }
+
+    .password-toggle:hover {
+      background: #eef2f6;
+      color: var(--ink);
+    }
+
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -842,6 +874,7 @@
   </style>
 
 <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <section class="login-screen" id="loginScreen">
@@ -853,7 +886,10 @@
           <input id="loginUser" autocomplete="username" required placeholder="Digite seu usuário">
         </label>
         <label>Senha
-          <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Digite sua senha">
+          <span class="password-field">
+            <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Digite sua senha">
+            <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+          </span>
         </label>
         <button type="submit">Entrar</button>
         <div class="login-error" id="loginError"></div>
@@ -869,10 +905,16 @@
       <p>Por segurança, altere a senha de primeiro acesso antes de usar o sistema.</p>
       <form id="changePasswordForm">
         <label>Nova senha
-          <input id="newPasswordInput" type="password" required minlength="6" placeholder="Digite a nova senha">
+          <span class="password-field">
+            <input id="newPasswordInput" type="password" required minlength="6" placeholder="Digite a nova senha">
+            <button class="password-toggle" type="button" data-password-toggle="newPasswordInput" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+          </span>
         </label>
         <label>Confirmar nova senha
-          <input id="confirmPasswordInput" type="password" required minlength="6" placeholder="Confirme a nova senha">
+          <span class="password-field">
+            <input id="confirmPasswordInput" type="password" required minlength="6" placeholder="Confirme a nova senha">
+            <button class="password-toggle" type="button" data-password-toggle="confirmPasswordInput" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+          </span>
         </label>
         <div class="actions"><button type="submit">Salvar nova senha</button></div>
         <div class="notice" id="changePasswordNotice"></div>
@@ -1582,7 +1624,10 @@
                   <input id="accessUsername" required placeholder="Ex.: vendedor01">
                 </label>
                 <label>Senha
-                  <input id="accessPassword" type="password" placeholder="Deixe em branco para usar acesso123">
+                  <span class="password-field">
+                    <input id="accessPassword" type="password" placeholder="Deixe em branco para usar acesso123">
+                    <button class="password-toggle" type="button" data-password-toggle="accessPassword" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+                  </span>
                 </label>
                 <label>Perfil
                   <select id="accessRole">
@@ -1651,11 +1696,25 @@
   <script>
     const STORAGE_KEY = "gestao-empresa-v1";
     const SESSION_KEY = "gestao-empresa-session";
+    const SUPABASE_URL = "https://pufeqvrenpyohzjebcpl.supabase.co";
+    const SUPABASE_ANON_KEY = "sb_publishable_SppB5tYqCTHDh-CnFCxg7Q_NFLd6NwE";
     const FIRST_ACCESS_PASSWORD = "acesso123";
     const LEGACY_ADMIN_PASSWORD = "admin123";
     const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
     const dateFmt = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
     const makeId = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+    const useRemoteStorage = Boolean(
+      window.supabase &&
+      SUPABASE_URL.startsWith("https://") &&
+      !SUPABASE_URL.includes("SEU_PROJECT_REF") &&
+      SUPABASE_ANON_KEY &&
+      !SUPABASE_ANON_KEY.includes("SUA_CHAVE")
+    );
+    const supabaseClient = useRemoteStorage ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+    let remoteSaveTimer = null;
+    let remoteSaveInProgress = false;
+    let remoteSavePending = false;
+    let remoteSavePromise = null;
 
     const seed = {
       products: [
@@ -1792,8 +1851,252 @@
     function saveState() {
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        queueRemoteSave();
       } catch (error) {
         alert("Não foi possível salvar os dados neste navegador. Verifique o espaço disponível ou exporte um backup.");
+      }
+    }
+
+    function normalizeRemoteState(loaded = {}) {
+      loaded.products ||= [];
+      loaded.sales ||= [];
+      loaded.expenses ||= [];
+      loaded.fixedExpenses ||= [];
+      loaded.monthlyExpenses ||= {};
+      loaded.fixedExpenseMonths ||= {};
+      loaded.cashFlows ||= {};
+      loaded.expenseMonth ||= currentMonthKey();
+      loaded.historyMonth ||= currentMonthKey();
+      loaded.financialMonth ||= currentMonthKey();
+      loaded.goalMonth ||= currentMonthKey();
+      loaded.monthlyGoals ||= {};
+      loaded.users ||= [];
+      if (!loaded.users.length) {
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+      }
+      loaded.goals ||= loaded.monthlyGoals[loaded.goalMonth] || { salesGoal: 0, salesPeople: 1 };
+      loaded.monthlyGoals[loaded.goalMonth] ||= loaded.goals;
+      loaded.pricingSettings ||= {};
+      loaded.pricingSettings.cardFee = normalizePercentValue(loaded.pricingSettings.cardFee || 4.98) || 4.98;
+      loaded.pricingSettings.taxes = normalizePercentValue(loaded.pricingSettings.taxes || 6) || 6;
+      loaded.pricingSettings.operational = normalizePercentValue(loaded.pricingSettings.operational || 15) || 15;
+      loaded.pricingSettings.margin = normalizeMarginValue(loaded.pricingSettings.margin);
+      loaded.pricingProducts ||= [];
+      loaded.pricingHistory ||= [];
+      return loaded;
+    }
+
+    function rowsToData(rows = []) {
+      return rows.map(row => row.data || {}).filter(Boolean);
+    }
+
+    function groupMonthlyExpenses(expenses = []) {
+      return expenses.reduce((acc, expense) => {
+        const month = expense.month || currentMonthKey();
+        const clean = { ...expense };
+        delete clean.scope;
+        delete clean.month;
+        acc[month] ||= [];
+        acc[month].push(clean);
+        return acc;
+      }, {});
+    }
+
+    async function readRemoteTable(table) {
+      const { data, error } = await supabaseClient.from(table).select("*");
+      if (error) throw error;
+      return data || [];
+    }
+
+    async function writeRemoteTable(table, rows) {
+      const normalizedRows = rows.filter(row => row.id);
+      const { data: existing, error: readError } = await supabaseClient.from(table).select("id");
+      if (readError) throw readError;
+
+      const nextIds = normalizedRows.map(row => row.id);
+      const existingIds = (existing || []).map(row => row.id);
+      const deleteIds = existingIds.filter(id => !nextIds.includes(id));
+
+      if (deleteIds.length) {
+        const { error } = await supabaseClient.from(table).delete().in("id", deleteIds);
+        if (error) throw error;
+      }
+      if (normalizedRows.length) {
+        const { error } = await supabaseClient.from(table).upsert(normalizedRows, { onConflict: "id" });
+        if (error) throw error;
+      }
+    }
+
+    function stateToRemoteRows() {
+      const monthlyExpenses = Object.entries(state.monthlyExpenses || {}).flatMap(([month, expenses]) =>
+        (expenses || []).map(expense => ({
+          id: `monthly:${month}:${expense.id}`,
+          data: { ...expense, scope: "monthly", month }
+        }))
+      );
+      const fixedExpenses = (state.fixedExpenses || []).map(expense => ({
+        id: `fixed:${expense.id}`,
+        data: { ...expense, scope: "fixed" }
+      }));
+      const appMeta = {
+        goalMonth: state.goalMonth || currentMonthKey(),
+        expenseMonth: state.expenseMonth || currentMonthKey(),
+        historyMonth: state.historyMonth || currentMonthKey(),
+        financialMonth: state.financialMonth || currentMonthKey(),
+        passwordOverrides: state.passwordOverrides || {},
+        fixedExpenseMonths: state.fixedExpenseMonths || {}
+      };
+
+      return {
+        users: (state.users || []).map(item => ({ id: item.id, data: item })),
+        products: (state.products || []).map(item => ({ id: item.id, data: item })),
+        sales: (state.sales || []).map(item => ({ id: item.id, data: item })),
+        expenses: [...fixedExpenses, ...monthlyExpenses],
+        goals: Object.entries(state.monthlyGoals || {}).map(([month, data]) => ({ id: month, month, data })),
+        cash_flows: Object.entries(state.cashFlows || {}).map(([date, data]) => ({ id: date, date, data })),
+        pricing_settings: [
+          { id: "default", data: state.pricingSettings || {} },
+          { id: "app_meta", data: appMeta }
+        ],
+        pricing_products: (state.pricingProducts || []).map(item => ({ id: item.id, data: item })),
+        pricing_history: (state.pricingHistory || []).map(item => ({ id: item.historyId || item.id, data: item }))
+      };
+    }
+
+    function remoteRowsToState(tables) {
+      const pricingSettingsRows = tables.pricing_settings || [];
+      const pricingSettings = pricingSettingsRows.find(row => row.id === "default")?.data || {};
+      const appMeta = pricingSettingsRows.find(row => row.id === "app_meta")?.data || {};
+      const expenseItems = rowsToData(tables.expenses);
+      const fixedExpenses = expenseItems
+        .filter(item => item.scope === "fixed")
+        .map(item => {
+          const clean = { ...item };
+          delete clean.scope;
+          return clean;
+        });
+      const monthlyExpenses = groupMonthlyExpenses(expenseItems.filter(item => item.scope === "monthly"));
+      const monthlyGoals = (tables.goals || []).reduce((acc, row) => {
+        acc[row.month || row.id] = row.data || {};
+        return acc;
+      }, {});
+      const cashFlows = (tables.cash_flows || []).reduce((acc, row) => {
+        acc[row.date || row.id] = row.data || {};
+        return acc;
+      }, {});
+
+      return normalizeRemoteState({
+        products: rowsToData(tables.products),
+        sales: rowsToData(tables.sales),
+        users: rowsToData(tables.users),
+        fixedExpenses,
+        monthlyExpenses,
+        fixedExpenseMonths: appMeta.fixedExpenseMonths || {},
+        cashFlows,
+        goals: monthlyGoals[appMeta.goalMonth] || Object.values(monthlyGoals)[0] || { salesGoal: 0, salesPeople: 1 },
+        goalMonth: appMeta.goalMonth || currentMonthKey(),
+        monthlyGoals,
+        expenseMonth: appMeta.expenseMonth || currentMonthKey(),
+        historyMonth: appMeta.historyMonth || currentMonthKey(),
+        financialMonth: appMeta.financialMonth || currentMonthKey(),
+        passwordOverrides: appMeta.passwordOverrides || {},
+        pricingSettings,
+        pricingProducts: rowsToData(tables.pricing_products),
+        pricingHistory: rowsToData(tables.pricing_history)
+      });
+    }
+
+    function preserveLocalChangedPasswords(remoteState, localState) {
+      const localUsers = new Map((localState.users || []).map(user => [normalizeUsername(user.username), user]));
+      remoteState.users = (remoteState.users || []).map(remoteUser => {
+        const localUser = localUsers.get(normalizeUsername(remoteUser.username));
+        const localHasChangedPassword = localUser?.password && localUser.password !== FIRST_ACCESS_PASSWORD && localUser.mustChangePassword === false;
+        const remoteStillInitial = !remoteUser.password || remoteUser.password === FIRST_ACCESS_PASSWORD || remoteUser.mustChangePassword === true;
+        return localHasChangedPassword && remoteStillInitial
+          ? { ...remoteUser, password: localUser.password, mustChangePassword: false, passwordResetRequested: false }
+          : remoteUser;
+      });
+      if (localState.passwordOverrides && Object.keys(localState.passwordOverrides).length) {
+        remoteState.passwordOverrides = { ...(remoteState.passwordOverrides || {}), ...localState.passwordOverrides };
+      }
+      return remoteState;
+    }
+
+    async function loadRemoteState() {
+      if (!supabaseClient) return null;
+      const tableNames = ["users", "products", "sales", "expenses", "goals", "cash_flows", "pricing_settings", "pricing_products", "pricing_history"];
+      const results = await Promise.all(tableNames.map(table => readRemoteTable(table)));
+      const tables = Object.fromEntries(tableNames.map((table, index) => [table, results[index]]));
+      const hasRemoteData = Object.values(tables).some(rows => rows.length);
+      return hasRemoteData ? remoteRowsToState(tables) : null;
+    }
+
+    async function persistRemoteState() {
+      if (!supabaseClient) return;
+      if (remoteSaveInProgress) {
+        remoteSavePending = true;
+        return remoteSavePromise;
+      }
+      remoteSaveInProgress = true;
+      remoteSavePromise = (async () => {
+        try {
+          const rowsByTable = stateToRemoteRows();
+          for (const [table, rows] of Object.entries(rowsByTable)) {
+            await writeRemoteTable(table, rows);
+          }
+        } catch (error) {
+          console.error("Falha ao sincronizar com Supabase:", error);
+        } finally {
+          remoteSaveInProgress = false;
+          if (remoteSavePending) {
+            remoteSavePending = false;
+            await persistRemoteState();
+          }
+        }
+      })();
+      return remoteSavePromise;
+    }
+
+    function queueRemoteSave(delay = 900) {
+      if (!supabaseClient) return;
+      clearTimeout(remoteSaveTimer);
+      remoteSaveTimer = setTimeout(persistRemoteState, delay);
+    }
+
+    async function flushRemoteSave() {
+      if (!supabaseClient) return;
+      clearTimeout(remoteSaveTimer);
+      await persistRemoteState();
+    }
+
+    async function syncRemoteOnStartup() {
+      if (!supabaseClient) {
+        console.info("Supabase nao configurado. Usando apenas localStorage.");
+        return;
+      }
+      try {
+        const remoteState = await loadRemoteState();
+        if (remoteState) {
+          state = preserveLocalChangedPasswords(remoteState, state);
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          migrateAccessSecurity();
+          queueRemoteSave(100);
+          const liveUser = currentUser ? state.users.find(user => user.id === currentUser.id && user.active !== false) : null;
+          if (liveUser) {
+            currentUser = effectiveUser(liveUser);
+            el("currentUserChip").textContent = `${currentUser.name || currentUser.username} Â· ${currentUser.role}`;
+            renderAll();
+            applyProfileSettings();
+            switchView(currentViewName() || firstAccessibleView());
+          } else if (!el("appShell")?.classList.contains("hidden")) {
+            showLogin();
+          }
+        } else {
+          queueRemoteSave(100);
+        }
+        console.info("Supabase configurado. Sincronizacao remota ativa.");
+      } catch (error) {
+        console.error("Nao foi possivel carregar dados do Supabase. Usando localStorage.", error);
       }
     }
 
@@ -1827,6 +2130,7 @@
           if (!confirm("Importar esta base vai substituir os dados atuais deste navegador. Continuar?")) return;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(importedState));
           state = loadState();
+          queueRemoteSave(100);
           currentUser = null;
           sessionStorage.removeItem(SESSION_KEY);
           alert("Base importada com sucesso. Entre novamente com um usuário cadastrado.");
@@ -2128,7 +2432,7 @@
         }
         renderPasswordResetRequests();
       });
-      el("changePasswordForm")?.addEventListener("submit", event => {
+      el("changePasswordForm")?.addEventListener("submit", async event => {
         event.preventDefault();
         const password = el("newPasswordInput").value;
         const confirm = el("confirmPasswordInput").value;
@@ -2148,6 +2452,7 @@
         clearPasswordOverride(user.username);
         currentUser = effectiveUser(user);
         saveState();
+        await flushRemoteSave();
         closeChangePasswordModal();
         renderAccesses();
         renderPasswordResetRequests();
@@ -4489,6 +4794,18 @@ renderAll();
       switchView(tab.dataset.view);
     }));
 
+    document.querySelectorAll("[data-password-toggle]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = el(button.dataset.passwordToggle);
+        if (!input) return;
+        const showing = input.type === "text";
+        input.type = showing ? "password" : "text";
+        button.setAttribute("aria-label", showing ? "Mostrar senha" : "Ocultar senha");
+        button.title = showing ? "Mostrar senha" : "Ocultar senha";
+        input.focus();
+      });
+    });
+
     const saleBarcodeInput = document.getElementById("saleBarcode");
     if (saleBarcodeInput) {
       let saleBarcodeTimer = null;
@@ -4583,6 +4900,7 @@ renderAll();
     });
 
     initAuth();
+    syncRemoteOnStartup();
   </script>
 </body>
 </html>
