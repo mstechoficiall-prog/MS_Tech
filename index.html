@@ -260,7 +260,6 @@
       color: var(--muted);
       box-shadow: none;
       line-height: 1;
-      font-size: 0;
       overflow: hidden;
     }
 
@@ -269,21 +268,22 @@
       color: var(--ink);
     }
 
-    .password-toggle::before {
-      content: "";
-      width: 18px;
-      height: 12px;
-      border: 2px solid currentColor;
-      border-radius: 999px / 720px;
+    .password-toggle svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+      flex: 0 0 auto;
+      pointer-events: none;
+      stroke: currentColor;
     }
 
-    .password-toggle::after {
-      content: "";
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: currentColor;
+    .password-toggle .eye-slash {
+      opacity: 0;
+      transition: opacity .12s ease;
+    }
+
+    .password-toggle.is-visible .eye-slash {
+      opacity: 1;
     }
 
     .grid-2 {
@@ -922,7 +922,7 @@
         <label>Senha
           <span class="password-field">
             <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Digite sua senha">
-            <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+            <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
           </span>
         </label>
         <button type="submit">Entrar</button>
@@ -941,13 +941,13 @@
         <label>Nova senha
           <span class="password-field">
             <input id="newPasswordInput" type="password" required minlength="6" placeholder="Digite a nova senha">
-            <button class="password-toggle" type="button" data-password-toggle="newPasswordInput" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+            <button class="password-toggle" type="button" data-password-toggle="newPasswordInput" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
           </span>
         </label>
         <label>Confirmar nova senha
           <span class="password-field">
             <input id="confirmPasswordInput" type="password" required minlength="6" placeholder="Confirme a nova senha">
-            <button class="password-toggle" type="button" data-password-toggle="confirmPasswordInput" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+            <button class="password-toggle" type="button" data-password-toggle="confirmPasswordInput" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
           </span>
         </label>
         <div class="actions"><button type="submit">Salvar nova senha</button></div>
@@ -1660,7 +1660,7 @@
                 <label>Senha
                   <span class="password-field">
                     <input id="accessPassword" type="password" placeholder="Deixe em branco para usar acesso123">
-                    <button class="password-toggle" type="button" data-password-toggle="accessPassword" aria-label="Mostrar senha" title="Mostrar senha">&#128065;</button>
+                    <button class="password-toggle" type="button" data-password-toggle="accessPassword" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
                   </span>
                 </label>
                 <label>Perfil
@@ -4834,6 +4834,7 @@ renderAll();
         if (!input) return;
         const showing = input.type === "text";
         input.type = showing ? "password" : "text";
+        button.classList.toggle("is-visible", !showing);
         button.setAttribute("aria-label", showing ? "Mostrar senha" : "Ocultar senha");
         button.title = showing ? "Mostrar senha" : "Ocultar senha";
         input.focus();
