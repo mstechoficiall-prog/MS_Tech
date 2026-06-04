@@ -5777,7 +5777,10 @@ loadProductIntoPricing(product);
     });
     el("applyCashActionBtn")?.addEventListener("click", applyCashAction);
     el("finishSaleBtn").addEventListener("click", finishSale);
-    el("clearSaleBtn").addEventListener("click", clearSale);
+    el("clearSaleBtn").addEventListener("click", () => {
+      if (!confirm("Tem certeza que deseja cancelar esta venda? Os itens preenchidos serão removidos.")) return;
+      clearSale();
+    });
     el("discountPercent")?.addEventListener("input", calculateSaleTotal);
     el("discountPercent")?.addEventListener("blur", calculateSaleTotal);
     el("cashReceived")?.addEventListener("input", calculateSaleTotal);
