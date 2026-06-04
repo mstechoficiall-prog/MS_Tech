@@ -1086,7 +1086,8 @@
         "brand item list"
         "customer customer list"
         "discount payment list"
-        "credit credit list"
+        "credit credit-installment list"
+        "credit-fees credit-total list"
         "cash cash total"
         "notice notice notice"
         "actions actions actions";
@@ -1302,11 +1303,20 @@
       grid-area: payment;
     }
 
-    #creditPaymentCard,
-    #creditInstallmentCard,
-    #creditFeeBreakdownCard,
-    #creditTotalCard {
+    #creditPaymentCard {
       grid-area: credit;
+    }
+
+    #creditInstallmentCard {
+      grid-area: credit-installment;
+    }
+
+    #creditFeeBreakdownCard {
+      grid-area: credit-fees;
+    }
+
+    #creditTotalCard {
+      grid-area: credit-total;
     }
 
     #cashPaymentCard {
@@ -1632,6 +1642,9 @@
           "discount"
           "payment"
           "credit"
+          "credit-installment"
+          "credit-fees"
+          "credit-total"
           "cash"
           "total"
           "notice"
