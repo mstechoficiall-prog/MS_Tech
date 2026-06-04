@@ -2254,7 +2254,10 @@
     }
 
     function saleMonthKey(sale) {
+      const storedMonth = sale.saleMonth || sale.month;
+      if (/^\d{4}-\d{2}$/.test(String(storedMonth || ""))) return storedMonth;
       const date = new Date(sale.date || Date.now());
+      if (Number.isNaN(date.getTime())) return currentMonthKey();
       return currentMonthKey(date);
     }
 
@@ -2279,6 +2282,10 @@
       }
       loaded.products ||= [];
       loaded.sales ||= [];
+      loaded.sales = loaded.sales.map(sale => {
+        const date = sale.date || new Date().toISOString();
+        return { ...sale, id: sale.id || makeId(), date, saleMonth: sale.saleMonth || sale.month || saleMonthKey({ ...sale, date }) };
+      });
       loaded.expenses ||= [];
       loaded.fixedExpenses ||= [];
       loaded.monthlyExpenses ||= {};
@@ -2365,6 +2372,10 @@
     function normalizeRemoteState(loaded = {}) {
       loaded.products ||= [];
       loaded.sales ||= [];
+      loaded.sales = loaded.sales.map(sale => {
+        const date = sale.date || new Date().toISOString();
+        return { ...sale, id: sale.id || makeId(), date, saleMonth: sale.saleMonth || sale.month || saleMonthKey({ ...sale, date }) };
+      });
       loaded.expenses ||= [];
       loaded.fixedExpenses ||= [];
       loaded.monthlyExpenses ||= {};
@@ -3829,7 +3840,12 @@
       return (state.users || [])
         .filter(user => user.active !== false && user.role === "Vendedor")
         .map(user => {
-          const sales = (state.sales || []).filter(sale => sale.sellerId === user.id && saleMonthKey(sale) === monthKey);
+          const sales = (state.sales || []).filter(sale => {
+            if (saleMonthKey(sale) !== monthKey) return false;
+            if (sale.sellerId) return sale.sellerId === user.id;
+            const sellerName = String(sale.sellerName || "").trim().toLowerCase();
+            return sellerName && [user.name, user.username].some(value => String(value || "").trim().toLowerCase() === sellerName);
+          });
           const revenue = sales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
           const goal = automaticSellerGoal(monthKey, user);
           const remaining = Math.max(0, goal - revenue);
@@ -5071,9 +5087,11 @@ function renderAll() {
 
       const costTotal = draft.items.reduce((sum, item) => sum + item.quantity * item.product.cost, 0);
       draft.items.forEach(item => item.product.quantity -= item.quantity);
+      const saleDate = new Date();
       state.sales.push({
         id: makeId(),
-        date: new Date().toISOString(),
+        date: saleDate.toISOString(),
+        saleMonth: currentMonthKey(saleDate),
         paymentMethod: el("paymentMethod").value,
         customerName: document.getElementById("customerName")?.value || "",
         customerPhone: normalizePhone(document.getElementById("customerPhone")?.value || "").slice(0, 11),
