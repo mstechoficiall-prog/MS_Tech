@@ -2848,6 +2848,7 @@
     const SUPABASE_ANON_KEY = "sb_publishable_SppB5tYqCTHDh-CnFCxg7Q_NFLd6NwE";
     const FIRST_ACCESS_PASSWORD = "acesso123";
     const LEGACY_ADMIN_PASSWORD = "admin123";
+    const CLEAR_BASE_PASSWORD = "M@r1995cela";
     const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
     const dateFmt = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
     const makeId = () => globalThis.crypto?.randomUUID?.() || `id-${Date.now()}-${Math.random().toString(16).slice(2)}`;
@@ -6196,6 +6197,12 @@ renderAll();
     el("exportFinancialBtn")?.addEventListener("click", exportFinancialReportToExcel);
 
     el("resetBtn").addEventListener("click", () => {
+      const password = prompt("Digite a senha para limpar a base:");
+      if (password === null) return;
+      if (password !== CLEAR_BASE_PASSWORD) {
+        alert("Senha incorreta. A base nao foi limpa.");
+        return;
+      }
       if (!confirm("Limpar todos os produtos e vendas cadastrados?")) return;
       state = {
         products: [],
