@@ -427,6 +427,18 @@
       line-height: 1.4;
     }
 
+    .fixed-expense-validation {
+      align-items: stretch;
+    }
+
+    .fixed-expense-validation .hint {
+      display: inline-flex;
+      align-items: center;
+      margin: 0;
+      min-height: 40px;
+      padding: 9px 14px;
+    }
+
     .actions {
       display: flex;
       gap: 10px;
@@ -2643,7 +2655,7 @@
               <button type="button" id="addExpenseBtn">Salvar despesa</button>
             </div>
             <h2 style="padding:6px 0 12px;border:0;background:transparent;">Fixas recorrentes</h2>
-            <div class="actions" style="margin:-4px 0 12px;">
+            <div class="actions fixed-expense-validation" style="margin:-4px 0 12px;">
               <button type="button" class="secondary" id="validateFixedExpensesBtn">Validar despesas fixas deste mês</button>
               <span class="hint" id="fixedExpenseMonthStatus">Despesas fixas ainda não validadas neste mês.</span>
             </div>
