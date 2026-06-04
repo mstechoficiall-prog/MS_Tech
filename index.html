@@ -1356,6 +1356,11 @@
       overflow-wrap: anywhere;
     }
 
+    #salesView .grid-2:has(#discountPercent) label {
+      grid-template-rows: minmax(1.7em, auto) 46px;
+      align-content: start;
+    }
+
     #salesView .grid-2:has(#discountPercent) input,
     #salesView .grid-2:has(#paymentMethod) select {
       min-height: 46px;
