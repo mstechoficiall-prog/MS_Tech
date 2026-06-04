@@ -673,6 +673,43 @@
 
     .customer-name-button:hover { text-decoration: underline; }
 
+    .product-entry-form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .product-entry-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .product-entry-grid label {
+      margin-bottom: 0;
+    }
+
+    .product-entry-grid .barcode-field {
+      grid-column: span 2;
+    }
+
+    .product-scan-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .product-scan-actions button {
+      width: 100%;
+    }
+
+    #productBarcodeReader {
+      width: 100% !important;
+      max-width: 520px !important;
+      margin-bottom: 0 !important;
+    }
+
     .access-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -1836,7 +1873,8 @@
     }
 
     @media (max-width: 640px) {
-      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid { grid-template-columns: 1fr; }
+      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid, .product-entry-grid { grid-template-columns: 1fr; }
+      .product-entry-grid .barcode-field { grid-column: auto; }
       #historyPaymentSummary { grid-template-columns: 1fr; }
       .access-grid { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
@@ -2015,40 +2053,46 @@
         <section id="stockEntryView" class="hidden">
           <div class="panel-body">
             <h2 style="padding:0 0 12px;border:0;background:transparent;">Entrada de produto</h2>
-            <form id="productForm">
+            <form id="productForm" class="product-entry-form">
               <input type="hidden" id="productId">
 
-              <label>Código de Barras
-                <input id="barcode" list="barcodeHistory" placeholder="Leia, escaneie ou digite o código de barras">
-              </label>
-              <div class="actions" style="margin:-4px 0 12px;">
-                <button type="button" class="secondary" id="scanProductBarcode">Ler pela câmera</button>
-                <button type="button" class="secondary hidden" id="stopProductBarcode">Parar leitura</button>
-              </div>
-              <div id="productBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
-
-              <label>SKU<input id="sku" placeholder="Código interno"></label><label>Marca<input id="brand" placeholder="Marca"></label><label>Localização<input id="location" placeholder="Prateleira"></label><label>Produto
-                <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
-              </label>
-              <div class="grid-2">
+              <div class="product-entry-grid">
+                <label class="barcode-field">Código de barras
+                  <input id="barcode" list="barcodeHistory" placeholder="Leia, escaneie ou digite o código de barras">
+                </label>
+                <div class="product-scan-actions">
+                  <button type="button" class="secondary" id="scanProductBarcode">Ler pela câmera</button>
+                  <button type="button" class="secondary hidden" id="stopProductBarcode">Parar leitura</button>
+                </div>
+                <label>Produto
+                  <input id="name" list="productHistory" required placeholder="Ex.: Camiseta básica">
+                </label>
                 <label>Categoria
                   <input id="category" list="categoryHistory" placeholder="Ex.: Vestuário">
+                </label>
+                <label>SKU
+                  <input id="sku" placeholder="Código interno">
+                </label>
+                <label>Marca
+                  <input id="brand" placeholder="Marca">
                 </label>
                 <label>Fornecedor
                   <input id="supplier" list="supplierHistory" placeholder="Ex.: Atacado ABC">
                 </label>
-              </div>
-              <div class="grid-2">
+                <label>Localização
+                  <input id="location" placeholder="Prateleira">
+                </label>
                 <label>Custo unitário
                   <input id="cost" type="number" min="0" step="0.01" required>
                 </label>
                 <label>Quantidade de entrada
                   <input id="quantity" type="number" min="0" step="1" required>
                 </label>
+                <label>Estoque mínimo
+                  <input id="minStock" type="number" min="0" step="1" value="5">
+                </label>
               </div>
-              <label>Estoque mínimo
-                <input id="minStock" type="number" min="0" step="1" value="5">
-              </label>
+              <div id="productBarcodeReader" class="hidden"></div>
               <div class="actions">
                 <button type="submit" id="saveProductBtn">Salvar produto</button>
                 <button type="button" class="secondary" id="clearProductBtn">Novo</button>
