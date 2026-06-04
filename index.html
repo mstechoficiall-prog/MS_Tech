@@ -1469,7 +1469,7 @@
               <input id="salesGoal" type="number" min="0" step="0.01" placeholder="Ex.: 25000">
             </label>
             <label>Pessoas na venda
-              <input id="salesPeople" type="number" min="1" step="1" value="1">
+              <input id="salesPeople" type="number" min="1" step="1" value="1" readonly>
             </label>
           </div>
           <div class="actions">
@@ -3061,6 +3061,17 @@
       return (state.sales || []).filter(sale => saleMonthKey(sale) === monthKey);
     }
 
+    function activeSellerCount() {
+      return Math.max(1, (state.users || []).filter(user => user.active !== false && user.role === "Vendedor").length);
+    }
+
+    function syncSalesPeopleWithSellers(monthKey = state.goalMonth || currentMonthKey()) {
+      const people = activeSellerCount();
+      if (state.monthlyGoals?.[monthKey]) state.monthlyGoals[monthKey].salesPeople = people;
+      if (state.goals) state.goals.salesPeople = people;
+      return people;
+    }
+
     function renderGoals() {
       state.goalMonth ||= currentMonthKey();
       state.monthlyGoals ||= {};
@@ -3070,7 +3081,7 @@
       const revenue = monthSales.reduce((sum, sale) => sum + Number(sale.total || 0), 0);
       const totalSales = monthSales.length;
       const goal = Number(monthGoal.salesGoal || 0);
-      const people = Math.max(1, Number(monthGoal.salesPeople || 1));
+      const people = syncSalesPeopleWithSellers(state.goalMonth);
       const averageSaleTicket = totalSales ? revenue / totalSales : 0;
       const averageProductTicket = state.products.length
         ? state.products.reduce((sum, product) => sum + suggestedPrice(product), 0) / state.products.length
@@ -4679,8 +4690,9 @@ function renderAll() {
       const user = (state.users || []).find(item => item.id === id);
       if (!user) return;
       user.active = user.active === false;
+      syncSalesPeopleWithSellers();
       saveState();
-      renderAccesses();
+      renderAll();
     }
 
     function deleteAccess(id) {
@@ -4691,8 +4703,9 @@ function renderAll() {
       const user = (state.users || []).find(item => item.id === id);
       if (user) clearPasswordOverride(user.username);
       state.users = (state.users || []).filter(item => item.id !== id);
+      syncSalesPeopleWithSellers();
       saveState();
-      renderAccesses();
+      renderAll();
     }
 
     function deleteProduct(id) {
@@ -5199,20 +5212,22 @@ loadProductIntoPricing(product);
       if (index >= 0) state.users[index] = user;
       else state.users.push(user);
       if (currentUser?.id === user.id) currentUser = effectiveUser(user);
+      syncSalesPeopleWithSellers();
       saveState();
       clearAccessForm();
       el("accessForm").classList.add("hidden");
       applyProfileSettings();
-      renderAccesses();
+      renderAll();
     });
 
     el("goalForm").addEventListener("submit", event => {
       event.preventDefault();
       state.goalMonth = selectedMonthFrom("goalMonthNumber", "goalYear");
       state.monthlyGoals ||= {};
+      const salesPeople = syncSalesPeopleWithSellers(state.goalMonth);
       state.monthlyGoals[state.goalMonth] = {
         salesGoal: Number(el("salesGoal").value || 0),
-        salesPeople: Math.max(1, Number(el("salesPeople").value || 1))
+        salesPeople
       };
       state.goals = state.monthlyGoals[state.goalMonth];
       saveState();
