@@ -25,14 +25,24 @@
     }
 
     * { box-sizing: border-box; }
+    html {
+      width: 100%;
+      overflow-x: hidden;
+    }
     body {
       margin: 0;
+      width: 100%;
+      overflow-x: hidden;
       min-height: 100vh;
       background:
         radial-gradient(circle at 52% -260px, rgba(104, 216, 255, .18), transparent 420px),
         linear-gradient(180deg, #f7fcfe 0%, var(--bg) 54%, #ffffff 100%);
       color: var(--ink);
       font-size: 15px;
+    }
+
+    img, svg {
+      max-width: 100%;
     }
 
     #appShell:not(.hidden) {
@@ -220,6 +230,7 @@
     .panel {
       overflow: hidden;
       width: 100%;
+      min-width: 0;
     }
 
     .workspace > .panel {
@@ -252,6 +263,7 @@
 
     form, .panel-body {
       padding: 18px 20px 22px;
+      min-width: 0;
     }
 
     label {
@@ -462,6 +474,8 @@
       gap: 8px;
       text-align: center;
       max-width: 100%;
+      white-space: normal;
+      overflow-wrap: anywhere;
       transition: transform .12s ease, box-shadow .12s ease, background .12s ease, border-color .12s ease, color .12s ease;
     }
 
@@ -493,13 +507,15 @@
       background: #fbfdfe;
       flex-direction: column;
       min-height: 100%;
+      min-width: 0;
     }
 
     .area-button {
       background: transparent;
       color: #5f7888;
       border: 1px solid transparent;
-      white-space: nowrap;
+      white-space: normal;
+      overflow-wrap: anywhere;
       box-shadow: none;
       justify-content: center !important;
       width: 100%;
@@ -532,6 +548,7 @@
       border-bottom: 1px solid var(--line);
       background: #fbfdfe;
       flex-wrap: wrap;
+      min-width: 0;
     }
 
     .subarea-menu.active {
@@ -549,7 +566,8 @@
       background: #ffffff;
       color: var(--muted);
       border: 1px solid var(--line);
-      white-space: nowrap;
+      white-space: normal;
+      overflow-wrap: anywhere;
       box-shadow: none;
       border-radius: 999px;
       min-height: 38px;
@@ -568,6 +586,7 @@
       padding: 14px 16px;
       border-bottom: 1px solid var(--line);
       background: #ffffff;
+      min-width: 0;
     }
 
     #newProductFromInventoryBtn {
@@ -581,6 +600,8 @@
 
     .table-wrap {
       overflow-x: auto;
+      max-width: 100%;
+      -webkit-overflow-scrolling: touch;
       background: #ffffff;
       border-top: 1px solid rgba(216, 231, 239, .7);
     }
@@ -597,6 +618,7 @@
       border-bottom: 1px solid var(--line);
       vertical-align: middle;
       font-size: .92rem;
+      overflow-wrap: anywhere;
     }
 
     th {
@@ -705,6 +727,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      min-width: 0;
     }
 
     .section-action-head h2,
@@ -719,6 +742,7 @@
     .product-entry-actions {
       justify-content: flex-end;
       flex-wrap: nowrap;
+      min-width: 0;
     }
 
     .product-entry-grid {
@@ -747,6 +771,7 @@
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 8px;
       align-items: center;
+      min-width: 0;
     }
 
     .product-scan-actions {
@@ -1204,7 +1229,7 @@
     .sale-terminal {
       grid-column: 1 / -1;
       display: grid;
-      grid-template-columns: 210px 280px minmax(360px, 1fr);
+      grid-template-columns: minmax(160px, 210px) minmax(220px, 280px) minmax(0, 1fr);
       grid-template-areas:
         "title title title"
         "brand entry list"
@@ -1225,6 +1250,7 @@
       border-radius: 10px;
       background: #2d6f9d;
       box-shadow: 0 16px 34px rgba(9, 42, 62, .12);
+      min-width: 0;
     }
 
     .sale-terminal-title,
@@ -1371,6 +1397,7 @@
       box-shadow: none;
       overflow: auto;
       position: relative;
+      min-width: 0;
     }
 
     #saleItems::before {
@@ -1412,12 +1439,13 @@
     }
 
     .sale-row {
-      grid-template-columns: minmax(170px, 1fr) 64px 92px 92px 38px;
+      grid-template-columns: minmax(150px, 1fr) minmax(58px, 64px) minmax(82px, 92px) minmax(82px, 92px) 34px;
       gap: 5px;
       padding: 6px;
       border: 1px solid #d8e7ef;
       border-radius: 4px;
       background: #f8fcfe;
+      min-width: 0;
     }
 
     .sale-row label {
@@ -1486,6 +1514,7 @@
       border-radius: 4px;
       background: #0d4f78;
       box-shadow: none;
+      min-width: 0;
     }
 
     #salesView .grid-2:has(#discountPercent),
@@ -1659,7 +1688,8 @@
     }
 
     dialog {
-      width: min(720px, calc(100vw - 24px));
+      width: calc(100vw - 24px);
+      max-width: 720px;
       border: 1px solid var(--line);
       padding: 0;
     }
@@ -1693,7 +1723,9 @@
       border-radius: var(--radius);
       box-shadow: 0 22px 60px rgba(1, 13, 23, .28);
       padding: 28px;
-      width: min(440px, 100%);
+      width: calc(100vw - 44px);
+      max-width: 440px;
+      min-width: 0;
       backdrop-filter: blur(18px);
     }
 
@@ -1713,7 +1745,8 @@
 
     #loginForm > button[type="submit"] {
       display: flex;
-      width: min(220px, 100%);
+      width: 100%;
+      max-width: 220px;
       margin: 4px auto 0;
     }
 
@@ -1745,7 +1778,8 @@
     }
 
     .auth-card {
-      width: min(440px, 100%);
+      width: calc(100vw - 40px);
+      max-width: 440px;
       background: #f8fdff;
       border: 1px solid var(--line);
       border-radius: var(--radius);
@@ -1836,6 +1870,29 @@
     .pricing-status.ok { color: #166534; background: #dcfce7; border: 1px solid #86efac; }
     .pricing-status.warn { color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; }
     .pricing-status.danger { color: #991b1b; background: #fee2e2; border: 1px solid #fca5a5; }
+    @media (max-width: 1200px) {
+      .sale-terminal {
+        grid-template-columns: minmax(130px, 180px) minmax(190px, 240px) minmax(0, 1fr);
+      }
+      .sale-terminal-brand {
+        min-height: 190px;
+      }
+      .sale-terminal-brand img {
+        min-height: 170px;
+        padding: 12px;
+      }
+      .sale-terminal-title {
+        font-size: 1.2rem;
+      }
+      #salesView .sale-total strong,
+      #salesView .sale-total #saleTotal {
+        font-size: clamp(1.5rem, 3vw, 2.4rem);
+      }
+      .sale-row {
+        grid-template-columns: minmax(130px, 1fr) minmax(54px, 60px) minmax(74px, 84px) minmax(74px, 84px) 34px;
+      }
+    }
+
     @media (max-width: 900px) {
       .pricing-layout, .pricing-results, .pricing-dashboard { grid-template-columns: 1fr; }
       #salesView .panel-body {
@@ -1863,6 +1920,17 @@
           "actions";
       }
       .sale-terminal-brand {
+        min-height: 160px;
+      }
+      .sale-terminal-brand img {
+        width: min(220px, 100%);
+        height: auto;
+        min-height: 0;
+      }
+      #saleItems {
+        min-height: 240px;
+      }
+      #saleItems:empty::after {
         min-height: 160px;
       }
       #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
@@ -1910,11 +1978,24 @@
         bottom: auto;
         flex-direction: row;
         align-items: flex-start;
+        gap: 16px;
         box-shadow: 0 12px 32px rgba(9, 42, 62, .18);
+      }
+      .brand-lockup {
+        align-items: flex-start;
+        text-align: left;
+      }
+      .brand-logo-card {
+        width: 82px;
+        margin: 0 0 10px;
+      }
+      header h1,
+      header .brand-lockup .subtitle {
+        text-align: left;
       }
       .header-actions {
         width: auto;
-        min-width: min(360px, 100%);
+        min-width: min(260px, 100%);
       }
       main {
         grid-column: auto;
@@ -1941,10 +2022,14 @@
         border-right: 0;
         border-bottom: 1px solid var(--line);
         overflow-x: auto;
+        max-width: 100%;
+        padding: 12px;
+        -webkit-overflow-scrolling: touch;
       }
       .area-button {
         width: auto;
         min-width: 88px;
+        max-width: 140px;
         justify-content: center !important;
         font-size: 11px;
       }
@@ -1952,20 +2037,159 @@
       .goals { grid-template-columns: 1fr; }
     }
 
+    @media (max-width: 760px) {
+      main {
+        padding: 18px 10px 30px;
+      }
+      form, .panel-body {
+        padding: 14px 12px 18px;
+      }
+      .panel h2 {
+        padding: 14px 12px;
+      }
+      .toolbar {
+        grid-template-columns: 1fr 1fr;
+        padding: 12px;
+      }
+      .toolbar input,
+      .toolbar button {
+        grid-column: 1 / -1;
+      }
+      .subarea-menu {
+        padding: 12px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .tab {
+        flex: 0 0 auto;
+        max-width: 180px;
+      }
+      table {
+        min-width: 680px;
+      }
+      th, td {
+        padding: 10px 12px;
+        font-size: .86rem;
+      }
+      .pricing-card strong,
+      .goal-card strong,
+      .access-card strong,
+      .customer-card strong {
+        font-size: 1rem;
+      }
+      .sale-terminal {
+        padding: 4px;
+      }
+      #salesView .grid-2:has(#customerName),
+      #salesView .grid-2:has(#discountPercent),
+      #creditPaymentCard,
+      #creditInstallmentCard,
+      #creditFeeBreakdownCard,
+      #creditTotalCard,
+      #cashPaymentCard {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 640px) {
       .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid, .product-entry-grid { grid-template-columns: 1fr; }
       .product-entry-grid .barcode-field { grid-column: auto; }
       .section-action-head, .product-entry-head { align-items: stretch; flex-direction: column; }
-      .section-action-actions, .product-entry-actions { justify-content: stretch; }
-      .section-action-actions button, .product-entry-actions button { flex: 1 1 0; }
+      .section-action-actions, .product-entry-actions { justify-content: stretch; flex-wrap: wrap; }
+      .section-action-actions button, .product-entry-actions button { flex: 1 1 160px; }
       #historyPaymentSummary { grid-template-columns: 1fr; }
       .access-grid { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
       .sale-row button { width: 100%; }
-      header { align-items: flex-start; }
+      header {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 18px 14px;
+      }
+      .brand-lockup {
+        align-items: center;
+        text-align: center;
+      }
+      header h1,
+      header .brand-lockup .subtitle {
+        text-align: center;
+      }
+      .brand-logo-card {
+        width: 76px;
+        margin: 0 auto 10px;
+      }
       .header-actions { width: 100%; }
       .header-actions button { flex: 1; }
       .login-screen { grid-template-columns: 1fr; }
+      .login-card,
+      .auth-card {
+        width: calc(100vw - 56px);
+        padding: 20px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        font-size: 14px;
+      }
+      main {
+        padding: 14px 8px 24px;
+      }
+      .metrics,
+      .goals {
+        gap: 10px;
+      }
+      .metric,
+      .goal-card,
+      .pricing-card,
+      .customer-card,
+      .access-card {
+        min-height: auto;
+        padding: 12px;
+      }
+      .barcode-control,
+      #salesView .sale-barcode-row {
+        grid-template-columns: 1fr;
+      }
+      .product-scan-actions,
+      #salesView .sale-product-card .actions:has(#scanSaleBarcode) {
+        width: 100%;
+      }
+      .product-scan-actions button,
+      .product-scan-actions #stopProductBarcode,
+      #salesView #scanSaleBarcode,
+      #stopSaleBarcode {
+        width: 100%;
+        flex: 1 1 0;
+      }
+      .sale-row {
+        grid-template-columns: 1fr;
+      }
+      .sale-terminal-title {
+        min-height: 36px;
+        font-size: 1rem;
+        padding: 6px;
+      }
+      .sale-terminal-brand {
+        min-height: 120px;
+      }
+      .sale-terminal-brand img {
+        width: min(160px, 100%);
+        padding: 10px;
+      }
+      #salesView .sale-total strong,
+      #salesView .sale-total #saleTotal {
+        min-height: 50px;
+        padding: 8px 10px;
+        font-size: 1.55rem;
+      }
+      table {
+        min-width: 560px;
+      }
+      dialog {
+        width: calc(100vw - 16px);
+      }
     }
   </style>
 
