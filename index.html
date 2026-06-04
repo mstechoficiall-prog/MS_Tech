@@ -678,6 +678,7 @@
       gap: 12px;
     }
 
+    .section-action-head,
     .product-entry-head {
       display: flex;
       align-items: center;
@@ -685,6 +686,7 @@
       gap: 12px;
     }
 
+    .section-action-head h2,
     .product-entry-head h2 {
       margin: 0;
       padding: 0;
@@ -692,6 +694,7 @@
       background: transparent;
     }
 
+    .section-action-actions,
     .product-entry-actions {
       justify-content: flex-end;
       flex-wrap: nowrap;
@@ -1921,9 +1924,9 @@
     @media (max-width: 640px) {
       .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid, .product-entry-grid { grid-template-columns: 1fr; }
       .product-entry-grid .barcode-field { grid-column: auto; }
-      .product-entry-head { align-items: stretch; flex-direction: column; }
-      .product-entry-actions { justify-content: stretch; }
-      .product-entry-actions button { flex: 1 1 0; }
+      .section-action-head, .product-entry-head { align-items: stretch; flex-direction: column; }
+      .section-action-actions, .product-entry-actions { justify-content: stretch; }
+      .section-action-actions button, .product-entry-actions button { flex: 1 1 0; }
       #historyPaymentSummary { grid-template-columns: 1fr; }
       .access-grid { grid-template-columns: 1fr; }
       .sale-row { grid-template-columns: 1fr 1fr; }
@@ -2106,7 +2109,6 @@
                 <h2>Entrada de produto</h2>
                 <div class="actions product-entry-actions">
                   <button type="submit" id="saveProductBtn">Salvar produto</button>
-                  <button type="button" class="secondary" id="clearProductBtn">Novo</button>
                 </div>
               </div>
               <input type="hidden" id="productId">
@@ -2193,7 +2195,12 @@
 
         <section id="pricingView" class="hidden">
           <div class="panel-body">
-            <h2 style="padding:0 0 12px;border:0;background:transparent;">Precificação</h2>
+            <div class="section-action-head">
+              <h2>Precificação</h2>
+              <div class="actions section-action-actions">
+                <button type="button" class="secondary" id="clearPricingBtn">Novo</button>
+              </div>
+            </div>
             <p class="hint">Calcule o preço de venda considerando custo, frete, taxas, impostos, despesas operacionais e lucro desejado.</p>
             <div class="pricing-layout">
               <div class="panel">
@@ -5953,7 +5960,7 @@ loadProductIntoPricing(product);
       renderFinancial();
     }));
 
-    el("clearProductBtn").addEventListener("click", clearProductForm);
+    el("clearProductBtn")?.addEventListener("click", clearProductForm);
     el("search").addEventListener("input", renderInventory);
     el("stockFilter").addEventListener("change", renderInventory);
     el("newProductFromInventoryBtn")?.addEventListener("click", () => switchView("stockEntry"));
@@ -6017,6 +6024,7 @@ renderAll();
     });
     el("savePricingProductBtn")?.addEventListener("click", savePricingProduct);
     el("savePricingAndBackBtn")?.addEventListener("click", savePricingAndBackToStock);
+    el("clearPricingBtn")?.addEventListener("click", clearPricingForm);
     el("applyPricingConfigBtn")?.addEventListener("click", applyPricingConfigToForm);
 
     document.querySelectorAll(".tab").forEach(tab => tab.addEventListener("click", () => {
