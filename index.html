@@ -1086,8 +1086,10 @@
         "brand item list"
         "customer customer list"
         "discount payment list"
-        "credit credit-installment list"
-        "credit-fees credit-total list"
+        "credit credit list"
+        "credit-installment credit-installment list"
+        "credit-fees credit-fees list"
+        "credit-total credit-total list"
         "cash cash total"
         "notice notice notice"
         "actions actions actions";
@@ -1370,6 +1372,26 @@
     #salesView .grid-2:has(#paymentMethod) label,
     #salesView .grid-2:has(#paymentMethod) select {
       width: 100%;
+    }
+
+    #creditPaymentCard,
+    #creditInstallmentCard,
+    #creditFeeBreakdownCard,
+    #creditTotalCard {
+      align-items: start;
+      gap: 8px;
+    }
+
+    #creditPaymentCard label,
+    #creditInstallmentCard label,
+    #creditFeeBreakdownCard label,
+    #creditTotalCard label,
+    #creditPaymentCard select,
+    #creditInstallmentCard select,
+    #creditFeeBreakdownCard input,
+    #creditTotalCard input {
+      width: 100%;
+      max-width: 100%;
     }
 
     #salesView .sale-total {
