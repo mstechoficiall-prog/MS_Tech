@@ -1761,13 +1761,13 @@
     <div class="login-card">
       <h1>MS Tech</h1>
       <p>Sistema de gestão MS Tech</p>
-      <form id="loginForm">
+      <form id="loginForm" autocomplete="off">
         <label>Usuário
-          <input id="loginUser" autocomplete="username" required placeholder="Digite seu usuário">
+          <input id="loginUser" autocomplete="off" autocapitalize="none" spellcheck="false" required placeholder="Digite seu usuário">
         </label>
         <label>Senha
           <span class="password-field">
-            <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Digite sua senha">
+            <input id="loginPassword" type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" required placeholder="Digite sua senha">
             <button class="password-toggle" type="button" data-password-toggle="loginPassword" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
           </span>
         </label>
@@ -1783,16 +1783,16 @@
     <div class="auth-card">
       <h2>Alterar senha obrigatória</h2>
       <p>Por segurança, altere a senha de primeiro acesso antes de usar o sistema.</p>
-      <form id="changePasswordForm">
+      <form id="changePasswordForm" autocomplete="off">
         <label>Nova senha
           <span class="password-field">
-            <input id="newPasswordInput" type="password" required minlength="6" placeholder="Digite a nova senha">
+            <input id="newPasswordInput" type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" required minlength="6" placeholder="Digite a nova senha">
             <button class="password-toggle" type="button" data-password-toggle="newPasswordInput" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
           </span>
         </label>
         <label>Confirmar nova senha
           <span class="password-field">
-            <input id="confirmPasswordInput" type="password" required minlength="6" placeholder="Confirme a nova senha">
+            <input id="confirmPasswordInput" type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" required minlength="6" placeholder="Confirme a nova senha">
             <button class="password-toggle" type="button" data-password-toggle="confirmPasswordInput" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
           </span>
         </label>
@@ -1806,9 +1806,9 @@
     <div class="auth-card">
       <h2>Recuperar senha</h2>
       <p>Informe seu usuário. O administrador precisa autorizar o retorno da senha ao padrão de primeiro acesso.</p>
-      <form id="recoverPasswordForm">
+      <form id="recoverPasswordForm" autocomplete="off">
         <label>Usuário
-          <input id="recoverUsername" required placeholder="Digite seu usuário">
+          <input id="recoverUsername" autocomplete="off" autocapitalize="none" spellcheck="false" required placeholder="Digite seu usuário">
         </label>
         <div class="actions">
           <button type="submit">Solicitar recuperação</button>
@@ -2524,7 +2524,7 @@
             </div>
 
             <div class="access-grid">
-              <form id="accessForm" class="access-form-card hidden">
+              <form id="accessForm" class="access-form-card hidden" autocomplete="off">
                 <div class="access-form-title">
                   <h3 id="accessFormTitle">Novo acesso</h3>
                   <span class="pill ok">Primeiro acesso: acesso123</span>
@@ -2534,11 +2534,11 @@
                   <input id="accessName" required placeholder="Nome do usuário">
                 </label>
                 <label>Usuário
-                  <input id="accessUsername" required placeholder="Ex.: vendedor01">
+                  <input id="accessUsername" autocomplete="off" autocapitalize="none" spellcheck="false" required placeholder="Ex.: vendedor01">
                 </label>
                 <label>Senha
                   <span class="password-field">
-                    <input id="accessPassword" type="password" placeholder="Deixe em branco para usar acesso123">
+                    <input id="accessPassword" type="password" autocomplete="new-password" data-lpignore="true" data-1p-ignore="true" placeholder="Deixe em branco para usar acesso123">
                     <button class="password-toggle" type="button" data-password-toggle="accessPassword" aria-label="Mostrar senha" title="Mostrar senha"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"></path><circle cx="12" cy="12" r="3"></circle><path class="eye-slash" d="M4 20 20 4"></path></svg></button>
                   </span>
                 </label>
