@@ -551,11 +551,20 @@
 
     .toolbar {
       display: grid;
-      grid-template-columns: 1fr 180px;
+      grid-template-columns: minmax(0, 1fr) 180px auto;
       gap: 10px;
       padding: 14px 16px;
       border-bottom: 1px solid var(--line);
       background: #ffffff;
+    }
+
+    #newProductFromInventoryBtn {
+      min-height: 42px;
+      padding: 8px 14px;
+      background: var(--brand);
+      border-color: var(--brand);
+      color: #ffffff;
+      white-space: nowrap;
     }
 
     .table-wrap {
@@ -2170,7 +2179,7 @@
               <option value="low">Estoque baixo</option>
               <option value="available">Disponíveis</option>
             </select>
-            <button type="button" class="secondary" id="newProductFromInventoryBtn">Novo produto</button>
+            <button type="button" id="newProductFromInventoryBtn">Novo produto</button>
           </div>
           <div class="table-wrap">
             <table>
