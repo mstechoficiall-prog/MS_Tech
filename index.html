@@ -2519,6 +2519,7 @@
       el("changePasswordModal")?.classList.add("hidden");
       el("recoverPasswordModal")?.classList.add("hidden");
       if (el("loginPassword")) el("loginPassword").value = "";
+      if (el("loginError")) el("loginError").style.color = "var(--danger)";
       el("loginUser")?.focus();
     }
 
@@ -2567,6 +2568,7 @@
         event.preventDefault();
         const user = findLoginUser(el("loginUser").value, el("loginPassword").value);
         if (!user) {
+          el("loginError").style.color = "var(--danger)";
           el("loginError").textContent = "Usuário ou senha inválidos.";
           return;
         }
@@ -2595,10 +2597,12 @@
         }
         user.passwordResetRequested = true;
         saveState();
-        if (notice) {
-          notice.style.color = "var(--ok)";
-          notice.textContent = "Solicitação enviada. Aguarde o administrador autorizar.";
-        }
+        if (notice) notice.textContent = "";
+        el("recoverPasswordForm")?.reset();
+        el("recoverPasswordModal")?.classList.add("hidden");
+        el("loginError").style.color = "var(--ok)";
+        el("loginError").textContent = "Solicitação enviada. Aguarde o administrador autorizar.";
+        el("loginUser")?.focus();
         renderPasswordResetRequests();
       });
       el("changePasswordForm")?.addEventListener("submit", async event => {
