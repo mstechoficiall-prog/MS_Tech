@@ -889,9 +889,7 @@
       font-weight: 500;
     }
 
-    #salesView .panel-body > label,
-    #salesView .panel-body > .actions:has(#scanSaleBarcode),
-    #saleBarcodeReader,
+    #salesView .sale-product-card,
     #salesView .grid-2:has(#customerName),
     #saleItems,
     #addSaleItemBtn,
@@ -908,7 +906,7 @@
       grid-column: 1;
     }
 
-    #salesView .panel-body > label,
+    #salesView .sale-product-card,
     #salesView .grid-2:has(#customerName),
     #saleItems,
     #salesView .grid-2:has(#discountPercent),
@@ -927,7 +925,7 @@
       box-shadow: 0 10px 24px rgba(9, 42, 62, .045);
     }
 
-    #salesView .panel-body > label::before,
+    #salesView .sale-product-card::before,
     #salesView .grid-2:has(#customerName)::before,
     #saleItems::before,
     #salesView .grid-2:has(#discountPercent)::before,
@@ -945,7 +943,7 @@
       text-transform: uppercase;
     }
 
-    #salesView .panel-body > label::before { content: "1. Produto"; }
+    #salesView .sale-product-card::before { content: "1. Produto"; }
     #salesView .grid-2:has(#customerName)::before { content: "2. Cliente"; }
     #saleItems::before { content: "3. Itens da venda"; }
     #salesView .grid-2:has(#discountPercent)::before { content: "4. Desconto"; }
@@ -973,10 +971,14 @@
       margin-top: 0 !important;
     }
 
-    #salesView .panel-body > .actions:has(#scanSaleBarcode) {
-      margin: -10px 0 0 !important;
+    #salesView .sale-product-card .actions:has(#scanSaleBarcode) {
+      margin: 2px 0 0 !important;
       padding: 0;
       justify-content: flex-end;
+    }
+
+    #salesView .sale-product-card label {
+      margin-bottom: 0;
     }
 
     #saleBarcodeReader.sale-reader,
@@ -1218,9 +1220,7 @@
       #salesView .panel-body {
         grid-template-columns: 1fr;
       }
-      #salesView .panel-body > label,
-      #salesView .panel-body > .actions:has(#scanSaleBarcode),
-      #saleBarcodeReader,
+      #salesView .sale-product-card,
       #salesView .grid-2:has(#customerName),
       #saleItems,
       #addSaleItemBtn,
@@ -1683,25 +1683,25 @@
             </section>
             <h2 style="padding:0 0 12px;border:0;background:transparent;">Registrar venda</h2>
 
-            <label>Leitor de código de barras
-              <input id="saleBarcode" list="barcodeHistory" placeholder="Passe o leitor aqui">
-            </label>
-            <div class="actions" style="margin:-4px 0 12px;">
-              <button type="button" class="secondary" id="scanSaleBarcode">Ler pela câmera</button>
-              <button type="button" class="secondary hidden" id="stopSaleBarcode">Parar leitura</button>
+            <div class="sale-product-card">
+              <label>Leitor de código de barras
+                <input id="saleBarcode" list="barcodeHistory" placeholder="Passe o leitor aqui">
+              </label>
+              <div class="actions" style="margin:2px 0 0;">
+                <button type="button" class="secondary" id="scanSaleBarcode">Ler pela câmera</button>
+                <button type="button" class="secondary hidden" id="stopSaleBarcode">Parar leitura</button>
+              </div>
+              <div id="saleBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:0;"></div>
             </div>
-            <div id="saleBarcodeReader" class="hidden" style="width:320px;max-width:100%;margin-bottom:12px;"></div>
-
-            
-<div class="grid-2" style="margin-bottom:12px;">
-<label>Nome do Cliente
-<input id="customerName" list="customerNameHistory" placeholder="Nome do cliente">
-</label>
-<label>Celular
-<input id="customerPhone" list="customerPhoneHistory" inputmode="numeric" maxlength="11" placeholder="11999999999">
-</label>
-</div>
-<div id="saleItems"></div>
+            <div class="grid-2" style="margin-bottom:12px;">
+              <label>Nome do Cliente
+                <input id="customerName" list="customerNameHistory" placeholder="Nome do cliente">
+              </label>
+              <label>Celular
+                <input id="customerPhone" list="customerPhoneHistory" inputmode="numeric" maxlength="11" placeholder="11999999999">
+              </label>
+            </div>
+            <div id="saleItems"></div>
 
             <button type="button" class="secondary" id="addSaleItemBtn">Adicionar item</button>
             <div class="grid-2" style="margin-top:14px;">
