@@ -1859,6 +1859,7 @@
     let remoteSaveInProgress = false;
     let remoteSavePending = false;
     let remoteSavePromise = null;
+    let remoteStartupPromise = null;
 
     const seed = {
       products: [
@@ -2302,6 +2303,14 @@
       return usersByUsername().get(normalizeUsername(username)) || null;
     }
 
+    function findUserByLoginIdentifier(value) {
+      const key = normalizeUsername(value);
+      return (state.users || []).find(user =>
+        normalizeUsername(user.username) === key ||
+        normalizeUsername(user.name) === key
+      ) || null;
+    }
+
     function canonicalizeAccessUsers() {
       const seen = new Set();
       state.users = (state.users || []).filter(user => {
@@ -2565,10 +2574,11 @@
         el("recoverUsername")?.focus();
       });
       el("closeRecoverPasswordBtn")?.addEventListener("click", () => el("recoverPasswordModal")?.classList.add("hidden"));
-      el("recoverPasswordForm")?.addEventListener("submit", event => {
+      el("recoverPasswordForm")?.addEventListener("submit", async event => {
         event.preventDefault();
+        if (remoteStartupPromise) await remoteStartupPromise;
         const username = normalizeUsername(el("recoverUsername")?.value);
-        const user = state.users.find(item => normalizeUsername(item.username) === username);
+        const user = findUserByLoginIdentifier(username);
         const notice = el("recoverPasswordNotice");
         if (!user) {
           if (notice) {
@@ -5054,7 +5064,7 @@ renderAll();
     });
 
     initAuth();
-    syncRemoteOnStartup();
+    remoteStartupPromise = syncRemoteOnStartup();
   </script>
 </body>
 </html>
