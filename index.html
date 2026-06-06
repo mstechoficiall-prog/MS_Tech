@@ -1895,6 +1895,25 @@
     .pricing-status.ok { color: #166534; background: #dcfce7; border: 1px solid #86efac; }
     .pricing-status.warn { color: #92400e; background: #fef3c7; border: 1px solid #fcd34d; }
     .pricing-status.danger { color: #991b1b; background: #fee2e2; border: 1px solid #fca5a5; }
+    @media (min-width: 901px) {
+      #salesView .panel-body {
+        padding: 8px;
+      }
+      .sale-terminal {
+        height: calc(100vh - 126px);
+        max-height: calc(100vh - 126px);
+        overflow: auto;
+      }
+      .sale-terminal-brand,
+      .sale-terminal-brand img {
+        min-height: 0;
+      }
+      #saleItems {
+        min-height: 0;
+        max-height: calc(100vh - 318px);
+      }
+    }
+
     @media (max-width: 1200px) {
       .sale-terminal {
         grid-template-columns: minmax(130px, 180px) minmax(190px, 240px) minmax(0, 1fr);
