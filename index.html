@@ -3634,7 +3634,7 @@
                     </table>
                     <div class="actions product-entry-actions" style="margin-top:14px;">
                       <button type="submit">Salvar funcionário</button>
-                      <button type="button" class="secondary hidden" id="printEmployeeBtn">Imprimir ficha</button>
+                      <button type="button" class="secondary" id="printEmployeeBtn">Imprimir ficha</button>
                       <button type="button" class="secondary" id="cancelEmployeeBtn">Cancelar</button>
                     </div>
                   </form>
@@ -5609,7 +5609,6 @@
       fillEmployeeProfile({});
       if (el("employeeActive")) el("employeeActive").checked = true;
       if (el("employeeRoleSelect")) el("employeeRoleSelect").value = "Vendedor";
-      el("printEmployeeBtn")?.classList.add("hidden");
       ["employeeName", "employeeUsername", "employeePassword"].forEach(clearEmployeeFieldError);
     }
 
@@ -5673,7 +5672,6 @@
       el("employeeRoleSelect").value = role || "Vendedor";
       el("employeeActive").checked = user.active !== false;
       fillEmployeeProfile(user.employeeProfile || {});
-      el("printEmployeeBtn")?.classList.remove("hidden");
       el("employeeForm")?.classList.remove("hidden");
       showEmployeeFormPanel();
       el("employeeName").focus();
@@ -7274,7 +7272,6 @@ loadProductIntoPricing(product);
       saveState();
       el("employeeId").value = id;
       el("employeePassword").value = "";
-      el("printEmployeeBtn")?.classList.remove("hidden");
       renderAll();
       showToast('Funcionário salvo');
     });
