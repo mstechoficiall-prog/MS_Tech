@@ -1902,15 +1902,47 @@
       .sale-terminal {
         height: calc(100vh - 220px);
         max-height: calc(100vh - 220px);
-        overflow: auto;
+        overflow: hidden;
       }
-      .sale-terminal-brand,
+      .sale-terminal-title {
+        min-height: 34px;
+        font-size: 1.2rem;
+      }
+      .sale-terminal-brand {
+        min-height: 150px;
+      }
       .sale-terminal-brand img {
-        min-height: 0;
+        min-height: 136px;
+        padding: 12px;
+      }
+      .sale-terminal-value {
+        grid-template-rows: 22px 1fr;
+        min-height: 56px;
+      }
+      #salesView .grid-2:has(#discountPercent),
+      #salesView .grid-2:has(#paymentMethod),
+      #cashPaymentCard {
+        min-height: 86px;
+      }
+      #salesView .grid-2:has(#customerName) label,
+      #salesView .grid-2:has(#discountPercent) label,
+      #salesView .grid-2:has(#paymentMethod) label,
+      #cashPaymentCard label {
+        grid-template-rows: 30px minmax(36px, 1fr);
+      }
+      #salesView .grid-2:has(#customerName) input,
+      #salesView .grid-2:has(#discountPercent) input,
+      #salesView .grid-2:has(#paymentMethod) select,
+      #cashPaymentCard input {
+        min-height: 36px;
       }
       #saleItems {
         min-height: 0;
         max-height: calc(100vh - 408px);
+      }
+      #salesView .sale-total strong,
+      #salesView .sale-total #saleTotal {
+        min-height: 48px;
       }
     }
 
