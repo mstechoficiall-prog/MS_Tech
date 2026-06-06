@@ -1900,10 +1900,11 @@
         padding: 8px;
       }
       .sale-terminal {
-        min-height: calc(100vh - 154px);
-        height: auto;
-        max-height: none;
-        overflow: visible;
+        grid-template-rows: 36px 136px 56px 56px 76px 84px 0 0 0 0 76px 20px 46px;
+        height: calc(100vh - 156px);
+        min-height: 640px;
+        max-height: calc(100vh - 156px);
+        overflow: hidden;
       }
       .sale-terminal-title {
         min-height: 34px;
@@ -1923,7 +1924,7 @@
       #salesView .grid-2:has(#discountPercent),
       #salesView .grid-2:has(#paymentMethod),
       #cashPaymentCard {
-        min-height: 86px;
+        min-height: 0;
       }
       #salesView .grid-2:has(#customerName) label,
       #salesView .grid-2:has(#discountPercent) label,
@@ -1938,12 +1939,16 @@
         min-height: 36px;
       }
       #saleItems {
+        height: 100%;
         min-height: 0;
-        max-height: calc(100vh - 342px);
+        max-height: none;
       }
       #salesView .sale-total strong,
       #salesView .sale-total #saleTotal {
-        min-height: 48px;
+        min-height: 46px;
+      }
+      #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
+        min-height: 0;
       }
     }
 
