@@ -280,6 +280,17 @@
       text-transform: uppercase;
     }
 
+    .field-error {
+      color: var(--danger);
+      font-size: .85rem;
+      margin-top: 6px;
+    }
+
+    .input-error {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 4px rgba(180, 35, 24, .06);
+    }
+
     input, select {
       width: 100%;
       border: 1px solid var(--line);
@@ -3204,6 +3215,9 @@
           <div class="panel-body">
             <div class="access-form-title">
               <h2 style="padding:0;border:0;background:transparent;">Gente e Gestão</h2>
+              <div style="margin-top:8px;">
+                <button type="button" id="newEmployeeBtn">Cadastrar funcionário</button>
+              </div>
             </div>
             <div class="access-summary">
               <article class="access-card"><span>Equipe</span><strong id="peopleTeamCount">0</strong><small>Colaboradores cadastrados.</small></article>
@@ -3217,6 +3231,53 @@
                 <thead><tr><th>Nome</th><th>Perfil</th><th>Status</th><th>Usuário</th></tr></thead>
                 <tbody id="peopleManagementBody"></tbody>
               </table>
+            </div>
+            <div style="margin-top:12px; display:flex; gap:12px; align-items:start;">
+              <div class="panel" style="flex:1;">
+                <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Lista de funcionários</h2>
+                <div class="panel-body">
+                  <input id="employeesSearch" placeholder="Buscar por nome ou usuário" style="margin-bottom:10px;">
+                  <div class="table-wrap">
+                    <table>
+                      <thead><tr><th>Nome</th><th>Perfil</th><th>Status</th><th>Usuário</th><th></th></tr></thead>
+                      <tbody id="peopleManagementBody"></tbody>
+                    </table>
+                  </div>
+                  <div class="empty hidden" id="peopleManagementEmpty">Nenhuma pessoa cadastrada.</div>
+                </div>
+              </div>
+              <div class="panel" style="width:380px;">
+                <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Cadastro / edição</h2>
+                <div class="panel-body">
+                  <form id="employeeForm" class="access-form-card hidden" autocomplete="off">
+                    <input type="hidden" id="employeeId">
+                    <label>Nome
+                      <input id="employeeName" required placeholder="Nome completo">
+                      <div class="field-error" id="err-employeeName"></div>
+                    </label>
+                    <label>Usuário
+                      <input id="employeeUsername" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ex.: vendedor01">
+                      <div class="field-error" id="err-employeeUsername"></div>
+                    </label>
+                    <label>Senha (opcional)
+                      <input id="employeePassword" type="password" autocomplete="new-password" placeholder="Deixe em branco para usar senha padrão">
+                      <div class="field-error" id="err-employeePassword"></div>
+                    </label>
+                    <label>Perfil
+                      <select id="employeeRoleSelect">
+                        <option value="Vendedor">Vendedor</option>
+                        <option value="Estoque">Estoque</option>
+                        <option value="Administrador">Administrador</option>
+                      </select>
+                    </label>
+                    <label><input type="checkbox" id="employeeActive" checked> Ativo</label>
+                    <div class="actions">
+                      <button type="submit">Salvar funcionário</button>
+                      <button type="button" class="secondary" id="cancelEmployeeBtn">Cancelar</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
             <div class="empty hidden" id="peopleManagementEmpty">Nenhuma pessoa cadastrada.</div>
           </div>
@@ -5128,9 +5189,44 @@
           <td>${escapeHtml(rolesLabel(user))}</td>
           <td><span class="pill ${user.active !== false ? "ok" : "danger"}">${user.active !== false ? "Ativo" : "Bloqueado"}</span></td>
           <td>${escapeHtml(user.username || "-")}</td>
+          <td>
+            <div class="actions">
+              <button class="secondary icon" title="Editar" onclick="editEmployee('${user.id}')">✎</button>
+              <button class="danger icon" title="Excluir" onclick="deleteEmployee('${user.id}')">×</button>
+            </div>
+          </td>
         </tr>
       `).join("");
       el("peopleManagementEmpty")?.classList.toggle("hidden", users.length > 0);
+    }
+
+    function editEmployee(id) {
+      const user = (state.users || []).find(item => item.id === id);
+      if (!user) return;
+      el("employeeId").value = user.id;
+      el("employeeName").value = user.name || "";
+      el("employeeUsername").value = user.username || "";
+      el("employeePassword").value = "";
+      const role = primaryRole(user.roles || [user.role]);
+      el("employeeRoleSelect").value = role || "Vendedor";
+      el("employeeActive").checked = user.active !== false;
+      el("employeeForm").classList.remove("hidden");
+      el("employeeName").focus();
+    }
+
+    function deleteEmployee(id) {
+      if (currentUser?.id === id) {
+        alert("Você não pode excluir o usuário logado.");
+        return;
+      }
+      const user = (state.users || []).find(item => item.id === id);
+      if (!user) return;
+      if (!confirm(`Excluir "${user.name}"?`)) return;
+      if (user) clearPasswordOverride(user.username);
+      state.users = (state.users || []).filter(item => item.id !== id);
+      syncSalesPeopleWithSellers();
+      saveState();
+      renderAll();
     }
 
 
@@ -6495,6 +6591,104 @@ loadProductIntoPricing(product);
       clearAccessForm();
       el("accessForm").classList.remove("hidden");
       el("accessName").focus();
+    });
+    el("newEmployeeBtn")?.addEventListener("click", () => {
+      // abrir o formulário de cadastro de funcionário (novo)
+      if (el("employeeForm")) {
+        el("employeeForm").reset();
+        el("employeeId").value = "";
+        el("employeeForm").classList.remove("hidden");
+        el("employeeName").focus();
+      } else {
+        // fallback: abrir o formulário completo de acessos
+        clearAccessForm();
+        document.querySelectorAll('input[name="accessRole"]').forEach(i => i.checked = i.value === "Vendedor");
+        renderPermissionList(permissionsForRoles(selectedAccessRoles()));
+        el("accessForm").classList.remove("hidden");
+        el("accessName").focus();
+      }
+    });
+
+    el("employeeForm")?.addEventListener("submit", event => {
+      event.preventDefault();
+      function setFieldError(id, msg) {
+        const elErr = el('err-' + id);
+        if (elErr) elErr.textContent = msg;
+        const input = el(id);
+        if (input) input.classList.add('input-error');
+      }
+      function clearFieldError(id) {
+        const elErr = el('err-' + id);
+        if (elErr) elErr.textContent = '';
+        const input = el(id);
+        if (input) input.classList.remove('input-error');
+      }
+      // limpar erros anteriores
+      ['employeeName','employeeUsername','employeePassword'].forEach(clearFieldError);
+
+      state.users ||= [];
+      const id = el("employeeId").value || makeId();
+      const name = el("employeeName").value.trim();
+      const usernameRaw = el("employeeUsername").value.trim();
+      const username = normalizeUsername(usernameRaw || "");
+      const role = el("employeeRoleSelect").value;
+      const password = el("employeePassword").value || "";
+      const active = el("employeeActive").checked;
+
+      let firstInvalid = null;
+      if (!name) {
+        setFieldError('employeeName', 'Nome é obrigatório.');
+        firstInvalid = firstInvalid || el('employeeName');
+      }
+      if (!username) {
+        setFieldError('employeeUsername', 'Usuário é obrigatório.');
+        firstInvalid = firstInvalid || el('employeeUsername');
+      } else if (!/^[a-z0-9._-]{3,}$/.test(username)) {
+        setFieldError('employeeUsername', 'Usuário inválido (mínimo 3 caracteres, apenas letras, números, . _ -).');
+        firstInvalid = firstInvalid || el('employeeUsername');
+      }
+      if (password && password.length > 0 && password.length < 6) {
+        setFieldError('employeePassword', 'Senha muito curta (mínimo 6 caracteres).');
+        firstInvalid = firstInvalid || el('employeePassword');
+      }
+
+      const duplicate = state.users.find(u => u.id !== id && normalizeUsername(u.username || "") === username);
+      if (duplicate) {
+        setFieldError('employeeUsername', 'Já existe um usuário com este nome de usuário.');
+        firstInvalid = firstInvalid || el('employeeUsername');
+      }
+
+      if (firstInvalid) {
+        firstInvalid.focus();
+        return;
+      }
+
+      const roles = [role];
+      const user = {
+        id,
+        name,
+        username,
+        password: password || 'acesso123',
+        role,
+        roles,
+        active,
+        mustChangePassword: false,
+        passwordResetRequested: false,
+        permissions: permissionsForRoles(roles, [])
+      };
+      const index = state.users.findIndex(u => u.id === id);
+      if (index >= 0) state.users[index] = user; else state.users.push(user);
+      syncSalesPeopleWithSellers();
+      saveState();
+      el("employeeForm").classList.add("hidden");
+      renderAll();
+    });
+
+    el("cancelEmployeeBtn")?.addEventListener("click", () => {
+      if (el("employeeForm")) {
+        el("employeeForm").classList.add("hidden");
+        el("employeeForm").reset();
+      }
     });
     el("cancelAccessBtn")?.addEventListener("click", () => {
       clearAccessForm();
