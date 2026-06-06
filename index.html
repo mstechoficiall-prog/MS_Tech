@@ -920,15 +920,15 @@
 
     .people-management-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      grid-template-columns: minmax(0, 1fr);
       gap: 12px;
       align-items: start;
       margin-top: 12px;
     }
 
     .employee-form-card {
-      max-height: 72vh;
-      overflow: auto;
+      max-height: none;
+      overflow: visible;
     }
 
     .people-management-actions {
@@ -954,6 +954,138 @@
 
     .employee-photo-preview.hidden {
       display: none;
+    }
+
+    .employee-sheet {
+      width: 100%;
+      border: 1px solid #1f2933;
+      border-collapse: collapse;
+      background: #fff;
+      table-layout: fixed;
+      color: #17202a;
+    }
+
+    .employee-sheet-title {
+      text-align: center;
+      font-size: .72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin: 0 0 8px;
+      color: #17202a;
+    }
+
+    .employee-sheet th,
+    .employee-sheet td {
+      border: 1px solid #1f2933;
+      padding: 0;
+      vertical-align: top;
+      height: 26px;
+      background: #fff;
+    }
+
+    .employee-sheet th {
+      background: #e8ecef;
+      text-align: center;
+      font-size: .72rem;
+      line-height: 1.2;
+      text-transform: uppercase;
+      padding: 3px 4px;
+    }
+
+    .employee-sheet label,
+    .employee-sheet .sheet-field {
+      display: grid;
+      grid-template-rows: auto minmax(22px, auto);
+      gap: 0;
+      margin: 0;
+      min-height: 100%;
+      color: #17202a;
+      font-size: .62rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .employee-sheet input,
+    .employee-sheet select {
+      width: 100%;
+      min-height: 22px;
+      border: 0;
+      border-radius: 0;
+      padding: 2px 4px;
+      background: transparent;
+      color: #17202a;
+      font-size: .72rem;
+      font-weight: 650;
+      outline: 0;
+    }
+
+    .employee-sheet input[type="checkbox"],
+    .employee-sheet input[type="radio"] {
+      width: auto;
+      min-height: auto;
+    }
+
+    .employee-sheet .sheet-label {
+      display: block;
+      padding: 2px 4px 0;
+      color: #17202a;
+      font-size: .58rem;
+      font-weight: 800;
+      line-height: 1.1;
+      text-transform: uppercase;
+    }
+
+    .employee-sheet .sheet-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px 10px;
+      align-items: center;
+      min-height: 22px;
+      padding: 2px 4px;
+      font-size: .68rem;
+      font-weight: 750;
+    }
+
+    .employee-sheet .sheet-options label {
+      display: inline-flex;
+      grid-template-rows: none;
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+      min-height: auto;
+      font-size: .68rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+
+    .employee-sheet .photo-cell {
+      width: 132px;
+      text-align: center;
+      background: #f7fafc;
+    }
+
+    .employee-sheet .employee-photo-field {
+      padding: 6px;
+      min-height: 170px;
+      align-content: start;
+    }
+
+    .employee-sheet .employee-photo-preview {
+      width: 108px;
+      height: 144px;
+      margin: 6px auto 0;
+      border-color: #1f2933;
+      border-radius: 0;
+    }
+
+    .employee-sheet textarea {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      resize: vertical;
+      padding: 3px 4px;
+      font: inherit;
+      outline: 0;
     }
 
     .employee-form-section {
@@ -3351,205 +3483,155 @@
                 <div class="panel-body">
                   <form id="employeeForm" class="access-form-card employee-form-card" autocomplete="off">
                     <input type="hidden" id="employeeId">
-                    <div class="employee-form-section">
-                      <h3>Dados pessoais</h3>
-                      <div class="employee-form-grid">
-                        <label class="span-2">Nome completo
-                          <input id="employeeName" required placeholder="Nome completo">
-                          <div class="field-error" id="err-employeeName"></div>
-                        </label>
-                        <div class="employee-photo-field">
-                          <label>Foto 3x4
-                            <input id="employeePhoto" type="file" accept="image/*">
-                          </label>
-                          <img id="employeePhotoPreview" class="employee-photo-preview hidden" alt="Foto 3x4 do funcionário">
-                        </div>
-                        <label>Data de nascimento
-                          <input id="employeeBirthDate" type="date">
-                        </label>
-                        <div class="employee-radio-row">
-                          <span>Sexo</span>
-                          <label><input type="radio" name="employeeSex" value="Masculino"> Masculino</label>
-                          <label><input type="radio" name="employeeSex" value="Feminino"> Feminino</label>
-                          <label><input type="radio" name="employeeSex" value="Outro"> Outro</label>
-                        </div>
-                        <label>Estado civil
-                          <input id="employeeMaritalStatus" placeholder="Estado civil">
-                        </label>
-                        <label>Nacionalidade
-                          <input id="employeeNationality" placeholder="Nacionalidade">
-                        </label>
-                        <label>Naturalidade
-                          <input id="employeeBirthplace" placeholder="Cidade/UF">
-                        </label>
-                        <label>CPF
-                          <input id="employeeCpf" inputmode="numeric" placeholder="000.000.000-00">
-                        </label>
-                        <label>RG
-                          <input id="employeeRg" placeholder="RG">
-                        </label>
-                        <label>Órgão emissor
-                          <input id="employeeRgIssuer" placeholder="SSP/UF">
-                        </label>
-                        <label>CTPS nº
-                          <input id="employeeCtps" placeholder="Número da CTPS">
-                        </label>
-                        <label>Série
-                          <input id="employeeCtpsSeries" placeholder="Série">
-                        </label>
-                        <label>PIS/PASEP
-                          <input id="employeePis" placeholder="PIS/PASEP">
-                        </label>
-                        <label>Título de eleitor
-                          <input id="employeeVoterTitle" placeholder="Título de eleitor">
-                        </label>
-                        <label>CNH nº
-                          <input id="employeeCnh" placeholder="CNH">
-                        </label>
-                        <label>Categoria CNH
-                          <input id="employeeCnhCategory" placeholder="Categoria">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section">
-                      <h3>Endereço e contato</h3>
-                      <div class="employee-form-grid">
-                        <label class="span-2">Rua/Avenida
-                          <input id="employeeStreet" placeholder="Rua ou avenida">
-                        </label>
-                        <label>Número
-                          <input id="employeeNumber" placeholder="Número">
-                        </label>
-                        <label>Complemento
-                          <input id="employeeComplement" placeholder="Complemento">
-                        </label>
-                        <label>Bairro
-                          <input id="employeeNeighborhood" placeholder="Bairro">
-                        </label>
-                        <label>Cidade
-                          <input id="employeeCity" placeholder="Cidade">
-                        </label>
-                        <label>Estado
-                          <input id="employeeState" maxlength="2" placeholder="UF">
-                        </label>
-                        <label>CEP
-                          <input id="employeeCep" inputmode="numeric" placeholder="00000-000">
-                        </label>
-                        <label>Telefone residencial
-                          <input id="employeeHomePhone" inputmode="tel" placeholder="Telefone residencial">
-                        </label>
-                        <label>Celular
-                          <input id="employeeMobile" inputmode="tel" placeholder="Celular">
-                        </label>
-                        <label class="span-2">E-mail
-                          <input id="employeeEmail" type="email" placeholder="email@empresa.com">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section">
-                      <h3>Dados familiares</h3>
-                      <div class="employee-form-grid">
-                        <label>Nome da mãe
-                          <input id="employeeMotherName" placeholder="Nome da mãe">
-                        </label>
-                        <label>Nome do pai
-                          <input id="employeeFatherName" placeholder="Nome do pai">
-                        </label>
-                        <label class="span-2">Dependentes
-                          <input id="employeeDependents" placeholder="Nomes ou quantidade de dependentes">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section">
-                      <h3>Dados bancários</h3>
-                      <div class="employee-form-grid">
-                        <label>Banco
-                          <input id="employeeBank" placeholder="Banco">
-                        </label>
-                        <label>Agência
-                          <input id="employeeAgency" placeholder="Agência">
-                        </label>
-                        <label>Conta
-                          <input id="employeeAccount" placeholder="Conta">
-                        </label>
-                        <label>Tipo de conta
-                          <input id="employeeAccountType" placeholder="Corrente, poupança...">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section">
-                      <h3>Informações profissionais</h3>
-                      <div class="employee-form-grid">
-                        <label>Cargo
-                          <input id="employeePosition" placeholder="Cargo">
-                        </label>
-                        <label>Departamento/Setor
-                          <input id="employeeDepartment" placeholder="Departamento ou setor">
-                        </label>
-                        <label>Data de admissão
-                          <input id="employeeAdmissionDate" type="date">
-                        </label>
-                        <label>Salário
-                          <input id="employeeSalary" type="text" inputmode="decimal" placeholder="R$ 0,00">
-                        </label>
-                        <label class="span-2">Jornada de trabalho
-                          <input id="employeeWorkHours" placeholder="Ex.: Segunda a sexta, 08h as 18h">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section">
-                      <h3>Acesso ao sistema</h3>
-                      <div class="employee-form-grid">
-                        <label>Usuário
-                          <input id="employeeUsername" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ex.: vendedor01">
-                          <div class="field-error" id="err-employeeUsername"></div>
-                        </label>
-                        <label>Senha (opcional)
-                          <input id="employeePassword" type="password" autocomplete="new-password" placeholder="Deixe em branco para manter">
-                          <div class="field-error" id="err-employeePassword"></div>
-                        </label>
-                        <label>Perfil
-                          <select id="employeeRoleSelect">
-                            <option value="Vendedor">Vendedor</option>
-                            <option value="Estoque">Estoque</option>
-                            <option value="Administrador">Administrador</option>
-                          </select>
-                        </label>
-                        <label><input type="checkbox" id="employeeActive" checked> Ativo</label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section">
-                      <h3>Documentos anexados</h3>
-                      <div class="employee-form-grid">
-                        <div class="employee-document-list">
-                          <span>Documentos</span>
-                          <label><input type="checkbox" name="employeeDocument" value="RG"> RG</label>
-                          <label><input type="checkbox" name="employeeDocument" value="CPF"> CPF</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Comprovante de residência"> Comprovante de residência</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Carteira de trabalho"> Carteira de trabalho</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Título de eleitor"> Título de eleitor</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Certificado militar"> Certificado militar</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Certidão de nascimento/casamento"> Certidão de nascimento/casamento</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Comprovante de escolaridade"> Comprovante de escolaridade</label>
-                          <label><input type="checkbox" name="employeeDocument" value="Foto 3x4"> Foto 3x4</label>
-                        </div>
-                        <label class="span-2">Outros
-                          <input id="employeeOtherDocuments" placeholder="Outros documentos">
-                        </label>
-                      </div>
-                    </div>
-                    <div class="employee-form-section employee-declaration">
-                      <h3>Declaração</h3>
-                      <label><input type="checkbox" id="employeeDeclarationAccepted"> Declaro que as informações acima são verdadeiras.</label>
-                      <div class="employee-form-grid" style="margin-top:10px;">
-                        <label>Local e data
-                          <input id="employeeDeclarationPlaceDate" placeholder="Local e data">
-                        </label>
-                        <label>Assinatura do funcionário
-                          <input id="employeeSignature" placeholder="Nome para assinatura">
-                        </label>
-                      </div>
-                    </div>
+                    <p class="employee-sheet-title">Ficha cadastral do funcionário</p>
+                    <table class="employee-sheet">
+                      <colgroup>
+                        <col span="12">
+                      </colgroup>
+                      <tbody>
+                        <tr><th colspan="12">Empresa</th></tr>
+                        <tr>
+                          <td colspan="8"><label><span class="sheet-label">Nome da empresa</span><input id="employeeCompanyName" placeholder="Nome da empresa"></label></td>
+                          <td colspan="4"><label><span class="sheet-label">CNPJ</span><input id="employeeCompanyCnpj" placeholder="00.000.000/0000-00"></label></td>
+                        </tr>
+                        <tr><th colspan="12">Dados pessoais do funcionário</th></tr>
+                        <tr>
+                          <td colspan="5"><label><span class="sheet-label">Nome completo</span><input id="employeeName" required placeholder="Nome completo"></label><div class="field-error" id="err-employeeName"></div></td>
+                          <td colspan="2"><label><span class="sheet-label">Nascimento</span><input id="employeeBirthDate" type="date"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Idade</span><input id="employeeAge" inputmode="numeric" placeholder="Idade"></label></td>
+                          <td colspan="1"><label><span class="sheet-label">Aniversário</span><input id="employeeBirthday" placeholder="Dia/mês"></label></td>
+                          <td class="photo-cell" rowspan="8" colspan="2">
+                            <div class="employee-photo-field">
+                              <label><span class="sheet-label">Foto 3x4</span><input id="employeePhoto" type="file" accept="image/*"></label>
+                              <img id="employeePhotoPreview" class="employee-photo-preview hidden" alt="Foto 3x4 do funcionário">
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Marca dia de Souza</span><input id="employeeBadgeName" placeholder="Nome de crachá"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Sexo</span><input id="employeeSexText" placeholder="Masculino/Feminino"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Estado civil</span><input id="employeeMaritalStatus" placeholder="Estado civil"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">UF</span><input id="employeeBirthState" maxlength="2" placeholder="UF"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3">
+                            <div class="sheet-field">
+                              <span class="sheet-label">Sexo</span>
+                              <div class="sheet-options">
+                                <label><input type="radio" name="employeeSex" value="Masculino"> Masculino</label>
+                                <label><input type="radio" name="employeeSex" value="Feminino"> Feminino</label>
+                                <label><input type="radio" name="employeeSex" value="Outro"> Outro</label>
+                              </div>
+                            </div>
+                          </td>
+                          <td colspan="2"><label><span class="sheet-label">Fator RH</span><input id="employeeBloodFactor" placeholder="Fator RH"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Naturalidade</span><input id="employeeBirthplace" placeholder="Cidade"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">UF</span><input id="employeeNaturalState" maxlength="2" placeholder="UF"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Mãe</span><input id="employeeMotherName" placeholder="Nome da mãe"></label></td>
+                          <td colspan="7"><label><span class="sheet-label">Rio de Janeiro</span><input id="employeeMotherCity" placeholder="Cidade/UF"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Nome do pai</span><input id="employeeFatherName" placeholder="Nome do pai"></label></td>
+                          <td colspan="7"><label><span class="sheet-label">Nome da mãe</span><input id="employeeFamilyNote" placeholder="Complemento familiar"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="4"><label><span class="sheet-label">Severino</span><input id="employeeSecondaryContact" placeholder="Contato familiar"></label></td>
+                          <td colspan="6"><label><span class="sheet-label">Alc</span><input id="employeeDependents" placeholder="Dependentes"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="10"><label><span class="sheet-label">Escolaridade</span><input id="employeeEducation" placeholder="Escolaridade"></label></td>
+                        </tr>
+                        <tr><th colspan="10">Endereço</th></tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Pós-graduação</span><input id="employeePostGraduation" placeholder="Formação"></label></td>
+                          <td colspan="5"><label><span class="sheet-label">Rua de exemplo, 123</span><input id="employeeStreet" placeholder="Rua/Avenida"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Número</span><input id="employeeNumber" placeholder="Número"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Complemento</span><input id="employeeComplement" placeholder="Complemento"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">CEP</span><input id="employeeCep" inputmode="numeric" placeholder="00000-000"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Cidade</span><input id="employeeCity" placeholder="Cidade"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Estado</span><input id="employeeState" maxlength="2" placeholder="UF"></label></td>
+                          <td colspan="4"><label><span class="sheet-label">Bairro</span><input id="employeeNeighborhood" placeholder="Bairro"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Telefone</span><input id="employeeHomePhone" inputmode="tel" placeholder="Telefone"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Celular</span><input id="employeeMobile" inputmode="tel" placeholder="Celular"></label></td>
+                          <td colspan="6"><label><span class="sheet-label">E-mail</span><input id="employeeEmail" type="email" placeholder="email@empresa.com"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="6"><label><span class="sheet-label">Primeiro emprego?</span><input id="employeeFirstJob" placeholder="Sim/Não"></label></td>
+                          <td colspan="6"><label><span class="sheet-label">Recolheu contribuição sindical no ano?</span><input id="employeeUnionContribution" placeholder="Sim/Não"></label></td>
+                        </tr>
+                        <tr><th colspan="12">Documentação do funcionário</th></tr>
+                        <tr>
+                          <td colspan="2"><label><span class="sheet-label">PIS/PASEP</span><input id="employeePis" placeholder="PIS/PASEP"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">CTPS</span><input id="employeeCtps" placeholder="CTPS"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Série</span><input id="employeeCtpsSeries" placeholder="Série"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Emissão</span><input id="employeeCtpsIssue" type="date"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">CPF</span><input id="employeeCpf" inputmode="numeric" placeholder="000.000.000-00"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Reservista</span><input id="employeeReservist" placeholder="Reservista"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Identidade</span><input id="employeeRg" placeholder="RG"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Órgão emissor</span><input id="employeeRgIssuer" placeholder="Órgão emissor"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Título eleitoral</span><input id="employeeVoterTitle" placeholder="Título eleitoral"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Zona</span><input id="employeeVoterZone" placeholder="Zona"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Emissão</span><input id="employeeRgIssueDate" type="date"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Habilitação</span><input id="employeeCnh" placeholder="CNH"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Cat.</span><input id="employeeCnhCategory" placeholder="Categoria"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Vencimento</span><input id="employeeCnhExpiration" type="date"></label></td>
+                          <td colspan="4"><label><span class="sheet-label">Outros documentos</span><input id="employeeOtherDocuments" placeholder="Outros"></label></td>
+                        </tr>
+                        <tr><th colspan="12">Dados bancários e profissionais</th></tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Banco</span><input id="employeeBank" placeholder="Banco"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Agência</span><input id="employeeAgency" placeholder="Agência"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Conta</span><input id="employeeAccount" placeholder="Conta"></label></td>
+                          <td colspan="4"><label><span class="sheet-label">Tipo de conta</span><input id="employeeAccountType" placeholder="Tipo de conta"></label></td>
+                        </tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Cargo</span><input id="employeePosition" placeholder="Cargo"></label></td>
+                          <td colspan="3"><label><span class="sheet-label">Departamento/Setor</span><input id="employeeDepartment" placeholder="Departamento/Setor"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Admissão</span><input id="employeeAdmissionDate" type="date"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Salário</span><input id="employeeSalary" type="text" inputmode="decimal" placeholder="R$ 0,00"></label></td>
+                          <td colspan="2"><label><span class="sheet-label">Jornada</span><input id="employeeWorkHours" placeholder="Jornada"></label></td>
+                        </tr>
+                        <tr><th colspan="12">Acesso ao sistema</th></tr>
+                        <tr>
+                          <td colspan="3"><label><span class="sheet-label">Usuário</span><input id="employeeUsername" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Usuário"></label><div class="field-error" id="err-employeeUsername"></div></td>
+                          <td colspan="3"><label><span class="sheet-label">Senha opcional</span><input id="employeePassword" type="password" autocomplete="new-password" placeholder="Deixe em branco para manter"></label><div class="field-error" id="err-employeePassword"></div></td>
+                          <td colspan="3"><label><span class="sheet-label">Perfil</span><select id="employeeRoleSelect"><option value="Vendedor">Vendedor</option><option value="Estoque">Estoque</option><option value="Administrador">Administrador</option></select></label></td>
+                          <td colspan="3"><div class="sheet-options"><label><input type="checkbox" id="employeeActive" checked> Ativo</label></div></td>
+                        </tr>
+                        <tr><th colspan="12">Documentos anexados</th></tr>
+                        <tr>
+                          <td colspan="12">
+                            <div class="sheet-options">
+                              <label><input type="checkbox" name="employeeDocument" value="RG"> RG</label>
+                              <label><input type="checkbox" name="employeeDocument" value="CPF"> CPF</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Comprovante de residência"> Comprovante de residência</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Carteira de trabalho"> Carteira de trabalho</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Título de eleitor"> Título de eleitor</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Certificado militar"> Certificado militar</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Certidão de nascimento/casamento"> Certidão de nascimento/casamento</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Comprovante de escolaridade"> Comprovante de escolaridade</label>
+                              <label><input type="checkbox" name="employeeDocument" value="Foto 3x4"> Foto 3x4</label>
+                            </div>
+                          </td>
+                        </tr>
+                        <tr><th colspan="12">Declaração</th></tr>
+                        <tr>
+                          <td colspan="4"><div class="sheet-options"><label><input type="checkbox" id="employeeDeclarationAccepted"> Declaro que as informações acima são verdadeiras.</label></div></td>
+                          <td colspan="4"><label><span class="sheet-label">Local e data</span><input id="employeeDeclarationPlaceDate" placeholder="Local e data"></label></td>
+                          <td colspan="4"><label><span class="sheet-label">Assinatura do funcionário</span><input id="employeeSignature" placeholder="Assinatura"></label></td>
+                        </tr>
+                      </tbody>
+                    </table>
                     <div class="actions product-entry-actions" style="margin-top:14px;">
                       <button type="submit">Salvar funcionário</button>
                       <button type="button" class="secondary hidden" id="printEmployeeBtn">Imprimir ficha</button>
@@ -5454,9 +5536,9 @@
     }
 
     const employeeProfileFields = [
-      "birthDate", "maritalStatus", "nationality", "birthplace", "cpf", "rg", "rgIssuer", "ctps", "ctpsSeries", "pis", "voterTitle", "cnh", "cnhCategory",
+      "companyName", "companyCnpj", "birthDate", "age", "birthday", "badgeName", "sexText", "maritalStatus", "nationality", "birthState", "bloodFactor", "birthplace", "naturalState", "cpf", "rg", "rgIssuer", "rgIssueDate", "ctps", "ctpsSeries", "ctpsIssue", "pis", "voterTitle", "voterZone", "reservist", "cnh", "cnhCategory", "cnhExpiration",
       "street", "number", "complement", "neighborhood", "city", "state", "cep", "homePhone", "mobile", "email",
-      "motherName", "fatherName", "dependents", "bank", "agency", "account", "accountType",
+      "motherName", "motherCity", "fatherName", "familyNote", "secondaryContact", "dependents", "education", "postGraduation", "firstJob", "unionContribution", "bank", "agency", "account", "accountType",
       "position", "department", "admissionDate", "salary", "workHours", "photo", "otherDocuments", "declarationPlaceDate", "signature"
     ];
 
@@ -5473,7 +5555,7 @@
           profile[field] = el(employeeProfileInputId(field))?.value?.trim() || "";
         }
       });
-      profile.sex = document.querySelector('input[name="employeeSex"]:checked')?.value || "";
+      profile.sex = document.querySelector('input[name="employeeSex"]:checked')?.value || el("employeeSexText")?.value?.trim() || "";
       profile.documents = [...document.querySelectorAll('input[name="employeeDocument"]:checked')].map(input => input.value);
       profile.declarationAccepted = Boolean(el("employeeDeclarationAccepted")?.checked);
       return profile;
@@ -5489,6 +5571,7 @@
       document.querySelectorAll('input[name="employeeSex"]').forEach(input => {
         input.checked = input.value === (profile.sex || "");
       });
+      if (el("employeeSexText")) el("employeeSexText").value = profile.sexText || profile.sex || "";
       const documents = new Set(profile.documents || []);
       document.querySelectorAll('input[name="employeeDocument"]').forEach(input => {
         input.checked = documents.has(input.value);
@@ -5612,13 +5695,23 @@
       if (profile.otherDocuments) docs.push(`Outros: ${profile.otherDocuments}`);
       const photoHtml = profile.photo ? `<img class="photo" src="${profile.photo}" alt="Foto 3x4">` : `<div class="photo empty">Foto 3x4</div>`;
       const sections = [
+        ["Empresa", [
+          employeePrintRow("Nome da empresa", profile.companyName),
+          employeePrintRow("CNPJ", profile.companyCnpj)
+        ]],
         ["Dados pessoais", [
           employeePrintRow("Nome completo", name),
           employeePrintRow("Data de nascimento", profile.birthDate),
+          employeePrintRow("Idade", profile.age),
+          employeePrintRow("Aniversário", profile.birthday),
           employeePrintRow("Sexo", profile.sex),
           employeePrintRow("Estado civil", profile.maritalStatus),
           employeePrintRow("Nacionalidade", profile.nationality),
           employeePrintRow("Naturalidade", profile.birthplace),
+          employeePrintRow("UF naturalidade", profile.naturalState),
+          employeePrintRow("Fator RH", profile.bloodFactor),
+          employeePrintRow("Escolaridade", profile.education),
+          employeePrintRow("Pós-graduação", profile.postGraduation),
           employeePrintRow("CPF", profile.cpf),
           employeePrintRow("RG", profile.rg),
           employeePrintRow("Órgão emissor", profile.rgIssuer),
@@ -5639,7 +5732,9 @@
           employeePrintRow("CEP", profile.cep),
           employeePrintRow("Telefone residencial", profile.homePhone),
           employeePrintRow("Celular", profile.mobile),
-          employeePrintRow("E-mail", profile.email)
+          employeePrintRow("E-mail", profile.email),
+          employeePrintRow("Primeiro emprego?", profile.firstJob),
+          employeePrintRow("Contribuição sindical no ano?", profile.unionContribution)
         ]],
         ["Dados familiares", [
           employeePrintRow("Nome da mãe", profile.motherName),
