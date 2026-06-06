@@ -918,6 +918,89 @@
       font-size: 1rem;
     }
 
+    .people-management-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+      gap: 12px;
+      align-items: start;
+      margin-top: 12px;
+    }
+
+    .employee-form-card {
+      max-height: 72vh;
+      overflow: auto;
+    }
+
+    .employee-form-section {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .employee-form-section:first-of-type {
+      border-top: 0;
+      padding-top: 0;
+      margin-top: 0;
+    }
+
+    .employee-form-section h3 {
+      margin: 0 0 10px;
+      font-size: .9rem;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .employee-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      align-items: end;
+    }
+
+    .employee-form-grid .span-2,
+    .employee-document-list,
+    .employee-declaration {
+      grid-column: 1 / -1;
+    }
+
+    .employee-radio-row,
+    .employee-document-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      align-items: center;
+      color: var(--text);
+      font-size: .88rem;
+      text-transform: none;
+    }
+
+    .employee-radio-row > span,
+    .employee-document-list > span {
+      flex-basis: 100%;
+      color: var(--muted);
+      font-size: .78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .employee-radio-row label,
+    .employee-document-list label {
+      display: inline-flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 7px;
+      margin: 0;
+      color: var(--text);
+      font-size: .88rem;
+      font-weight: 650;
+      text-transform: none;
+    }
+
+    .employee-radio-row input,
+    .employee-document-list input {
+      width: auto;
+    }
+
     .access-profile-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(150px, 1fr));
@@ -2253,8 +2336,12 @@
     }
 
     @media (max-width: 640px) {
-      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid, .product-entry-grid { grid-template-columns: 1fr; }
+      .metrics, .toolbar, .grid-2, .goal-summary, .customer-tools, .customer-summary, .access-summary, .access-profile-grid, .product-entry-grid, .people-management-layout, .employee-form-grid { grid-template-columns: 1fr; }
       .product-entry-grid .barcode-field { grid-column: auto; }
+      .employee-form-grid .span-2,
+      .employee-document-list,
+      .employee-declaration { grid-column: auto; }
+      .employee-form-card { max-height: none; }
       .section-action-head, .product-entry-head { align-items: stretch; flex-direction: column; }
       .section-action-actions, .product-entry-actions { justify-content: stretch; flex-wrap: wrap; }
       .section-action-actions button, .product-entry-actions button { flex: 1 1 160px; }
@@ -3225,53 +3312,220 @@
               <article class="access-card"><span>Estoque</span><strong id="peopleStockCount">0</strong><small>Responsáveis por produtos e inventário.</small></article>
               <article class="access-card"><span>Administradores</span><strong id="peopleAdminCount">0</strong><small>Gestão completa do sistema.</small></article>
             </div>
-            <div class="hint">Use esta área para acompanhar a composição da equipe. Cadastros e permissões continuam em Controle de acessos.</div>
-            <div class="table-wrap">
-              <table>
-                <thead><tr><th>Nome</th><th>Perfil</th><th>Status</th><th>Usuário</th></tr></thead>
-                <tbody id="peopleManagementBody"></tbody>
-              </table>
-            </div>
-            <div style="margin-top:12px; display:flex; gap:12px; align-items:start;">
-              <div class="panel" style="flex:1;">
+            <div class="hint">Cadastre a ficha completa do funcionário e mantenha o acesso do sistema no mesmo registro.</div>
+            <div class="people-management-layout">
+              <div class="panel">
                 <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Lista de funcionários</h2>
                 <div class="panel-body">
                   <input id="employeesSearch" placeholder="Buscar por nome ou usuário" style="margin-bottom:10px;">
                   <div class="table-wrap">
                     <table>
-                      <thead><tr><th>Nome</th><th>Perfil</th><th>Status</th><th>Usuário</th><th></th></tr></thead>
+                      <thead><tr><th>Nome</th><th>Cargo</th><th>Setor</th><th>Perfil</th><th>Status</th><th>Usuário</th><th>Ações</th></tr></thead>
                       <tbody id="peopleManagementBody"></tbody>
                     </table>
                   </div>
                   <div class="empty hidden" id="peopleManagementEmpty">Nenhuma pessoa cadastrada.</div>
                 </div>
               </div>
-              <div class="panel" style="width:380px;">
-                <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Cadastro / edição</h2>
+              <div class="panel">
+                <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Ficha de cadastro de funcionário</h2>
                 <div class="panel-body">
-                  <form id="employeeForm" class="access-form-card hidden" autocomplete="off">
+                  <form id="employeeForm" class="access-form-card employee-form-card hidden" autocomplete="off">
                     <input type="hidden" id="employeeId">
-                    <label>Nome
-                      <input id="employeeName" required placeholder="Nome completo">
-                      <div class="field-error" id="err-employeeName"></div>
-                    </label>
-                    <label>Usuário
-                      <input id="employeeUsername" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ex.: vendedor01">
-                      <div class="field-error" id="err-employeeUsername"></div>
-                    </label>
-                    <label>Senha (opcional)
-                      <input id="employeePassword" type="password" autocomplete="new-password" placeholder="Deixe em branco para usar senha padrão">
-                      <div class="field-error" id="err-employeePassword"></div>
-                    </label>
-                    <label>Perfil
-                      <select id="employeeRoleSelect">
-                        <option value="Vendedor">Vendedor</option>
-                        <option value="Estoque">Estoque</option>
-                        <option value="Administrador">Administrador</option>
-                      </select>
-                    </label>
-                    <label><input type="checkbox" id="employeeActive" checked> Ativo</label>
-                    <div class="actions">
+                    <div class="employee-form-section">
+                      <h3>Dados pessoais</h3>
+                      <div class="employee-form-grid">
+                        <label class="span-2">Nome completo
+                          <input id="employeeName" required placeholder="Nome completo">
+                          <div class="field-error" id="err-employeeName"></div>
+                        </label>
+                        <label>Data de nascimento
+                          <input id="employeeBirthDate" type="date">
+                        </label>
+                        <div class="employee-radio-row">
+                          <span>Sexo</span>
+                          <label><input type="radio" name="employeeSex" value="Masculino"> Masculino</label>
+                          <label><input type="radio" name="employeeSex" value="Feminino"> Feminino</label>
+                          <label><input type="radio" name="employeeSex" value="Outro"> Outro</label>
+                        </div>
+                        <label>Estado civil
+                          <input id="employeeMaritalStatus" placeholder="Estado civil">
+                        </label>
+                        <label>Nacionalidade
+                          <input id="employeeNationality" placeholder="Nacionalidade">
+                        </label>
+                        <label>Naturalidade
+                          <input id="employeeBirthplace" placeholder="Cidade/UF">
+                        </label>
+                        <label>CPF
+                          <input id="employeeCpf" inputmode="numeric" placeholder="000.000.000-00">
+                        </label>
+                        <label>RG
+                          <input id="employeeRg" placeholder="RG">
+                        </label>
+                        <label>Órgão emissor
+                          <input id="employeeRgIssuer" placeholder="SSP/UF">
+                        </label>
+                        <label>CTPS nº
+                          <input id="employeeCtps" placeholder="Número da CTPS">
+                        </label>
+                        <label>Série
+                          <input id="employeeCtpsSeries" placeholder="Série">
+                        </label>
+                        <label>PIS/PASEP
+                          <input id="employeePis" placeholder="PIS/PASEP">
+                        </label>
+                        <label>Título de eleitor
+                          <input id="employeeVoterTitle" placeholder="Título de eleitor">
+                        </label>
+                        <label>CNH nº
+                          <input id="employeeCnh" placeholder="CNH">
+                        </label>
+                        <label>Categoria CNH
+                          <input id="employeeCnhCategory" placeholder="Categoria">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section">
+                      <h3>Endereço e contato</h3>
+                      <div class="employee-form-grid">
+                        <label class="span-2">Rua/Avenida
+                          <input id="employeeStreet" placeholder="Rua ou avenida">
+                        </label>
+                        <label>Número
+                          <input id="employeeNumber" placeholder="Número">
+                        </label>
+                        <label>Complemento
+                          <input id="employeeComplement" placeholder="Complemento">
+                        </label>
+                        <label>Bairro
+                          <input id="employeeNeighborhood" placeholder="Bairro">
+                        </label>
+                        <label>Cidade
+                          <input id="employeeCity" placeholder="Cidade">
+                        </label>
+                        <label>Estado
+                          <input id="employeeState" maxlength="2" placeholder="UF">
+                        </label>
+                        <label>CEP
+                          <input id="employeeCep" inputmode="numeric" placeholder="00000-000">
+                        </label>
+                        <label>Telefone residencial
+                          <input id="employeeHomePhone" inputmode="tel" placeholder="Telefone residencial">
+                        </label>
+                        <label>Celular
+                          <input id="employeeMobile" inputmode="tel" placeholder="Celular">
+                        </label>
+                        <label class="span-2">E-mail
+                          <input id="employeeEmail" type="email" placeholder="email@empresa.com">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section">
+                      <h3>Dados familiares</h3>
+                      <div class="employee-form-grid">
+                        <label>Nome da mãe
+                          <input id="employeeMotherName" placeholder="Nome da mãe">
+                        </label>
+                        <label>Nome do pai
+                          <input id="employeeFatherName" placeholder="Nome do pai">
+                        </label>
+                        <label class="span-2">Dependentes
+                          <input id="employeeDependents" placeholder="Nomes ou quantidade de dependentes">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section">
+                      <h3>Dados bancários</h3>
+                      <div class="employee-form-grid">
+                        <label>Banco
+                          <input id="employeeBank" placeholder="Banco">
+                        </label>
+                        <label>Agência
+                          <input id="employeeAgency" placeholder="Agência">
+                        </label>
+                        <label>Conta
+                          <input id="employeeAccount" placeholder="Conta">
+                        </label>
+                        <label>Tipo de conta
+                          <input id="employeeAccountType" placeholder="Corrente, poupança...">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section">
+                      <h3>Informações profissionais</h3>
+                      <div class="employee-form-grid">
+                        <label>Cargo
+                          <input id="employeePosition" placeholder="Cargo">
+                        </label>
+                        <label>Departamento/Setor
+                          <input id="employeeDepartment" placeholder="Departamento ou setor">
+                        </label>
+                        <label>Data de admissão
+                          <input id="employeeAdmissionDate" type="date">
+                        </label>
+                        <label>Salário
+                          <input id="employeeSalary" type="text" inputmode="decimal" placeholder="R$ 0,00">
+                        </label>
+                        <label class="span-2">Jornada de trabalho
+                          <input id="employeeWorkHours" placeholder="Ex.: Segunda a sexta, 08h as 18h">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section">
+                      <h3>Acesso ao sistema</h3>
+                      <div class="employee-form-grid">
+                        <label>Usuário
+                          <input id="employeeUsername" required autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="Ex.: vendedor01">
+                          <div class="field-error" id="err-employeeUsername"></div>
+                        </label>
+                        <label>Senha (opcional)
+                          <input id="employeePassword" type="password" autocomplete="new-password" placeholder="Deixe em branco para manter">
+                          <div class="field-error" id="err-employeePassword"></div>
+                        </label>
+                        <label>Perfil
+                          <select id="employeeRoleSelect">
+                            <option value="Vendedor">Vendedor</option>
+                            <option value="Estoque">Estoque</option>
+                            <option value="Administrador">Administrador</option>
+                          </select>
+                        </label>
+                        <label><input type="checkbox" id="employeeActive" checked> Ativo</label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section">
+                      <h3>Documentos anexados</h3>
+                      <div class="employee-form-grid">
+                        <div class="employee-document-list">
+                          <span>Documentos</span>
+                          <label><input type="checkbox" name="employeeDocument" value="RG"> RG</label>
+                          <label><input type="checkbox" name="employeeDocument" value="CPF"> CPF</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Comprovante de residência"> Comprovante de residência</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Carteira de trabalho"> Carteira de trabalho</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Título de eleitor"> Título de eleitor</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Certificado militar"> Certificado militar</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Certidão de nascimento/casamento"> Certidão de nascimento/casamento</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Comprovante de escolaridade"> Comprovante de escolaridade</label>
+                          <label><input type="checkbox" name="employeeDocument" value="Foto 3x4"> Foto 3x4</label>
+                        </div>
+                        <label class="span-2">Outros
+                          <input id="employeeOtherDocuments" placeholder="Outros documentos">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="employee-form-section employee-declaration">
+                      <h3>Declaração</h3>
+                      <label><input type="checkbox" id="employeeDeclarationAccepted"> Declaro que as informações acima são verdadeiras.</label>
+                      <div class="employee-form-grid" style="margin-top:10px;">
+                        <label>Local e data
+                          <input id="employeeDeclarationPlaceDate" placeholder="Local e data">
+                        </label>
+                        <label>Assinatura do funcionário
+                          <input id="employeeSignature" placeholder="Nome para assinatura">
+                        </label>
+                      </div>
+                    </div>
+                    <div class="actions product-entry-actions" style="margin-top:14px;">
                       <button type="submit">Salvar funcionário</button>
                       <button type="button" class="secondary" id="cancelEmployeeBtn">Cancelar</button>
                     </div>
@@ -3279,7 +3533,6 @@
                 </div>
               </div>
             </div>
-            <div class="empty hidden" id="peopleManagementEmpty">Nenhuma pessoa cadastrada.</div>
           </div>
         </section>
 
@@ -5174,6 +5427,64 @@
       el("accessEmpty")?.classList.toggle("hidden", users.length > 0);
     }
 
+    const employeeProfileFields = [
+      "birthDate", "maritalStatus", "nationality", "birthplace", "cpf", "rg", "rgIssuer", "ctps", "ctpsSeries", "pis", "voterTitle", "cnh", "cnhCategory",
+      "street", "number", "complement", "neighborhood", "city", "state", "cep", "homePhone", "mobile", "email",
+      "motherName", "fatherName", "dependents", "bank", "agency", "account", "accountType",
+      "position", "department", "admissionDate", "salary", "workHours", "otherDocuments", "declarationPlaceDate", "signature"
+    ];
+
+    function employeeProfileInputId(field) {
+      return `employee${field.charAt(0).toUpperCase()}${field.slice(1)}`;
+    }
+
+    function readEmployeeProfile() {
+      const profile = {};
+      employeeProfileFields.forEach(field => {
+        profile[field] = el(employeeProfileInputId(field))?.value?.trim() || "";
+      });
+      profile.sex = document.querySelector('input[name="employeeSex"]:checked')?.value || "";
+      profile.documents = [...document.querySelectorAll('input[name="employeeDocument"]:checked')].map(input => input.value);
+      profile.declarationAccepted = Boolean(el("employeeDeclarationAccepted")?.checked);
+      return profile;
+    }
+
+    function fillEmployeeProfile(profile = {}) {
+      employeeProfileFields.forEach(field => {
+        const input = el(employeeProfileInputId(field));
+        if (input) input.value = profile[field] || "";
+      });
+      document.querySelectorAll('input[name="employeeSex"]').forEach(input => {
+        input.checked = input.value === (profile.sex || "");
+      });
+      const documents = new Set(profile.documents || []);
+      document.querySelectorAll('input[name="employeeDocument"]').forEach(input => {
+        input.checked = documents.has(input.value);
+      });
+      if (el("employeeDeclarationAccepted")) el("employeeDeclarationAccepted").checked = Boolean(profile.declarationAccepted);
+    }
+
+    function resetEmployeeForm() {
+      el("employeeForm")?.reset();
+      if (el("employeeId")) el("employeeId").value = "";
+      fillEmployeeProfile({});
+      if (el("employeeActive")) el("employeeActive").checked = true;
+      if (el("employeeRoleSelect")) el("employeeRoleSelect").value = "Vendedor";
+      ["employeeName", "employeeUsername", "employeePassword"].forEach(clearEmployeeFieldError);
+    }
+
+    function clearEmployeeFieldError(id) {
+      const error = el(`err-${id}`);
+      if (error) error.textContent = "";
+      el(id)?.classList.remove("input-error");
+    }
+
+    function setEmployeeFieldError(id, message) {
+      const error = el(`err-${id}`);
+      if (error) error.textContent = message;
+      el(id)?.classList.add("input-error");
+    }
+
     function renderPeopleManagement() {
       const users = state.users || [];
       const activeUsers = users.filter(user => user.active !== false);
@@ -5183,9 +5494,19 @@
       if (el("peopleAdminCount")) el("peopleAdminCount").textContent = activeUsers.filter(user => hasRole(user, "Administrador")).length;
       const body = el("peopleManagementBody");
       if (!body) return;
-      body.innerHTML = users.map(user => `
+      const search = (el("employeesSearch")?.value || "").trim().toLowerCase();
+      const filteredUsers = users.filter(user => {
+        const profile = user.employeeProfile || {};
+        return [user.name, user.username, rolesLabel(user), profile.position, profile.department, profile.cpf]
+          .some(value => String(value || "").toLowerCase().includes(search));
+      });
+      body.innerHTML = filteredUsers.map(user => {
+        const profile = user.employeeProfile || {};
+        return `
         <tr>
           <td>${escapeHtml(user.name || "-")}</td>
+          <td>${escapeHtml(profile.position || "-")}</td>
+          <td>${escapeHtml(profile.department || "-")}</td>
           <td>${escapeHtml(rolesLabel(user))}</td>
           <td><span class="pill ${user.active !== false ? "ok" : "danger"}">${user.active !== false ? "Ativo" : "Bloqueado"}</span></td>
           <td>${escapeHtml(user.username || "-")}</td>
@@ -5196,8 +5517,9 @@
             </div>
           </td>
         </tr>
-      `).join("");
-      el("peopleManagementEmpty")?.classList.toggle("hidden", users.length > 0);
+      `;
+      }).join("");
+      el("peopleManagementEmpty")?.classList.toggle("hidden", filteredUsers.length > 0);
     }
 
     function editEmployee(id) {
@@ -5210,6 +5532,7 @@
       const role = primaryRole(user.roles || [user.role]);
       el("employeeRoleSelect").value = role || "Vendedor";
       el("employeeActive").checked = user.active !== false;
+      fillEmployeeProfile(user.employeeProfile || {});
       el("employeeForm").classList.remove("hidden");
       el("employeeName").focus();
     }
@@ -6594,14 +6917,11 @@ loadProductIntoPricing(product);
       el("accessName").focus();
     });
     el("newEmployeeBtn")?.addEventListener("click", () => {
-      // abrir o formulário de cadastro de funcionário (novo)
       if (el("employeeForm")) {
-        el("employeeForm").reset();
-        el("employeeId").value = "";
+        resetEmployeeForm();
         el("employeeForm").classList.remove("hidden");
         el("employeeName").focus();
       } else {
-        // fallback: abrir o formulário completo de acessos
         clearAccessForm();
         document.querySelectorAll('input[name="accessRole"]').forEach(i => i.checked = i.value === "Vendedor");
         renderPermissionList(permissionsForRoles(selectedAccessRoles()));
@@ -6609,26 +6929,15 @@ loadProductIntoPricing(product);
         el("accessName").focus();
       }
     });
+    el("employeesSearch")?.addEventListener("input", renderPeopleManagement);
 
     el("employeeForm")?.addEventListener("submit", event => {
       event.preventDefault();
-      function setFieldError(id, msg) {
-        const elErr = el('err-' + id);
-        if (elErr) elErr.textContent = msg;
-        const input = el(id);
-        if (input) input.classList.add('input-error');
-      }
-      function clearFieldError(id) {
-        const elErr = el('err-' + id);
-        if (elErr) elErr.textContent = '';
-        const input = el(id);
-        if (input) input.classList.remove('input-error');
-      }
-      // limpar erros anteriores
-      ['employeeName','employeeUsername','employeePassword'].forEach(clearFieldError);
+      ["employeeName", "employeeUsername", "employeePassword"].forEach(clearEmployeeFieldError);
 
       state.users ||= [];
       const id = el("employeeId").value || makeId();
+      const existingUser = state.users.find(u => u.id === id);
       const name = el("employeeName").value.trim();
       const usernameRaw = el("employeeUsername").value.trim();
       const username = normalizeUsername(usernameRaw || "");
@@ -6638,25 +6947,25 @@ loadProductIntoPricing(product);
 
       let firstInvalid = null;
       if (!name) {
-        setFieldError('employeeName', 'Nome é obrigatório.');
-        firstInvalid = firstInvalid || el('employeeName');
+        setEmployeeFieldError("employeeName", "Nome é obrigatório.");
+        firstInvalid = firstInvalid || el("employeeName");
       }
       if (!username) {
-        setFieldError('employeeUsername', 'Usuário é obrigatório.');
-        firstInvalid = firstInvalid || el('employeeUsername');
+        setEmployeeFieldError("employeeUsername", "Usuário é obrigatório.");
+        firstInvalid = firstInvalid || el("employeeUsername");
       } else if (!/^[a-z0-9._-]{3,}$/.test(username)) {
-        setFieldError('employeeUsername', 'Usuário inválido (mínimo 3 caracteres, apenas letras, números, . _ -).');
-        firstInvalid = firstInvalid || el('employeeUsername');
+        setEmployeeFieldError("employeeUsername", "Usuário inválido (mínimo 3 caracteres, apenas letras, números, . _ -).");
+        firstInvalid = firstInvalid || el("employeeUsername");
       }
       if (password && password.length > 0 && password.length < 6) {
-        setFieldError('employeePassword', 'Senha muito curta (mínimo 6 caracteres).');
-        firstInvalid = firstInvalid || el('employeePassword');
+        setEmployeeFieldError("employeePassword", "Senha muito curta (mínimo 6 caracteres).");
+        firstInvalid = firstInvalid || el("employeePassword");
       }
 
       const duplicate = state.users.find(u => u.id !== id && normalizeUsername(u.username || "") === username);
       if (duplicate) {
-        setFieldError('employeeUsername', 'Já existe um usuário com este nome de usuário.');
-        firstInvalid = firstInvalid || el('employeeUsername');
+        setEmployeeFieldError("employeeUsername", "Já existe um usuário com este nome de usuário.");
+        firstInvalid = firstInvalid || el("employeeUsername");
       }
 
       if (firstInvalid) {
@@ -6669,13 +6978,13 @@ loadProductIntoPricing(product);
         id,
         name,
         username,
-        password: password || 'acesso123',
+        password: password || existingUser?.password || FIRST_ACCESS_PASSWORD,
         role,
         roles,
         active,
-        mustChangePassword: false,
-        passwordResetRequested: false,
-        // preset permissions a partir do perfil selecionado
+        mustChangePassword: existingUser ? Boolean(existingUser.mustChangePassword) : false,
+        passwordResetRequested: Boolean(existingUser?.passwordResetRequested),
+        employeeProfile: readEmployeeProfile(),
         permissions: permissionsForRoles(roles, [])
       };
       const index = state.users.findIndex(u => u.id === id);
@@ -6690,7 +6999,7 @@ loadProductIntoPricing(product);
     el("cancelEmployeeBtn")?.addEventListener("click", () => {
       if (el("employeeForm")) {
         el("employeeForm").classList.add("hidden");
-        el("employeeForm").reset();
+        resetEmployeeForm();
       }
     });
     el("cancelAccessBtn")?.addEventListener("click", () => {
