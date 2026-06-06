@@ -5012,7 +5012,8 @@
       if (cash && statusEl) statusEl.textContent = status.label;
     }
 
-    function showCashRequiredNotice() {
+    function showCashRequiredNotice(options = {}) {
+      const { showAlert = true, redirect = true } = options;
       const flow = cashFlowForToday();
       const message = flow.closed
         ? "Caixa fechado. Abra um novo caixa antes de iniciar uma venda."
@@ -5024,9 +5025,11 @@
         notice.textContent = message;
         notice.style.color = "var(--danger)";
       }
-      alert(message);
-      switchView("cashFlow");
-      el("cashActionValue")?.focus();
+      if (showAlert) alert(message);
+      if (redirect) {
+        switchView("cashFlow");
+        el("cashActionValue")?.focus();
+      }
     }
 
     function updateSalesCashLock() {
@@ -5759,7 +5762,7 @@ function renderAll() {
 
     function addSaleItem(force = false) {
       if (!force && !isCashRegisterOpenForSales()) {
-        showCashRequiredNotice();
+        showCashRequiredNotice({ showAlert: false });
         return;
       }
       const row = document.createElement("div");
@@ -6003,7 +6006,7 @@ function renderAll() {
 
     function addProductByBarcode(code, options = {}) {
       if (!isCashRegisterOpenForSales()) {
-        showCashRequiredNotice();
+        showCashRequiredNotice({ showAlert: false });
         if (el("saleBarcode")) el("saleBarcode").value = "";
         return;
       }
@@ -6072,7 +6075,7 @@ function renderAll() {
 
     function finishSale() {
       if (!isCashRegisterOpenForSales()) {
-        showCashRequiredNotice();
+        showCashRequiredNotice({ showAlert: false });
         return;
       }
       const draft = getSaleDraft();
@@ -6159,6 +6162,9 @@ renderAll();
       if (currentUser && !areaViews.some(view => canAccess(view))) return;
       const nextView = areaViews.find(view => !currentUser || canAccess(view));
       if (nextView) switchView(nextView);
+      if (area === "salesArea" && nextView === "sales" && !isCashRegisterOpenForSales()) {
+        showCashRequiredNotice({ showAlert: true, redirect: false });
+      }
     }
 
     function switchView(view) {
