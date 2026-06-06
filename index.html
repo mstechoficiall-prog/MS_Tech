@@ -5124,6 +5124,7 @@
       const action = el("cashAction")?.value || "open";
       const value = parseBrazilianNumber(el("cashActionValue")?.value || 0);
       const description = el("cashActionDescription")?.value || "";
+      let returnToSales = false;
 
       if (action === "open") {
         if (!flow.opened || flow.closed) {
@@ -5137,9 +5138,11 @@
           flow.initial = value;
           flow.closing = 0;
           flow.movements ||= [];
+          returnToSales = true;
         } else if (flow.paused) {
           flow.paused = false;
           flow.movements.push({ id: makeId(), date: new Date().toISOString(), type: "Reabertura", description: "Caixa retomado", value: 0 });
+          returnToSales = true;
         } else {
           alert("O caixa já está aberto.");
           return;
@@ -5174,6 +5177,7 @@
       if (el("cashActionValue")) el("cashActionValue").value = "";
       if (el("cashActionDescription")) el("cashActionDescription").value = "";
       renderCashFlow();
+      if (returnToSales) switchView("sales");
     }
 
     function renderCashFlow() {
