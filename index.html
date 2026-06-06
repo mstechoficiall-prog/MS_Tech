@@ -1500,6 +1500,7 @@
 
     #salesView .grid-2:has(#discountPercent) {
       grid-area: discount;
+      grid-template-columns: minmax(82px, .75fr) minmax(118px, 1fr);
     }
 
     #salesView .grid-2:has(#paymentMethod) {
@@ -1524,6 +1525,7 @@
 
     #cashPaymentCard {
       grid-area: cash;
+      grid-template-columns: minmax(180px, 1fr) minmax(120px, .75fr);
     }
 
     #salesView .grid-2:has(#customerName),
@@ -1566,7 +1568,7 @@
       border-radius: 4px;
       background: #ffffff;
       color: #0d4f78;
-      font-size: .68rem;
+      font-size: .66rem;
       line-height: 1.25;
       word-break: normal;
       overflow-wrap: anywhere;
@@ -1587,6 +1589,7 @@
       color: #ffffff;
       font-weight: 850;
       text-transform: uppercase;
+      white-space: normal;
     }
 
     #salesView .grid-2:has(#customerName) input,
@@ -1932,7 +1935,7 @@
       #salesView .grid-2:has(#discountPercent) label,
       #salesView .grid-2:has(#paymentMethod) label,
       #cashPaymentCard label {
-        grid-template-rows: 30px minmax(36px, 1fr);
+        grid-template-rows: 34px minmax(36px, 1fr);
       }
       #salesView .grid-2:has(#customerName) input,
       #salesView .grid-2:has(#discountPercent) input,
@@ -2737,7 +2740,7 @@
               <label><span>Desconto (%)</span>
                 <input id="discountPercent" type="number" min="0" max="10" step="0.01" value="0" placeholder="0 a 10">
               </label>
-              <label><span>Valor do desconto aplicado</span>
+              <label><span>Desconto aplicado</span>
                 <input id="discountValue" type="text" value="R$ 0,00" readonly>
               </label>
             </div>
@@ -2812,7 +2815,7 @@
               </label>
             </div>
             <div class="grid-2" id="cashPaymentCard" style="margin-top:2px;">
-              <label><span>Valor recebido em dinheiro</span>
+              <label><span>Valor recebido</span>
                 <input id="cashReceived" type="number" min="0" step="0.01" placeholder="Informe o valor entregue pelo cliente">
               </label>
               <label><span>Troco</span>
