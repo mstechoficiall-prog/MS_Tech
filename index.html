@@ -99,10 +99,6 @@
     }
 
     main {
-      display: grid;
-      grid-template-columns: 220px minmax(0, 1fr);
-      gap: 18px;
-      align-items: start;
       grid-column: 2;
       width: 100%;
       max-width: none;
@@ -111,7 +107,6 @@
     }
 
     .user-status-row {
-      grid-column: 1 / -1;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -122,11 +117,7 @@
     }
 
     .module-nav {
-      grid-column: 1;
-      position: sticky;
-      top: 24px;
       flex-direction: column;
-      align-self: start;
       margin-bottom: 0;
     }
 
@@ -136,7 +127,6 @@
     }
 
     .dashboard-view {
-      grid-column: 2;
       width: 100%;
     }
 
@@ -244,7 +234,6 @@
     }
 
     .workspace {
-      grid-column: 2;
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
@@ -369,7 +358,8 @@
     }
 
     header button.secondary,
-    header button.warning {
+    header button.warning,
+    header .module-nav .area-button {
       width: 100%;
       justify-content: center !important;
       background: transparent;
@@ -378,12 +368,25 @@
       box-shadow: none;
       font-size: 11px;
       text-align: center !important;
+      min-height: 48px;
     }
 
     header button.secondary:hover,
-    header button.warning:hover {
+    header button.warning:hover,
+    header .module-nav .area-button:hover,
+    header .module-nav .area-button.active {
       background: rgba(255, 255, 255, .16);
       color: #ffffff;
+    }
+
+    header .module-nav {
+      width: 100%;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      gap: 10px;
     }
 
     .password-field {
@@ -2293,6 +2296,14 @@
       <p class="subtitle">Sistema de gestão MS Tech.</p>
     </div>
     <div class="header-actions">
+      <nav class="area-menu module-nav" aria-label="Areas do sistema">
+        <button class="area-button" data-area="dashboardArea" type="button">Dashboard</button>
+        <button class="area-button" data-area="salesArea" type="button">Vendas</button>
+        <button class="area-button" data-area="stockArea" type="button">Estoque</button>
+        <button class="area-button" data-area="customersArea" type="button">Clientes</button>
+        <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
+        <button class="area-button" data-area="accessArea" type="button">Acessos</button>
+      </nav>
       <button class="warning" id="resetBtn" type="button">Limpar base</button>
       <button class="secondary" id="logoutBtn" type="button">Sair</button>
     </div>
@@ -2302,14 +2313,6 @@
     <div class="user-status-row">
       <span class="user-chip" id="currentUserChip">Usuário</span>
     </div>
-    <nav class="area-menu module-nav" aria-label="Areas do sistema">
-      <button class="area-button" data-area="dashboardArea" type="button">Dashboard</button>
-      <button class="area-button" data-area="salesArea" type="button">Vendas</button>
-      <button class="area-button" data-area="stockArea" type="button">Estoque</button>
-      <button class="area-button" data-area="customersArea" type="button">Clientes</button>
-      <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
-      <button class="area-button" data-area="accessArea" type="button">Acessos</button>
-    </nav>
     <section id="dashboardView" class="dashboard-view hidden">
     <section class="metrics company-only" id="companyMetrics" aria-label="Resumo da empresa">
       <article class="metric"><span>Saldo em vendas</span><strong id="metricRevenue">R$ 0,00</strong></article>
