@@ -110,10 +110,14 @@
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      min-height: 84px;
-      margin-bottom: 18px;
+      min-height: 66px;
+      margin-bottom: 10px;
       padding: 10px 0 14px;
       background: linear-gradient(180deg, var(--bg) 0%, rgba(244, 249, 252, .96) 76%, rgba(244, 249, 252, 0) 100%);
+    }
+
+    .module-nav {
+      margin-bottom: 18px;
     }
 
     .metrics {
@@ -234,22 +238,12 @@
     }
 
     .workspace > .panel {
-      display: grid;
-      grid-template-columns: 210px minmax(0, 1fr);
       align-items: start;
       min-height: calc(100vh - 48px);
     }
 
     .workspace > .panel > .area-menu {
-      grid-column: 1;
-      grid-row: 1 / span 20;
-    }
-
-    .workspace > .panel > .subarea-menu,
-    .workspace > .panel > .subarea-placeholder,
-    .workspace > .panel > section {
-      grid-column: 2;
-      min-width: 0;
+      display: none;
     }
 
     .panel h2 {
@@ -500,13 +494,15 @@
 
     .area-menu {
       display: flex;
-      gap: 6px;
-      padding: 18px 14px;
-      border-bottom: 0;
-      border-right: 1px solid var(--line);
-      background: #fbfdfe;
-      flex-direction: column;
-      min-height: 100%;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid rgba(216, 231, 239, .92);
+      border-radius: 12px;
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      flex-direction: row;
+      flex-wrap: wrap;
+      min-height: auto;
       min-width: 0;
     }
 
@@ -518,20 +514,20 @@
       overflow-wrap: anywhere;
       box-shadow: none;
       justify-content: center !important;
-      width: 100%;
-      min-height: 40px;
-      padding: 9px 10px;
-      font-size: 11px;
-      font-weight: 720;
+      flex: 1 1 140px;
+      min-height: 48px;
+      padding: 11px 14px;
+      font-size: 13px;
+      font-weight: 800;
       text-align: center !important;
       line-height: 1.1;
+      border-radius: 8px;
     }
 
     .area-menu .area-button,
     .subarea-menu .tab {
       justify-content: center !important;
       text-align: center !important;
-      font-size: 11px;
     }
 
     .area-button.active {
@@ -2013,25 +2009,16 @@
       }
       .workspace { grid-template-columns: 1fr; }
       .workspace > .panel {
-        display: block;
         min-height: auto;
       }
       .area-menu {
-        flex-direction: row;
-        min-height: auto;
-        border-right: 0;
-        border-bottom: 1px solid var(--line);
         overflow-x: auto;
         max-width: 100%;
-        padding: 12px;
         -webkit-overflow-scrolling: touch;
       }
       .area-button {
-        width: auto;
-        min-width: 88px;
-        max-width: 140px;
+        flex: 1 0 128px;
         justify-content: center !important;
-        font-size: 11px;
       }
       .metrics { grid-template-columns: repeat(2, minmax(160px, 1fr)); }
       .goals { grid-template-columns: 1fr; }
@@ -2060,6 +2047,9 @@
         flex-wrap: nowrap;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+      }
+      .area-menu {
+        flex-wrap: nowrap;
       }
       .tab {
         flex: 0 0 auto;
@@ -2282,6 +2272,13 @@
     <div class="user-status-row">
       <span class="user-chip" id="currentUserChip">Usuário</span>
     </div>
+    <nav class="area-menu module-nav" aria-label="Areas do sistema">
+      <button class="area-button" data-area="salesArea" type="button">Vendas</button>
+      <button class="area-button" data-area="stockArea" type="button">Estoque</button>
+      <button class="area-button" data-area="customersArea" type="button">Clientes</button>
+      <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
+      <button class="area-button" data-area="accessArea" type="button">Acessos</button>
+    </nav>
     <section class="metrics company-only" id="companyMetrics" aria-label="Resumo da empresa">
       <article class="metric"><span>Saldo em vendas</span><strong id="metricRevenue">R$ 0,00</strong></article>
       <article class="metric"><span>Lucro estimado</span><strong id="metricProfit">R$ 0,00</strong></article>
@@ -6122,17 +6119,8 @@ renderAll();
     function switchArea(area) {
       const areaViews = Object.entries(areaByView).filter(([, areaName]) => areaName === area).map(([view]) => view);
       if (currentUser && !areaViews.some(view => canAccess(view))) return;
-      document.querySelectorAll(".area-button").forEach(button => {
-        button.classList.toggle("active", button.dataset.area === area);
-      });
-      document.querySelectorAll(".subarea-menu").forEach(menu => {
-        menu.classList.toggle("active", menu.dataset.subarea === area);
-      });
-      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-      viewNames.forEach(name => {
-        el(`${name}View`).classList.add("hidden");
-      });
-      el("subareaPlaceholder").classList.toggle("hidden", Boolean(area));
+      const nextView = areaViews.find(view => !currentUser || canAccess(view));
+      if (nextView) switchView(nextView);
     }
 
     function switchView(view) {
