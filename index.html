@@ -1936,7 +1936,7 @@
       .sale-terminal {
         width: 100%;
         box-sizing: border-box;
-        grid-template-rows: 30px 110px 44px 44px 72px 78px 0 0 0 0 72px 16px;
+        grid-template-rows: 34px 150px 60px 60px 94px 102px 0 0 0 0 96px 24px;
         height: calc(90vh - 86px);
         min-height: 0;
         max-height: calc(90vh - 86px);
@@ -1945,8 +1945,8 @@
         overflow: hidden;
       }
       .sale-terminal-title {
-        min-height: 28px;
-        font-size: 1.1rem;
+        min-height: 32px;
+        font-size: 1.2rem;
       }
       .sale-terminal-brand {
         min-height: 0;
@@ -1956,7 +1956,7 @@
         padding: 8px;
       }
       .sale-terminal-value {
-        grid-template-rows: 18px 1fr;
+        grid-template-rows: 22px 1fr;
         min-height: 0;
       }
       .sale-terminal-value span,
@@ -1971,6 +1971,7 @@
       #salesView .grid-2:has(#discountPercent),
       #salesView .grid-2:has(#paymentMethod),
       #cashPaymentCard {
+        height: 100%;
         padding: 4px;
       }
       #salesView .grid-2:has(#discountPercent),
@@ -1982,16 +1983,17 @@
       #salesView .grid-2:has(#discountPercent) label,
       #salesView .grid-2:has(#paymentMethod) label,
       #cashPaymentCard label {
-        grid-template-rows: 26px 34px;
-        font-size: .62rem;
+        height: 100%;
+        grid-template-rows: 30px minmax(42px, 1fr);
+        font-size: .64rem;
       }
       #salesView .grid-2:has(#customerName) input,
       #salesView .grid-2:has(#discountPercent) input,
       #salesView .grid-2:has(#paymentMethod) select,
       #cashPaymentCard input {
-        min-height: 34px;
-        padding: 5px 8px;
-        font-size: .78rem;
+        min-height: 42px;
+        padding: 7px 9px;
+        font-size: .82rem;
       }
       #salesView .grid-2:has(#customerName) label > span,
       #salesView .grid-2:has(#discountPercent) label > span,
@@ -2006,7 +2008,7 @@
       }
       #salesView .sale-total strong,
       #salesView .sale-total #saleTotal {
-        min-height: 38px;
+        min-height: 62px;
       }
       #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
         min-height: 0;
