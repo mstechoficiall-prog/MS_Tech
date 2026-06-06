@@ -99,6 +99,10 @@
     }
 
     main {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 18px;
+      align-items: start;
       grid-column: 2;
       width: 100%;
       max-width: none;
@@ -107,6 +111,7 @@
     }
 
     .user-status-row {
+      grid-column: 1 / -1;
       display: flex;
       justify-content: flex-end;
       align-items: center;
@@ -117,10 +122,21 @@
     }
 
     .module-nav {
-      margin-bottom: 18px;
+      grid-column: 1;
+      position: sticky;
+      top: 24px;
+      flex-direction: column;
+      align-self: start;
+      margin-bottom: 0;
+    }
+
+    .module-nav .area-button {
+      flex: 0 0 auto;
+      width: 100%;
     }
 
     .dashboard-view {
+      grid-column: 2;
       width: 100%;
     }
 
@@ -228,6 +244,7 @@
     }
 
     .workspace {
+      grid-column: 2;
       display: grid;
       grid-template-columns: 1fr;
       gap: 16px;
@@ -1999,6 +2016,7 @@
       }
       main {
         grid-column: auto;
+        display: block;
         padding-top: 24px;
       }
       #currentUserChip {
@@ -2019,6 +2037,14 @@
         overflow-x: auto;
         max-width: 100%;
         -webkit-overflow-scrolling: touch;
+      }
+      .module-nav {
+        position: static;
+        flex-direction: row;
+        margin-bottom: 18px;
+      }
+      .module-nav .area-button {
+        width: auto;
       }
       .area-button {
         flex: 1 0 128px;
