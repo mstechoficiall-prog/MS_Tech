@@ -1267,8 +1267,7 @@
         "credit-fees credit-fees list"
         "credit-total credit-total list"
         "cash cash total"
-        "notice notice notice"
-        "actions actions actions";
+        "notice notice notice";
       gap: 6px;
       padding: 6px;
       border: 1px solid rgba(13, 79, 120, .28);
@@ -1642,7 +1641,6 @@
     }
 
     #salesView .sale-total {
-      grid-area: total;
       display: grid;
       grid-template-columns: 1fr;
       gap: 0;
@@ -1668,6 +1666,39 @@
       grid-area: notice;
       color: #ffffff;
       font-weight: 800;
+    }
+
+    .sale-checkout {
+      grid-area: total;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .sale-checkout .actions {
+      display: grid;
+      grid-template-columns: 42px minmax(126px, 156px);
+      gap: 6px;
+      margin: 0 !important;
+      min-width: 0;
+    }
+
+    .sale-checkout #clearSaleBtn {
+      width: 42px;
+      min-height: 100%;
+      padding: 0;
+      background: var(--danger);
+      color: #ffffff;
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .sale-checkout #finishSaleBtn {
+      width: auto;
+      min-height: 100%;
+      padding: 0 12px;
+      white-space: nowrap;
     }
 
     #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
@@ -1905,7 +1936,7 @@
       .sale-terminal {
         width: 100%;
         box-sizing: border-box;
-        grid-template-rows: 30px 110px 44px 44px 62px 64px 0 0 0 0 62px 16px 40px;
+        grid-template-rows: 30px 110px 44px 44px 72px 78px 0 0 0 0 72px 16px;
         height: calc(90vh - 86px);
         min-height: 0;
         max-height: calc(90vh - 86px);
@@ -1951,14 +1982,14 @@
       #salesView .grid-2:has(#discountPercent) label,
       #salesView .grid-2:has(#paymentMethod) label,
       #cashPaymentCard label {
-        grid-template-rows: 22px 32px;
+        grid-template-rows: 26px 34px;
         font-size: .62rem;
       }
       #salesView .grid-2:has(#customerName) input,
       #salesView .grid-2:has(#discountPercent) input,
       #salesView .grid-2:has(#paymentMethod) select,
       #cashPaymentCard input {
-        min-height: 32px;
+        min-height: 34px;
         padding: 5px 8px;
         font-size: .78rem;
       }
@@ -2028,8 +2059,7 @@
           "credit-total"
           "cash"
           "total"
-          "notice"
-          "actions";
+          "notice";
       }
       .sale-terminal-brand {
         min-height: 160px;
@@ -2045,8 +2075,11 @@
       #saleItems:empty::after {
         min-height: 160px;
       }
-      #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
+      .sale-checkout {
         grid-template-columns: 1fr;
+      }
+      .sale-checkout .actions {
+        grid-template-columns: 42px 1fr;
       }
       .sale-row {
         grid-template-columns: 1fr 1fr;
@@ -2847,12 +2880,14 @@
                 <input id="cashChange" type="text" value="R$ 0,00" readonly>
               </label>
             </div>
-            <div class="sale-total"><span>Total</span><span id="saleTotal">R$ 0,00</span></div>
-            <div class="notice" id="saleNotice"></div>
-            <div class="actions" style="margin-top:12px;">
-              <button type="button" class="secondary" id="clearSaleBtn">Cancelar</button>
-              <button type="button" id="finishSaleBtn">Finalizar venda</button>
+            <div class="sale-checkout">
+              <div class="sale-total"><span>Total</span><span id="saleTotal">R$ 0,00</span></div>
+              <div class="actions">
+                <button type="button" class="danger" id="clearSaleBtn" aria-label="Cancelar venda" title="Cancelar venda">×</button>
+                <button type="button" id="finishSaleBtn">Finalizar venda</button>
+              </div>
             </div>
+            <div class="notice" id="saleNotice"></div>
             </div>
           </div>
         </section>
