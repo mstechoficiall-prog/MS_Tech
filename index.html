@@ -1905,26 +1905,42 @@
       .sale-terminal {
         width: 100%;
         box-sizing: border-box;
-        grid-template-rows: 32px 122px 50px 50px 68px 76px 0 0 0 0 68px 18px 42px;
+        grid-template-rows: 30px 110px 44px 44px 62px 64px 0 0 0 0 62px 16px 40px;
         height: calc(90vh - 86px);
         min-height: 0;
         max-height: calc(90vh - 86px);
+        gap: 4px;
+        padding: 4px;
         overflow: hidden;
       }
       .sale-terminal-title {
-        min-height: 30px;
+        min-height: 28px;
         font-size: 1.1rem;
       }
       .sale-terminal-brand {
-        min-height: 134px;
+        min-height: 0;
       }
       .sale-terminal-brand img {
-        min-height: 122px;
-        padding: 10px;
+        min-height: 0;
+        padding: 8px;
       }
       .sale-terminal-value {
-        grid-template-rows: 20px 1fr;
-        min-height: 50px;
+        grid-template-rows: 18px 1fr;
+        min-height: 0;
+      }
+      .sale-terminal-value span,
+      .sale-total span:first-child {
+        padding: 3px 8px;
+      }
+      .sale-terminal-value strong {
+        padding: 4px 8px;
+        font-size: 1.08rem;
+      }
+      #salesView .grid-2:has(#customerName),
+      #salesView .grid-2:has(#discountPercent),
+      #salesView .grid-2:has(#paymentMethod),
+      #cashPaymentCard {
+        padding: 4px;
       }
       #salesView .grid-2:has(#discountPercent),
       #salesView .grid-2:has(#paymentMethod),
@@ -1935,13 +1951,22 @@
       #salesView .grid-2:has(#discountPercent) label,
       #salesView .grid-2:has(#paymentMethod) label,
       #cashPaymentCard label {
-        grid-template-rows: 34px minmax(36px, 1fr);
+        grid-template-rows: 22px 32px;
+        font-size: .62rem;
       }
       #salesView .grid-2:has(#customerName) input,
       #salesView .grid-2:has(#discountPercent) input,
       #salesView .grid-2:has(#paymentMethod) select,
       #cashPaymentCard input {
-        min-height: 36px;
+        min-height: 32px;
+        padding: 5px 8px;
+        font-size: .78rem;
+      }
+      #salesView .grid-2:has(#customerName) label > span,
+      #salesView .grid-2:has(#discountPercent) label > span,
+      #salesView .grid-2:has(#paymentMethod) label > span,
+      #cashPaymentCard label > span {
+        padding: 3px 8px;
       }
       #saleItems {
         height: 100%;
@@ -1950,7 +1975,7 @@
       }
       #salesView .sale-total strong,
       #salesView .sale-total #saleTotal {
-        min-height: 42px;
+        min-height: 38px;
       }
       #salesView .sale-terminal > .actions:has(#finishSaleBtn) {
         min-height: 0;
