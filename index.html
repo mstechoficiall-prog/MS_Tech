@@ -5227,6 +5227,7 @@
       syncSalesPeopleWithSellers();
       saveState();
       renderAll();
+      showToast('Funcionário excluído');
     }
 
 
@@ -6674,6 +6675,7 @@ loadProductIntoPricing(product);
         active,
         mustChangePassword: false,
         passwordResetRequested: false,
+        // preset permissions a partir do perfil selecionado
         permissions: permissionsForRoles(roles, [])
       };
       const index = state.users.findIndex(u => u.id === id);
@@ -6682,6 +6684,7 @@ loadProductIntoPricing(product);
       saveState();
       el("employeeForm").classList.add("hidden");
       renderAll();
+      showToast('Funcionário salvo');
     });
 
     el("cancelEmployeeBtn")?.addEventListener("click", () => {
@@ -6867,6 +6870,35 @@ renderAll();
 
     initAuth();
     remoteStartupPromise = syncRemoteOnStartup();
+    // Toast helper
+    function showToast(message, timeout = 3000) {
+      let toast = document.getElementById('appToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'appToast';
+        toast.style.position = 'fixed';
+        toast.style.right = '20px';
+        toast.style.bottom = '20px';
+        toast.style.zIndex = 9999;
+        document.body.appendChild(toast);
+      }
+      const node = document.createElement('div');
+      node.textContent = message;
+      node.style.background = 'linear-gradient(90deg,#0d4f78,#079fe3)';
+      node.style.color = 'white';
+      node.style.padding = '10px 14px';
+      node.style.borderRadius = '8px';
+      node.style.boxShadow = '0 8px 20px rgba(9,42,62,.18)';
+      node.style.marginTop = '8px';
+      node.style.fontWeight = '700';
+      toast.appendChild(node);
+      setTimeout(() => {
+        node.style.transition = 'opacity .25s ease, transform .25s ease';
+        node.style.opacity = '0';
+        node.style.transform = 'translateY(6px)';
+        setTimeout(() => node.remove(), 300);
+      }, timeout);
+    }
   </script>
 </body>
 </html>
