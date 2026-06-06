@@ -931,6 +931,31 @@
       overflow: auto;
     }
 
+    .people-management-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .employee-photo-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .employee-photo-preview {
+      width: 92px;
+      aspect-ratio: 3 / 4;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      object-fit: cover;
+      background: #fff;
+    }
+
+    .employee-photo-preview.hidden {
+      display: none;
+    }
+
     .employee-form-section {
       border-top: 1px solid var(--line);
       padding-top: 14px;
@@ -3302,19 +3327,13 @@
           <div class="panel-body">
             <div class="access-form-title">
               <h2 style="padding:0;border:0;background:transparent;">Gente e Gestão</h2>
-              <div style="margin-top:8px;">
-                <button type="button" id="newEmployeeBtn">Cadastrar funcionário</button>
-              </div>
             </div>
-            <div class="access-summary">
-              <article class="access-card"><span>Equipe</span><strong id="peopleTeamCount">0</strong><small>Colaboradores cadastrados.</small></article>
-              <article class="access-card"><span>Vendedores</span><strong id="peopleSellerCount">0</strong><small>Atuam no atendimento e vendas.</small></article>
-              <article class="access-card"><span>Estoque</span><strong id="peopleStockCount">0</strong><small>Responsáveis por produtos e inventário.</small></article>
-              <article class="access-card"><span>Administradores</span><strong id="peopleAdminCount">0</strong><small>Gestão completa do sistema.</small></article>
+            <div class="people-management-actions">
+              <button type="button" id="newEmployeeBtn">Novo funcionário</button>
+              <button type="button" class="secondary" id="viewEmployeesBtn">Funcionários cadastrados</button>
             </div>
-            <div class="hint">Cadastre a ficha completa do funcionário e mantenha o acesso do sistema no mesmo registro.</div>
             <div class="people-management-layout">
-              <div class="panel">
+              <div class="panel hidden" id="employeeListPanel">
                 <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Lista de funcionários</h2>
                 <div class="panel-body">
                   <input id="employeesSearch" placeholder="Buscar por nome ou usuário" style="margin-bottom:10px;">
@@ -3327,10 +3346,10 @@
                   <div class="empty hidden" id="peopleManagementEmpty">Nenhuma pessoa cadastrada.</div>
                 </div>
               </div>
-              <div class="panel">
+              <div class="panel hidden" id="employeeFormPanel">
                 <h2 style="margin:0 0 10px 0; padding:16px 20px; border-bottom:1px solid var(--line);">Ficha de cadastro de funcionário</h2>
                 <div class="panel-body">
-                  <form id="employeeForm" class="access-form-card employee-form-card hidden" autocomplete="off">
+                  <form id="employeeForm" class="access-form-card employee-form-card" autocomplete="off">
                     <input type="hidden" id="employeeId">
                     <div class="employee-form-section">
                       <h3>Dados pessoais</h3>
@@ -3339,6 +3358,12 @@
                           <input id="employeeName" required placeholder="Nome completo">
                           <div class="field-error" id="err-employeeName"></div>
                         </label>
+                        <div class="employee-photo-field">
+                          <label>Foto 3x4
+                            <input id="employeePhoto" type="file" accept="image/*">
+                          </label>
+                          <img id="employeePhotoPreview" class="employee-photo-preview hidden" alt="Foto 3x4 do funcionário">
+                        </div>
                         <label>Data de nascimento
                           <input id="employeeBirthDate" type="date">
                         </label>
@@ -3527,6 +3552,7 @@
                     </div>
                     <div class="actions product-entry-actions" style="margin-top:14px;">
                       <button type="submit">Salvar funcionário</button>
+                      <button type="button" class="secondary hidden" id="printEmployeeBtn">Imprimir ficha</button>
                       <button type="button" class="secondary" id="cancelEmployeeBtn">Cancelar</button>
                     </div>
                   </form>
@@ -5431,7 +5457,7 @@
       "birthDate", "maritalStatus", "nationality", "birthplace", "cpf", "rg", "rgIssuer", "ctps", "ctpsSeries", "pis", "voterTitle", "cnh", "cnhCategory",
       "street", "number", "complement", "neighborhood", "city", "state", "cep", "homePhone", "mobile", "email",
       "motherName", "fatherName", "dependents", "bank", "agency", "account", "accountType",
-      "position", "department", "admissionDate", "salary", "workHours", "otherDocuments", "declarationPlaceDate", "signature"
+      "position", "department", "admissionDate", "salary", "workHours", "photo", "otherDocuments", "declarationPlaceDate", "signature"
     ];
 
     function employeeProfileInputId(field) {
@@ -5441,7 +5467,11 @@
     function readEmployeeProfile() {
       const profile = {};
       employeeProfileFields.forEach(field => {
-        profile[field] = el(employeeProfileInputId(field))?.value?.trim() || "";
+        if (field === "photo") {
+          profile.photo = el("employeePhotoPreview")?.dataset?.photo || "";
+        } else {
+          profile[field] = el(employeeProfileInputId(field))?.value?.trim() || "";
+        }
       });
       profile.sex = document.querySelector('input[name="employeeSex"]:checked')?.value || "";
       profile.documents = [...document.querySelectorAll('input[name="employeeDocument"]:checked')].map(input => input.value);
@@ -5451,9 +5481,11 @@
 
     function fillEmployeeProfile(profile = {}) {
       employeeProfileFields.forEach(field => {
+        if (field === "photo") return;
         const input = el(employeeProfileInputId(field));
         if (input) input.value = profile[field] || "";
       });
+      setEmployeePhotoPreview(profile.photo || "");
       document.querySelectorAll('input[name="employeeSex"]').forEach(input => {
         input.checked = input.value === (profile.sex || "");
       });
@@ -5464,12 +5496,37 @@
       if (el("employeeDeclarationAccepted")) el("employeeDeclarationAccepted").checked = Boolean(profile.declarationAccepted);
     }
 
+    function setEmployeePhotoPreview(photo = "") {
+      const preview = el("employeePhotoPreview");
+      if (!preview) return;
+      preview.dataset.photo = photo;
+      preview.src = photo || "";
+      preview.classList.toggle("hidden", !photo);
+    }
+
+    function showEmployeeFormPanel() {
+      el("employeeFormPanel")?.classList.remove("hidden");
+      el("employeeListPanel")?.classList.add("hidden");
+    }
+
+    function showEmployeeListPanel() {
+      el("employeeListPanel")?.classList.remove("hidden");
+      el("employeeFormPanel")?.classList.add("hidden");
+      renderPeopleManagement();
+    }
+
+    function hidePeoplePanels() {
+      el("employeeListPanel")?.classList.add("hidden");
+      el("employeeFormPanel")?.classList.add("hidden");
+    }
+
     function resetEmployeeForm() {
       el("employeeForm")?.reset();
       if (el("employeeId")) el("employeeId").value = "";
       fillEmployeeProfile({});
       if (el("employeeActive")) el("employeeActive").checked = true;
       if (el("employeeRoleSelect")) el("employeeRoleSelect").value = "Vendedor";
+      el("printEmployeeBtn")?.classList.add("hidden");
       ["employeeName", "employeeUsername", "employeePassword"].forEach(clearEmployeeFieldError);
     }
 
@@ -5533,8 +5590,124 @@
       el("employeeRoleSelect").value = role || "Vendedor";
       el("employeeActive").checked = user.active !== false;
       fillEmployeeProfile(user.employeeProfile || {});
-      el("employeeForm").classList.remove("hidden");
+      el("printEmployeeBtn")?.classList.remove("hidden");
+      el("employeeForm")?.classList.remove("hidden");
+      showEmployeeFormPanel();
       el("employeeName").focus();
+    }
+
+    function employeePrintRow(label, value) {
+      return `<div><span>${escapeHtml(label)}</span><strong>${escapeHtml(value || "-")}</strong></div>`;
+    }
+
+    function printEmployeeFicha() {
+      const id = el("employeeId")?.value || "";
+      const savedUser = (state.users || []).find(user => user.id === id);
+      const profile = readEmployeeProfile();
+      const name = el("employeeName")?.value?.trim() || savedUser?.name || "";
+      const username = el("employeeUsername")?.value?.trim() || savedUser?.username || "";
+      const role = el("employeeRoleSelect")?.value || primaryRole(savedUser?.roles || [savedUser?.role]);
+      const active = el("employeeActive")?.checked ? "Ativo" : "Bloqueado";
+      const docs = [...(profile.documents || [])];
+      if (profile.otherDocuments) docs.push(`Outros: ${profile.otherDocuments}`);
+      const photoHtml = profile.photo ? `<img class="photo" src="${profile.photo}" alt="Foto 3x4">` : `<div class="photo empty">Foto 3x4</div>`;
+      const sections = [
+        ["Dados pessoais", [
+          employeePrintRow("Nome completo", name),
+          employeePrintRow("Data de nascimento", profile.birthDate),
+          employeePrintRow("Sexo", profile.sex),
+          employeePrintRow("Estado civil", profile.maritalStatus),
+          employeePrintRow("Nacionalidade", profile.nationality),
+          employeePrintRow("Naturalidade", profile.birthplace),
+          employeePrintRow("CPF", profile.cpf),
+          employeePrintRow("RG", profile.rg),
+          employeePrintRow("Órgão emissor", profile.rgIssuer),
+          employeePrintRow("CTPS nº", profile.ctps),
+          employeePrintRow("Série", profile.ctpsSeries),
+          employeePrintRow("PIS/PASEP", profile.pis),
+          employeePrintRow("Título de eleitor", profile.voterTitle),
+          employeePrintRow("CNH nº", profile.cnh),
+          employeePrintRow("Categoria CNH", profile.cnhCategory)
+        ]],
+        ["Endereço e contato", [
+          employeePrintRow("Rua/Avenida", profile.street),
+          employeePrintRow("Número", profile.number),
+          employeePrintRow("Complemento", profile.complement),
+          employeePrintRow("Bairro", profile.neighborhood),
+          employeePrintRow("Cidade", profile.city),
+          employeePrintRow("Estado", profile.state),
+          employeePrintRow("CEP", profile.cep),
+          employeePrintRow("Telefone residencial", profile.homePhone),
+          employeePrintRow("Celular", profile.mobile),
+          employeePrintRow("E-mail", profile.email)
+        ]],
+        ["Dados familiares", [
+          employeePrintRow("Nome da mãe", profile.motherName),
+          employeePrintRow("Nome do pai", profile.fatherName),
+          employeePrintRow("Dependentes", profile.dependents)
+        ]],
+        ["Dados bancários", [
+          employeePrintRow("Banco", profile.bank),
+          employeePrintRow("Agência", profile.agency),
+          employeePrintRow("Conta", profile.account),
+          employeePrintRow("Tipo de conta", profile.accountType)
+        ]],
+        ["Informações profissionais", [
+          employeePrintRow("Cargo", profile.position),
+          employeePrintRow("Departamento/Setor", profile.department),
+          employeePrintRow("Data de admissão", profile.admissionDate),
+          employeePrintRow("Salário", profile.salary),
+          employeePrintRow("Jornada de trabalho", profile.workHours),
+          employeePrintRow("Usuário", username),
+          employeePrintRow("Perfil", role),
+          employeePrintRow("Status", active)
+        ]],
+        ["Documentos anexados", [
+          employeePrintRow("Documentos", docs.join(", "))
+        ]],
+        ["Declaração", [
+          employeePrintRow("Declaração", profile.declarationAccepted ? "Declaro que as informações acima são verdadeiras." : "-"),
+          employeePrintRow("Local e data", profile.declarationPlaceDate),
+          employeePrintRow("Assinatura do funcionário", profile.signature)
+        ]]
+      ];
+      const printWindow = window.open("", "_blank", "width=900,height=700");
+      if (!printWindow) {
+        alert("Permita pop-ups para imprimir a ficha.");
+        return;
+      }
+      printWindow.document.write(`<!doctype html>
+        <html lang="pt-BR">
+          <head>
+            <meta charset="utf-8">
+            <title>Ficha de cadastro de funcionário</title>
+            <style>
+              * { box-sizing: border-box; }
+              body { font-family: Arial, sans-serif; color: #17202a; margin: 28px; }
+              header { display: flex; justify-content: space-between; gap: 20px; align-items: flex-start; border-bottom: 2px solid #17202a; padding-bottom: 14px; margin-bottom: 18px; }
+              h1 { font-size: 22px; margin: 0 0 6px; text-transform: uppercase; }
+              h2 { font-size: 14px; margin: 18px 0 10px; padding-bottom: 5px; border-bottom: 1px solid #cfd8dc; text-transform: uppercase; }
+              .photo { width: 90px; height: 120px; object-fit: cover; border: 1px solid #17202a; display: grid; place-items: center; font-size: 12px; text-align: center; }
+              .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 14px; }
+              .grid div { border-bottom: 1px solid #d7dee2; min-height: 28px; padding-bottom: 4px; }
+              span { display: block; color: #5d6972; font-size: 11px; text-transform: uppercase; }
+              strong { display: block; font-size: 13px; font-weight: 700; word-break: break-word; }
+              @media print { body { margin: 18mm; } button { display: none; } }
+            </style>
+          </head>
+          <body>
+            <header>
+              <div>
+                <h1>Ficha de cadastro de funcionário</h1>
+                <strong>${escapeHtml(name || "-")}</strong>
+              </div>
+              ${photoHtml}
+            </header>
+            ${sections.map(([title, rows]) => `<section><h2>${title}</h2><div class="grid">${rows.join("")}</div></section>`).join("")}
+            <script>window.onload = () => { window.print(); };<\/script>
+          </body>
+        </html>`);
+      printWindow.document.close();
     }
 
     function deleteEmployee(id) {
@@ -6919,7 +7092,8 @@ loadProductIntoPricing(product);
     el("newEmployeeBtn")?.addEventListener("click", () => {
       if (el("employeeForm")) {
         resetEmployeeForm();
-        el("employeeForm").classList.remove("hidden");
+        el("employeeForm")?.classList.remove("hidden");
+        showEmployeeFormPanel();
         el("employeeName").focus();
       } else {
         clearAccessForm();
@@ -6929,7 +7103,19 @@ loadProductIntoPricing(product);
         el("accessName").focus();
       }
     });
+    el("viewEmployeesBtn")?.addEventListener("click", showEmployeeListPanel);
     el("employeesSearch")?.addEventListener("input", renderPeopleManagement);
+    el("employeePhoto")?.addEventListener("change", event => {
+      const file = event.target.files?.[0];
+      if (!file) {
+        setEmployeePhotoPreview("");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => setEmployeePhotoPreview(String(reader.result || ""));
+      reader.readAsDataURL(file);
+    });
+    el("printEmployeeBtn")?.addEventListener("click", printEmployeeFicha);
 
     el("employeeForm")?.addEventListener("submit", event => {
       event.preventDefault();
@@ -6991,15 +7177,17 @@ loadProductIntoPricing(product);
       if (index >= 0) state.users[index] = user; else state.users.push(user);
       syncSalesPeopleWithSellers();
       saveState();
-      el("employeeForm").classList.add("hidden");
+      el("employeeId").value = id;
+      el("employeePassword").value = "";
+      el("printEmployeeBtn")?.classList.remove("hidden");
       renderAll();
       showToast('Funcionário salvo');
     });
 
     el("cancelEmployeeBtn")?.addEventListener("click", () => {
       if (el("employeeForm")) {
-        el("employeeForm").classList.add("hidden");
         resetEmployeeForm();
+        hidePeoplePanels();
       }
     });
     el("cancelAccessBtn")?.addEventListener("click", () => {
