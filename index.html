@@ -120,6 +120,10 @@
       margin-bottom: 18px;
     }
 
+    .dashboard-view {
+      width: 100%;
+    }
+
     .metrics {
       display: grid;
       grid-template-columns: repeat(4, minmax(180px, 1fr));
@@ -2273,12 +2277,14 @@
       <span class="user-chip" id="currentUserChip">Usuário</span>
     </div>
     <nav class="area-menu module-nav" aria-label="Areas do sistema">
+      <button class="area-button" data-area="dashboardArea" type="button">Dashboard</button>
       <button class="area-button" data-area="salesArea" type="button">Vendas</button>
       <button class="area-button" data-area="stockArea" type="button">Estoque</button>
       <button class="area-button" data-area="customersArea" type="button">Clientes</button>
       <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
       <button class="area-button" data-area="accessArea" type="button">Acessos</button>
     </nav>
+    <section id="dashboardView" class="dashboard-view hidden">
     <section class="metrics company-only" id="companyMetrics" aria-label="Resumo da empresa">
       <article class="metric"><span>Saldo em vendas</span><strong id="metricRevenue">R$ 0,00</strong></article>
       <article class="metric"><span>Lucro estimado</span><strong id="metricProfit">R$ 0,00</strong></article>
@@ -2324,6 +2330,8 @@
           <p class="hint" id="goalHint">Defina uma meta para acompanhar quantas vendas faltam.</p>
         </div>
       </div>
+    </section>
+
     </section>
 
     <section class="workspace">
@@ -3127,7 +3135,7 @@
       rankingMonth: currentMonthKey(),
       financialMonth: currentMonthKey(),
       users: [
-        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
+        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
       ],
       goals: { salesGoal: 25000, salesPeople: 3 },
       goalMonth: currentMonthKey(),
@@ -3213,7 +3221,7 @@
         }));
       }
       if (!loaded.users.length) {
-        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
       }
       loaded.users = loaded.users.map(user => {
         const roles = normalizedRoles(user);
@@ -3282,7 +3290,7 @@
       loaded.monthlyGoals ||= {};
       loaded.users ||= [];
       if (!loaded.users.length) {
-        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
       }
       loaded.goals ||= loaded.monthlyGoals[loaded.goalMonth] || { salesGoal: 0, salesPeople: 1 };
       loaded.monthlyGoals[loaded.goalMonth] ||= loaded.goals;
@@ -4792,6 +4800,7 @@
     }
 
     const permissionOptions = [
+      ["dashboard", "Dashboard"],
       ["sales", "Registrar venda"],
       ["cashFlow", "Fluxo de caixa"],
       ["stockEntry", "Entrada de produto"],
@@ -6101,6 +6110,7 @@ renderAll();
     }
 
     const areaByView = {
+      dashboard: "dashboardArea",
       sales: "salesArea",
       cashFlow: "salesArea",
       history: "salesArea",
@@ -6114,7 +6124,7 @@ renderAll();
       access: "accessArea"
     };
 
-    const viewNames = ["sales","cashFlow","inventory","stockEntry","pricing","history","ranking","customerHistory","expenses","financial","access"];
+    const viewNames = ["dashboard","sales","cashFlow","inventory","stockEntry","pricing","history","ranking","customerHistory","expenses","financial","access"];
 
     function switchArea(area) {
       const areaViews = Object.entries(areaByView).filter(([, areaName]) => areaName === area).map(([view]) => view);
@@ -6139,6 +6149,7 @@ renderAll();
         el(`${name}View`).classList.toggle("hidden", name !== view);
         document.querySelector(`[data-view="${name}"]`)?.classList.toggle("active", name === view);
       });
+      document.querySelector(".workspace")?.classList.toggle("hidden", view === "dashboard");
       if (view === "sales" && !el("saleBarcode")?.disabled) {
         setTimeout(() => el("saleBarcode")?.focus(), 80);
       }
