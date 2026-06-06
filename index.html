@@ -2428,7 +2428,7 @@
         <button class="area-button" data-area="stockArea" type="button">Estoque</button>
         <button class="area-button" data-area="customersArea" type="button">Clientes</button>
         <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
-        <button class="area-button" data-area="accessArea" type="button">Acessos</button>
+        <button class="area-button" data-area="accessArea" type="button">Gestão</button>
       </nav>
       <button class="warning" id="resetBtn" type="button">Limpar base</button>
       <button class="secondary" id="logoutBtn" type="button">Sair</button>
@@ -2496,7 +2496,7 @@
           <button class="area-button" data-area="stockArea" type="button">Estoque</button>
           <button class="area-button" data-area="customersArea" type="button">Clientes</button>
           <button class="area-button" data-area="financialArea" type="button">Financeiro</button>
-          <button class="area-button" data-area="accessArea" type="button">Acessos</button>
+          <button class="area-button" data-area="accessArea" type="button">Gestão</button>
         </div>
 
         <div class="subarea-menu" data-subarea="salesArea" aria-label="Subáreas de vendas">
@@ -2518,6 +2518,7 @@
         </div>
         <div class="subarea-menu" data-subarea="accessArea" aria-label="Subáreas de acessos">
           <button class="tab" data-view="access" type="button">Controle de acessos</button>
+          <button class="tab" data-view="peopleManagement" type="button">Gente e Gestão</button>
         </div>
         <div class="subarea-placeholder" id="subareaPlaceholder">Escolha uma área para ver as subáreas.</div>
 
@@ -3199,6 +3200,28 @@
           </div>
         </section>
 
+        <section id="peopleManagementView" class="hidden">
+          <div class="panel-body">
+            <div class="access-form-title">
+              <h2 style="padding:0;border:0;background:transparent;">Gente e Gestão</h2>
+            </div>
+            <div class="access-summary">
+              <article class="access-card"><span>Equipe</span><strong id="peopleTeamCount">0</strong><small>Colaboradores cadastrados.</small></article>
+              <article class="access-card"><span>Vendedores</span><strong id="peopleSellerCount">0</strong><small>Atuam no atendimento e vendas.</small></article>
+              <article class="access-card"><span>Estoque</span><strong id="peopleStockCount">0</strong><small>Responsáveis por produtos e inventário.</small></article>
+              <article class="access-card"><span>Administradores</span><strong id="peopleAdminCount">0</strong><small>Gestão completa do sistema.</small></article>
+            </div>
+            <div class="hint">Use esta área para acompanhar a composição da equipe. Cadastros e permissões continuam em Controle de acessos.</div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Nome</th><th>Perfil</th><th>Status</th><th>Usuário</th></tr></thead>
+                <tbody id="peopleManagementBody"></tbody>
+              </table>
+            </div>
+            <div class="empty hidden" id="peopleManagementEmpty">Nenhuma pessoa cadastrada.</div>
+          </div>
+        </section>
+
       </div>
     </section>
   </main>
@@ -3292,7 +3315,7 @@
       rankingMonth: currentMonthKey(),
       financialMonth: currentMonthKey(),
       users: [
-        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] }
+        { id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access", "peopleManagement"] }
       ],
       goals: { salesGoal: 25000, salesPeople: 3 },
       goalMonth: currentMonthKey(),
@@ -3378,13 +3401,13 @@
         }));
       }
       if (!loaded.users.length) {
-        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access", "peopleManagement"] });
       }
       loaded.users = loaded.users.map(user => {
         const roles = normalizedRoles(user);
         const role = primaryRole(roles);
         const defaults = role === "Administrador"
-          ? ["sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"]
+          ? ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access", "peopleManagement"]
           : [...new Set(roles.flatMap(item => item === "Estoque"
             ? ["stockEntry", "inventory", "pricing"]
             : ["sales", "cashFlow", "history", "customerHistory"]))];
@@ -3447,7 +3470,7 @@
       loaded.monthlyGoals ||= {};
       loaded.users ||= [];
       if (!loaded.users.length) {
-        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access"] });
+        loaded.users.push({ id: makeId(), name: "Administrador", username: "admin", password: FIRST_ACCESS_PASSWORD, role: "Administrador", roles: ["Administrador"], active: true, mustChangePassword: true, permissions: ["dashboard", "sales", "cashFlow", "stockEntry", "inventory", "history", "ranking", "customerHistory", "expenses", "financial", "access", "peopleManagement"] });
       }
       loaded.goals ||= loaded.monthlyGoals[loaded.goalMonth] || { salesGoal: 0, salesPeople: 1 };
       loaded.monthlyGoals[loaded.goalMonth] ||= loaded.goals;
@@ -4968,7 +4991,8 @@
       ["customerHistory", "Clientes"],
       ["expenses", "Despesas"],
       ["financial", "Dashboard financeiro"],
-      ["access", "Gerenciar acessos"]
+      ["access", "Gerenciar acessos"],
+      ["peopleManagement", "Gente e Gestão"]
     ];
 
     function permissionsForRole(role, selected = []) {
@@ -5087,6 +5111,26 @@
         </tr>
       `).join("");
       el("accessEmpty")?.classList.toggle("hidden", users.length > 0);
+    }
+
+    function renderPeopleManagement() {
+      const users = state.users || [];
+      const activeUsers = users.filter(user => user.active !== false);
+      if (el("peopleTeamCount")) el("peopleTeamCount").textContent = activeUsers.length;
+      if (el("peopleSellerCount")) el("peopleSellerCount").textContent = activeUsers.filter(user => hasRole(user, "Vendedor")).length;
+      if (el("peopleStockCount")) el("peopleStockCount").textContent = activeUsers.filter(user => hasRole(user, "Estoque")).length;
+      if (el("peopleAdminCount")) el("peopleAdminCount").textContent = activeUsers.filter(user => hasRole(user, "Administrador")).length;
+      const body = el("peopleManagementBody");
+      if (!body) return;
+      body.innerHTML = users.map(user => `
+        <tr>
+          <td>${escapeHtml(user.name || "-")}</td>
+          <td>${escapeHtml(rolesLabel(user))}</td>
+          <td><span class="pill ${user.active !== false ? "ok" : "danger"}">${user.active !== false ? "Ativo" : "Bloqueado"}</span></td>
+          <td>${escapeHtml(user.username || "-")}</td>
+        </tr>
+      `).join("");
+      el("peopleManagementEmpty")?.classList.toggle("hidden", users.length > 0);
     }
 
 
@@ -5766,6 +5810,7 @@ function renderAll() {
       renderExpenses();
       renderFinancial();
       renderAccesses();
+      renderPeopleManagement();
       renderPasswordResetRequests();
       renderSellerGoal();
       renderSellerRanking();
@@ -6285,10 +6330,11 @@ renderAll();
       customerHistory: "customersArea",
       expenses: "financialArea",
       financial: "financialArea",
-      access: "accessArea"
+      access: "accessArea",
+      peopleManagement: "accessArea"
     };
 
-    const viewNames = ["dashboard","sales","cashFlow","inventory","stockEntry","pricing","history","ranking","customerHistory","expenses","financial","access"];
+    const viewNames = ["dashboard","sales","cashFlow","inventory","stockEntry","pricing","history","ranking","customerHistory","expenses","financial","access","peopleManagement"];
 
     function switchArea(area) {
       const areaViews = Object.entries(areaByView).filter(([, areaName]) => areaName === area).map(([view]) => view);
